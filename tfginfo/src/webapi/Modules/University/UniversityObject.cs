@@ -9,13 +9,6 @@ namespace TFGinfo.Objects
 
         public UniversityBase () {}
 
-        public UniversityModel toModel () {
-            return new UniversityModel {
-                name = this.name,
-                address = this.address
-            };
-        }
-
         public UniversityBase (UniversityModel model) {
             name = model.name;
             address = model.address;

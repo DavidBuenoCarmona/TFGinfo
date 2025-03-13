@@ -19,7 +19,10 @@ namespace TFGinfo.Api
         { 
             CheckNameIsNotRepeated(university.name);
 
-            UniversityModel model = university.toModel();
+            UniversityModel model = new UniversityModel {
+                name = university.name,
+                address = university.address
+            };
             context.university.Add(model);
             context.SaveChanges();
 
