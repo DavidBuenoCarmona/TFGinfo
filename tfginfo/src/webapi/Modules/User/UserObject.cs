@@ -5,8 +5,8 @@ namespace TFGinfo.Objects
     public class UserBase {
         public int? id { get; set; }
         public string username { get; set; }
-        public string password { get; set; }
-        public string auth_code { get; set; }
+        public string? password { get; set; }
+        public string? auth_code { get; set; }
 
         public UserBase () {}
 

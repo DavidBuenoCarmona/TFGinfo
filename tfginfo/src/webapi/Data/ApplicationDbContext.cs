@@ -14,6 +14,7 @@ namespace TFGinfo.Data
         public DbSet<ProfessorModel> professor { get; set; }
         public DbSet<RoleModel> role  { get; set; }
         public DbSet<UserModel> user { get; set; }
+        public DbSet<StudentModel> student { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,6 +22,7 @@ namespace TFGinfo.Data
             modelBuilder.ApplyConfiguration(new CareerConfiguration());
             modelBuilder.ApplyConfiguration(new ProfessorConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new StudentConfiguration());
         }
     }
 }

@@ -69,9 +69,7 @@ namespace TFGinfo.Api
                 throw new NotFoundException();
             }
 
-            model.name = Professor.name;
             model.department = Professor.departmentId;
-            model.surname = Professor.surname;
             model.department_boss = Professor.department_boss ? 1 : 0;
             context.SaveChanges();
 
