@@ -14,7 +14,7 @@ namespace TFGinfo.Api
 
         public int CreateUser(UserFlatDTO User)
         { 
-            CheckNameIsNotRepeated(User.username);
+            CheckNameIsNotRepeated(User);
 
             UserModel model = new UserModel {
                 username = User.username,
@@ -37,9 +37,9 @@ namespace TFGinfo.Api
         }
 
         #region Private Methods
-        private void CheckNameIsNotRepeated(string name)
+        private void CheckNameIsNotRepeated(UserFlatDTO user)
         {
-            if (context.user.Any(User => User.username.ToLower() == name.ToLower())) {
+            if (context.user.Any(u => u.id != user.id && u.username.ToLower() == user.username.ToLower())) {
                 throw new UnprocessableException("User name already exists");
             }
         }

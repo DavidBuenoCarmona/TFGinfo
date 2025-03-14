@@ -19,13 +19,13 @@ namespace TFGinfo.Api
 
         public ProfessorDTO CreateProfessor(ProfessorFlatDTO Professor)
         { 
+            CheckEmailIsNotRepeated(Professor);
+
             UserManager userManager = new UserManager(context);
             int userId = userManager.CreateUser(new UserFlatDTO {
                 username = Professor.email,
                 roleId = (int)RoleTypes.Professor
             });
-
-            CheckEmailIsNotRepeated(Professor.email);
 
             ProfessorModel model = new ProfessorModel {
                 name = Professor.name,
@@ -69,6 +69,8 @@ namespace TFGinfo.Api
                 throw new NotFoundException();
             }
 
+            CheckEmailIsNotRepeated(Professor);
+
             model.department = Professor.departmentId;
             model.department_boss = Professor.department_boss ? 1 : 0;
             context.SaveChanges();
@@ -82,9 +84,9 @@ namespace TFGinfo.Api
         }
 
         #region Private Methods
-        private void CheckEmailIsNotRepeated(string email)
+        private void CheckEmailIsNotRepeated(ProfessorFlatDTO professor)
         {
-            if (context.professor.Any(Professor => Professor.email.ToLower() == email.ToLower())) {
+            if (context.professor.Any(p => p.id != professor.id && p.email.ToLower() == professor.email.ToLower())) {
                 throw new UnprocessableException("Professor email already exists");
             }
         }

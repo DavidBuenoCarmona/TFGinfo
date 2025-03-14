@@ -19,7 +19,7 @@ namespace TFGinfo.Api
 
         public CareerDTO CreateCareer(CareerFlatDTO Career)
         { 
-            CheckNameIsNotRepeated(Career.name);
+            CheckNameIsNotRepeated(Career);
 
             CareerModel model = new CareerModel {
                 name = Career.name,
@@ -53,7 +53,7 @@ namespace TFGinfo.Api
                 throw new NotFoundException();
             }
 
-            CheckNameIsNotRepeated(Career.name);
+            CheckNameIsNotRepeated(Career);
 
             model.name = Career.name;
             model.university = Career.universityId;
@@ -68,9 +68,9 @@ namespace TFGinfo.Api
         }
 
         #region Private Methods
-        private void CheckNameIsNotRepeated(string name)
+        private void CheckNameIsNotRepeated(CareerFlatDTO career)
         {
-            if (context.career.Any(Career => Career.name.ToLower() == name.ToLower())) {
+            if (context.career.Any(c => c.id != career.id && c.name.ToLower() == career.name.ToLower())) {
                 throw new UnprocessableException("Career name already exists");
             }
         }

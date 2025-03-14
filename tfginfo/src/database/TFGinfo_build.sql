@@ -23,13 +23,13 @@ DROP TABLE IF EXISTS `career`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `career` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `university` int NOT NULL,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `University_idx` (`university`),
+  KEY `University_career_idx` (`university`),
   CONSTRAINT `University_career` FOREIGN KEY (`university`) REFERENCES `university` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,13 +40,28 @@ DROP TABLE IF EXISTS `department`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `department` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `university` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `University_department_idx` (`university`),
   CONSTRAINT `University_department` FOREIGN KEY (`university`) REFERENCES `university` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `external_tutor`
+--
+
+DROP TABLE IF EXISTS `external_tutor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `external_tutor` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -57,15 +72,19 @@ DROP TABLE IF EXISTS `professor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `professor` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `email` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
   `surname` varchar(45) NOT NULL,
   `department` int NOT NULL,
+  `department_boss` smallint DEFAULT NULL,
+  `user` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Department_professor_idx` (`department`),
-  CONSTRAINT `Department_professor` FOREIGN KEY (`department`) REFERENCES `department` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `user_professor_idx` (`user`),
+  CONSTRAINT `Department_professor` FOREIGN KEY (`department`) REFERENCES `department` (`id`),
+  CONSTRAINT `user_professor` FOREIGN KEY (`user`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,13 +95,13 @@ DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `code` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,14 +120,17 @@ CREATE TABLE `student` (
   `career` int NOT NULL,
   `phone` varchar(45) DEFAULT NULL,
   `address` varchar(45) DEFAULT NULL,
-  `birthdate` varchar(45) DEFAULT NULL,
+  `birthdate` datetime DEFAULT NULL,
+  `user` int NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `dni_UNIQUE` (`dni`),
+  KEY `User_Student_idx` (`user`),
   KEY `Career_Student_idx` (`career`),
-  CONSTRAINT `Career_Student` FOREIGN KEY (`career`) REFERENCES `career` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `Career_Student` FOREIGN KEY (`career`) REFERENCES `career` (`id`),
+  CONSTRAINT `User_Student` FOREIGN KEY (`user`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,12 +141,31 @@ DROP TABLE IF EXISTS `tfg`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tfg` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `tfg_line` int NOT NULL,
   `startdate` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `TFG_idx` (`tfg_line`),
-  CONSTRAINT `TFG_LINE` FOREIGN KEY (`tfg_line`) REFERENCES `tfg_line` (`id`)
+  KEY `tfg_line_idx` (`tfg_line`),
+  CONSTRAINT `tfg_line` FOREIGN KEY (`tfg_line`) REFERENCES `tfg_line` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tfg_external_tutor`
+--
+
+DROP TABLE IF EXISTS `tfg_external_tutor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tfg_external_tutor` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `external_tutor` int NOT NULL,
+  `tfg` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `TFG_external_idx` (`external_tutor`),
+  KEY `external_tfg_idx` (`tfg`),
+  CONSTRAINT `external_tfg` FOREIGN KEY (`tfg`) REFERENCES `tfg` (`id`),
+  CONSTRAINT `TFG_external` FOREIGN KEY (`external_tutor`) REFERENCES `external_tutor` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -136,12 +177,15 @@ DROP TABLE IF EXISTS `tfg_line`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tfg_line` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `description` varchar(45) NOT NULL,
   `slots` int NOT NULL,
   `group` smallint NOT NULL,
-  PRIMARY KEY (`id`)
+  `department` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tfg_line_department_idx` (`department`),
+  CONSTRAINT `tfg_line_department` FOREIGN KEY (`department`) REFERENCES `department` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -153,14 +197,14 @@ DROP TABLE IF EXISTS `tfg_line_career`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tfg_line_career` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `tfg_line` int NOT NULL,
   `career` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `TFG_idx` (`tfg_line`),
-  KEY `Career_idx` (`career`),
-  CONSTRAINT `Career` FOREIGN KEY (`career`) REFERENCES `career` (`id`),
-  CONSTRAINT `TFG` FOREIGN KEY (`tfg_line`) REFERENCES `tfg_line` (`id`)
+  KEY `Career_TFG_idx` (`career`),
+  KEY `TFG_Career_idx` (`tfg_line`),
+  CONSTRAINT `Career_TFG` FOREIGN KEY (`career`) REFERENCES `career` (`id`),
+  CONSTRAINT `TFG_Career` FOREIGN KEY (`tfg_line`) REFERENCES `tfg_line` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -172,14 +216,14 @@ DROP TABLE IF EXISTS `tfg_professor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tfg_professor` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `professor` int NOT NULL,
   `tfg` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `tfg_profesor_idx` (`tfg`),
-  KEY `profesor_idx` (`professor`),
-  CONSTRAINT `professor` FOREIGN KEY (`professor`) REFERENCES `professor` (`id`),
-  CONSTRAINT `professor_tfg` FOREIGN KEY (`tfg`) REFERENCES `tfg` (`id`)
+  KEY `tfg_professor_idx` (`professor`),
+  KEY `professor_tfg_idx` (`tfg`),
+  CONSTRAINT `professor_tfg` FOREIGN KEY (`tfg`) REFERENCES `tfg` (`id`),
+  CONSTRAINT `tfg_professor` FOREIGN KEY (`professor`) REFERENCES `professor` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -191,7 +235,7 @@ DROP TABLE IF EXISTS `tfg_student`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tfg_student` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `student` int NOT NULL,
   `tfg` int NOT NULL,
   PRIMARY KEY (`id`),
@@ -210,12 +254,32 @@ DROP TABLE IF EXISTS `university`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `university` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `address` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  `password` varchar(45) DEFAULT NULL,
+  `role` int NOT NULL,
+  `auth_code` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
+  KEY `role_user_idx` (`role`),
+  CONSTRAINT `role_user` FOREIGN KEY (`role`) REFERENCES `role` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,7 +290,7 @@ DROP TABLE IF EXISTS `working_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `working_group` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `private` smallint NOT NULL,
   `description` varchar(45) NOT NULL,
@@ -242,13 +306,13 @@ DROP TABLE IF EXISTS `working_group_professor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `working_group_professor` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `professor` int NOT NULL,
   `working_group` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `Professor_Working_group_idx` (`working_group`),
   KEY `Working_group_professor_idx` (`professor`),
-  CONSTRAINT `Professor_Working_group` FOREIGN KEY (`working_group`) REFERENCES `working_group` (`id`),
+  KEY `professor_working_group_idx` (`working_group`),
+  CONSTRAINT `professor_working_group` FOREIGN KEY (`working_group`) REFERENCES `working_group` (`id`),
   CONSTRAINT `Working_group_professor` FOREIGN KEY (`professor`) REFERENCES `professor` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -261,13 +325,13 @@ DROP TABLE IF EXISTS `working_group_student`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `working_group_student` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `working_group` int NOT NULL,
   `student` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `Working_group_idx` (`working_group`),
   KEY `Working_group_student_idx` (`student`),
-  CONSTRAINT `Student_Working_group` FOREIGN KEY (`working_group`) REFERENCES `working_group` (`id`),
+  KEY `student_working_group_idx` (`working_group`),
+  CONSTRAINT `student_working_group` FOREIGN KEY (`working_group`) REFERENCES `working_group` (`id`),
   CONSTRAINT `Working_group_student` FOREIGN KEY (`student`) REFERENCES `student` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -280,14 +344,14 @@ DROP TABLE IF EXISTS `working_group_tfg`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `working_group_tfg` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `working_group` int NOT NULL,
   `tfg` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `Working_group_idx` (`working_group`),
-  KEY `Working_group_tfg_idx` (`tfg`),
-  CONSTRAINT `TFG_Working_group` FOREIGN KEY (`working_group`) REFERENCES `working_group` (`id`),
-  CONSTRAINT `Working_group_tfg` FOREIGN KEY (`tfg`) REFERENCES `tfg` (`id`)
+  KEY `working_group_tfg_idx` (`tfg`),
+  KEY `tfg_working_group_idx` (`working_group`),
+  CONSTRAINT `tfg_working_group` FOREIGN KEY (`working_group`) REFERENCES `working_group` (`id`),
+  CONSTRAINT `working_group_tfg` FOREIGN KEY (`tfg`) REFERENCES `tfg` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -300,4 +364,4 @@ CREATE TABLE `working_group_tfg` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-13 11:08:49
+-- Dump completed on 2025-03-14 18:36:01

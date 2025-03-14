@@ -20,8 +20,8 @@ namespace TFGinfo.Api
         public StudentDTO CreateStudent(StudentFlatDTO Student)
         { 
             
-            CheckEmailIsNotRepeated(Student.email);
-            CheckDniIsNotRepeated(Student.dni);
+            CheckEmailIsNotRepeated(Student);
+            CheckDniIsNotRepeated(Student);
             
             UserManager userManager = new UserManager(context);
             int userId = userManager.CreateUser(new UserFlatDTO {
@@ -73,6 +73,9 @@ namespace TFGinfo.Api
                 throw new NotFoundException();
             }
 
+            CheckEmailIsNotRepeated(Student);
+            CheckDniIsNotRepeated(Student);
+
             model.phone = Student.phone;
             model.address = Student.address;
             context.SaveChanges();
@@ -86,16 +89,16 @@ namespace TFGinfo.Api
         }
 
         #region Private Methods
-        private void CheckEmailIsNotRepeated(string email)
+        private void CheckEmailIsNotRepeated(StudentFlatDTO student)
         {
-            if (context.student.Any(Student => Student.email.ToLower() == email.ToLower())) {
+            if (context.student.Any(s => s.id != student.id && s.email.ToLower() == student.email.ToLower())) {
                 throw new UnprocessableException("Student email already exists");
             }
         }
 
-        private void CheckDniIsNotRepeated(string dni)
+        private void CheckDniIsNotRepeated(StudentFlatDTO student)
         {
-            if (context.student.Any(Student => Student.dni.ToLower() == dni.ToLower())) {
+            if (context.student.Any(s => s.id != student.id && s.dni.ToLower() == student.dni.ToLower())) {
                 throw new UnprocessableException("Student dni already exists");
             }
         }

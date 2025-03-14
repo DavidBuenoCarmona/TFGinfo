@@ -17,7 +17,7 @@ namespace TFGinfo.Api
 
         public UniversityBase CreateUniversity(UniversityBase university)
         { 
-            CheckNameIsNotRepeated(university.name);
+            CheckNameIsNotRepeated(university);
 
             UniversityModel model = new UniversityModel {
                 name = university.name,
@@ -47,7 +47,7 @@ namespace TFGinfo.Api
                 throw new NotFoundException();
             }
 
-            CheckNameIsNotRepeated(university.name);
+            CheckNameIsNotRepeated(university);
 
             model.name = university.name;
             model.address = university.address;
@@ -57,9 +57,9 @@ namespace TFGinfo.Api
         }
 
         #region Private Methods
-        private void CheckNameIsNotRepeated(string name)
+        private void CheckNameIsNotRepeated(UniversityBase university)
         {
-            if (context.university.Any(university => university.name.ToLower() == name.ToLower())) {
+            if (context.university.Any(u => u.id != university.id && u.name.ToLower() == university.name.ToLower())) {
                 throw new UnprocessableException("University name already exists");
             }
         }

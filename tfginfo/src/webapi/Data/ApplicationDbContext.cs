@@ -15,6 +15,8 @@ namespace TFGinfo.Data
         public DbSet<RoleModel> role  { get; set; }
         public DbSet<UserModel> user { get; set; }
         public DbSet<StudentModel> student { get; set; }
+        public DbSet<ExternalTutorModel> external_tutor { get; set; }
+        public DbSet<TFGLineModel> tfg_line { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,6 +25,7 @@ namespace TFGinfo.Data
             modelBuilder.ApplyConfiguration(new ProfessorConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new StudentConfiguration());
+            modelBuilder.ApplyConfiguration(new TFGLineConfiguration());
         }
     }
 }
