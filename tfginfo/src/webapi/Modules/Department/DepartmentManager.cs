@@ -21,7 +21,7 @@ namespace TFGinfo.Api
         { 
             CheckNameIsNotRepeated(department.name);
 
-            DepartmentModel model = new DepartmentModel{
+            DepartmentModel model = new DepartmentModel {
                 name = department.name,
                 university = department.universityId
             };

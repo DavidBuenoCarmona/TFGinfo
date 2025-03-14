@@ -21,7 +21,7 @@ namespace TFGinfo.Api
         { 
             CheckNameIsNotRepeated(Career.name);
 
-            CareerModel model = new CareerModel{
+            CareerModel model = new CareerModel {
                 name = Career.name,
                 university = Career.universityId
             };
