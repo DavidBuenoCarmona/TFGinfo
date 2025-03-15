@@ -16,6 +16,8 @@ namespace TFGinfo.Models
 
         [JsonIgnore]
         public DepartmentModel departmentModel { get; set; }
+
+        public List<TFGProfessorModel> TFGs { get; set; }
     }
 
     public class ProfessorConfiguration : IEntityTypeConfiguration<ProfessorModel>

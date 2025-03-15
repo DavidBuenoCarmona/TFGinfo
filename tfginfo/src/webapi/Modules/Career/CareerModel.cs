@@ -13,6 +13,7 @@ namespace TFGinfo.Models
         [JsonIgnore]
         public UniversityModel universityModel { get; set; }
         public List<StudentModel> Students { get; set; }
+        public List<TFGLineCareerModel> TFGLines { get; set; }
     }
 
     public class CareerConfiguration : IEntityTypeConfiguration<CareerModel>

@@ -12,6 +12,9 @@ namespace TFGinfo.Models
 
         [JsonIgnore]
         public TFGLineModel tfgLineModel { get; set; }
+        public List<TFGStudentModel> Students { get; set; }
+        public List<TFGProfessorModel> Professors { get; set; }
+        public List<TFGExternalTutorModel> ExternalTutors { get; set; }
     }
 
     public class TFGConfiguration : IEntityTypeConfiguration<TFGModel>
