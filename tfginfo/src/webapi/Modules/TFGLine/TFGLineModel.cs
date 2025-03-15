@@ -15,6 +15,7 @@ namespace TFGinfo.Models
 
         [JsonIgnore]
         public DepartmentModel departmentModel { get; set; }
+        public List<TFGModel> TFGs { get; set; }
     }
 
     public class TFGLineConfiguration : IEntityTypeConfiguration<TFGLineModel>
