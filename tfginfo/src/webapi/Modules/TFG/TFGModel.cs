@@ -15,6 +15,7 @@ namespace TFGinfo.Models
         public List<TFGStudentModel> Students { get; set; }
         public List<TFGProfessorModel> Professors { get; set; }
         public List<TFGExternalTutorModel> ExternalTutors { get; set; }
+        public List<WorkingGroupTFGModel> WorkingGroups { get; set; }
     }
 
     public class TFGConfiguration : IEntityTypeConfiguration<TFGModel>

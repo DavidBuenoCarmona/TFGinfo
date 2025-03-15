@@ -18,6 +18,8 @@ namespace TFGinfo.Models
         public DepartmentModel departmentModel { get; set; }
 
         public List<TFGProfessorModel> TFGs { get; set; }
+
+        public List<WorkingGroupProfessorModel> WorkingGroups { get; set; }
     }
 
     public class ProfessorConfiguration : IEntityTypeConfiguration<ProfessorModel>

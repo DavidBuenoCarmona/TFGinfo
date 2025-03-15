@@ -21,6 +21,7 @@ namespace TFGinfo.Models
         public CareerModel careerModel { get; set; }
 
         public List<TFGStudentModel> TFGs { get; set; }
+        public List<WorkingGroupStudentModel> WorkingGroups { get; set; }
     }
 
     public class StudentConfiguration : IEntityTypeConfiguration<StudentModel>

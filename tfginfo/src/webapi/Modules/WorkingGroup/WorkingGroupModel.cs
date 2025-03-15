@@ -10,5 +10,9 @@ namespace TFGinfo.Models
         public string name { get; set; }
         public string description { get; set; }
         public int isPrivate { get; set; }
+
+        public List<WorkingGroupProfessorModel> Professors { get; set; }
+        public List<WorkingGroupStudentModel> Students { get; set; }
+        public List<WorkingGroupTFGModel> TFGs { get; set; }
     }
 }
