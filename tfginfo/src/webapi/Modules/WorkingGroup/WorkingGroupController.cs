@@ -57,4 +57,56 @@ public class WorkingGroupController : BaseController
             return UnprocessableEntity(e.GetError());
         }
     }
+
+    [HttpGet("{id}")]
+    public IActionResult Get(int id)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            return Ok(manager.GetWorkingGroup(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpGet("{professor/id}")]
+    public IActionResult GetProfessorsByWorkingGroup(int id)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            return Ok(manager.GetProfessorsByWorkingGroup(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpGet("{student/id}")]
+    public IActionResult GetStudentsByWorkingGroup(int id)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            return Ok(manager.GetStudentsByWorkingGroup(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpGet("{tfg/{id}}")]
+    public IActionResult GetTFGsByWorkingGroup(int id)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            return Ok(manager.GetTFGsByWorkingGroup(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
 }

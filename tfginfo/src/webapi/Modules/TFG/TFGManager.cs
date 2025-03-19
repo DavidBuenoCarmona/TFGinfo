@@ -63,6 +63,15 @@ namespace TFGinfo.Api
             return context.tfg.Where(TFG => TFG.tfgLine == tfgLineId).Include(d => d.tfgLineModel).ToList().ConvertAll(model => new TFGDTO(model));
         }
 
+        public TFGDTO GetTFGById(int id)
+        {
+            TFGModel? model = context.tfg.Include(d => d.tfgLineModel).FirstOrDefault(d => d.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            return new TFGDTO(model);
+        }
+
         #region Private Methods
         #endregion
     }

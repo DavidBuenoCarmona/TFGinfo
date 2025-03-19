@@ -64,4 +64,17 @@ public class ProfessorController : BaseController
         ProfessorManager manager = new ProfessorManager(context);
         return Ok(manager.GetAllByDepartment(departmentId));
     }
+
+    [HttpGet("{id}")]
+    public IActionResult GetProfessorById([FromBody] int id)
+    {
+        try {
+            ProfessorManager manager = new ProfessorManager(context);
+            return Ok(manager.GetProfessorById(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
 }

@@ -55,6 +55,33 @@ namespace TFGinfo.Api
             return new WorkingGroupBase(model);
         }
 
+        public WorkingGroupBase GetWorkingGroup(int id)
+        {
+            WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            return new WorkingGroupBase(model);
+        }
+
+        public List<ProfessorDTO> GetProfessorsByWorkingGroup(int id)
+        {
+            List<ProfessorModel> professors = context.working_group_professor.Where(WorkingGroup => WorkingGroup.id == id).Select(p => p.professorModel).ToList();
+            return professors.ConvertAll(model => new ProfessorDTO(model));
+        }
+
+        public List<StudentDTO> GetStudentsByWorkingGroup(int id)
+        {
+            List<StudentModel> students = context.working_group_student.Where(WorkingGroup => WorkingGroup.id == id).Select(p => p.studentModel).ToList();
+            return students.ConvertAll(model => new StudentDTO(model));
+        }
+
+        public List<TFGDTO> GetTFGsByWorkingGroup(int id)
+        {
+            List<TFGModel> TFGs = context.working_group_tfg.Where(WorkingGroup => WorkingGroup.id == id).Select(p => p.tfgModel).ToList();
+            return TFGs.ConvertAll(model => new TFGDTO(model));
+        }
+
 
         #region Private Methods
         #endregion

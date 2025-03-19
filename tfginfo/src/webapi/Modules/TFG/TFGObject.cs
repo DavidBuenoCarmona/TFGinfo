@@ -33,4 +33,9 @@ namespace TFGinfo.Objects
             tfgLineId = model.tfgLine;
         }
     }
+
+    public class TFGStudentFlatDTO {
+        public int tfgId { get; set; }
+        public int studentId { get; set; }
+    }
 }

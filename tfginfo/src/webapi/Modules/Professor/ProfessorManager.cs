@@ -83,6 +83,15 @@ namespace TFGinfo.Api
             return context.professor.AsNoTracking().Where(Professor => Professor.department == departmentId).Include(d => d.departmentModel).ToList().ConvertAll(model => new ProfessorDTO(model));
         }
 
+        public ProfessorDTO GetProfessorById(int id)
+        {
+            ProfessorModel? model = context.professor.Include(d => d.departmentModel).FirstOrDefault(d => d.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            return new ProfessorDTO(model);
+        }
+
         #region Private Methods
         private void CheckEmailIsNotRepeated(ProfessorFlatDTO professor)
         {
