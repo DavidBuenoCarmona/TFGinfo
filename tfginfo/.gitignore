@@ -253,3 +253,7 @@ docker-ms/ms-scripts/*.sql
 system.info
 src/webapi/Docker/ms/ms-scripts/*.sql
 src/webapi/Docker/pg/pg-scripts/*.sql5
+
+
+# Ignore appConfig.json
+**/appConfig.json
