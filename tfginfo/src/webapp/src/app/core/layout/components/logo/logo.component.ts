@@ -19,7 +19,7 @@ export class LogoComponent implements AfterViewInit {
             const logoType = this.isAuth ? 'auth-width' : 'header-width';
             this.logoWidth =  this.appConfig.getConfig().app.logo[logoType];
             this.logoUrl = this.appConfig.getConfig().app.logo.src;
-        });
+        }, 10);
     }
 
 }
