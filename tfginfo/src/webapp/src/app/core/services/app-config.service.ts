@@ -19,7 +19,6 @@ export class AppConfigService {
             this.appConfig = data;
         } catch (error) {
             console.error("Error loading app config", error);
-            throw error;
         }
     }
 
