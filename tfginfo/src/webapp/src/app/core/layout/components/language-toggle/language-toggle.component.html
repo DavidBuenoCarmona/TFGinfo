@@ -1,0 +1,20 @@
+<div class="language-selector dropdown">
+    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+      <span [ngClass]="usedLang == 'es' ? 'fi fi-es' : 'fi fi-gb'"></span>
+    </button>
+    <ul class="dropdown-menu w-auto">
+      <li class="dropdown-item w-auto d-flex align-items-center">
+        <a class="" (click)="changeLanguage('es')">
+            <span class="fi fi-es me-2"></span>
+            <span>{{ 'GLOBAL.SPANISH' | translate }}</span>
+        </a>
+      </li>
+      <li class="dropdown-item w-auto d-flex align-items-center">
+        <a  (click)="changeLanguage('en')">
+            <span class="fi fi-gb me-2"></span>
+            <span>{{ 'GLOBAL.ENGLISH' | translate }}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  

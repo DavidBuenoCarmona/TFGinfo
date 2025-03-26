@@ -39,9 +39,11 @@
         "CREATE": "Create",
         "DELETE": "Delete",
         "EDIT": "Edit",
+        "ENGLISH": "English",
         "LOGOUT": "Logout",
         "SAVE": "Save",
         "SEARCH": "Search",
+        "SPANISH": "Spanish",
         "VIEW": "View"
     },
     "PROFESSOR": {
