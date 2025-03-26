@@ -1,4 +1,4 @@
-<a class="logo">
+<a class="logo nav-link active" aria-current="page" [routerLink]="isAuth ? route.booking : ''">
     @if (logoUrl) {
         <img [src]="logoUrl" [width]="logoWidth" alt="logo" />
     }

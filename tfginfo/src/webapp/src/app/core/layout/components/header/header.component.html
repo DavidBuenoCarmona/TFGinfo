@@ -1,21 +1,66 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <logo></logo>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/bookings">{{ 'HEADER.BOOKING' | translate }}</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Servicios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contacto</a>
-          </li>
-        </ul>
-      </div>
+<nav class="navbar navbar-expand-lg header">
+  <div class="container-fluid">
+    <logo></logo>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="route.booking" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            {{ 'BOOKING.TITLE_N' | translate }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="route.tfg.list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            {{ 'TFG.TITLE_N' | translate }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="route.studingGroup.list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+             {{ 'STUDING_GROUP.TITLE_N' | translate }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="route.professor.list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+             {{ 'PROFESSOR.TITLE_N' | translate }}
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">
+             {{ 'ADMIN.TITLE_1' | translate }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+            <li>
+              <a class="dropdown-item" [routerLink]="route.admin.user.list" routerLinkActive="active">
+                {{ 'ADMIN.USER.TITLE_N' | translate }}
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="route.admin.department.list" routerLinkActive="active">
+                {{ 'ADMIN.DEPARTMENT.TITLE_N' | translate }}
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="route.admin.university.list" routerLinkActive="active">
+                {{ 'ADMIN.UNIVERSITY.TITLE_N' | translate }}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <div>
+            <theme-toggle></theme-toggle>
+          </div>
+        </li>
+        <li class="nav-item">
+          <profile-dropdown></profile-dropdown>
+        </li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>

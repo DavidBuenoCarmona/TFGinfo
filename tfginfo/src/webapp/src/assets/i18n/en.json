@@ -1,5 +1,62 @@
 {
-    "HEADER": {
-        "BOOKING": "My bookings"
+    "ADMIN": {
+        "TITLE_1": "Administration",
+        "DEPARTMENT": {
+            "CREATE": "Create department",
+            "EDIT": "Edit department",
+            "DELETE": "Delete department",
+            "TITLE_1": "Department",
+            "TITLE_N": "Departments",
+            "VIEW": "View department",
+            "VIEW_LIST": "View department list"
+        },
+        "UNIVERSITY": {
+            "CREATE": "Create university",
+            "EDIT": "Edit university",
+            "DELETE": "Delete university",
+            "TITLE_1": "University",
+            "TITLE_N": "Universities",
+            "VIEW": "View university",
+            "VIEW_LIST": "View university list"
+        },
+        "USER": {
+            "CREATE": "Create user",
+            "EDIT": "Edit user",
+            "DELETE": "Delete user",
+            "TITLE_1": "User",
+            "TITLE_N": "Users",
+            "VIEW": "View user",
+            "VIEW_LIST": "View user list"
+        }
+    },
+    "BOOKING": {
+        "GROUP": "My groups",
+        "TITLE_N": "My bookings",
+        "TFG": "My TFG bookings"
+    },
+    "GLOBAL": {
+        "CANCEL": "Cancel",
+        "CREATE": "Create",
+        "DELETE": "Delete",
+        "EDIT": "Edit",
+        "LOGOUT": "Logout",
+        "SAVE": "Save",
+        "SEARCH": "Search",
+        "VIEW": "View"
+    },
+    "PROFESSOR": {
+        "TITLE_1": "Professor",
+        "TITLE_N": "Professors"
+    },
+    "PROFILE": {
+        "TITLE_1": "My Profile"
+    },
+    "STUDING_GROUP": {
+        "TITLE_1": "Studing group",
+        "TITLE_N": "Studing groups"
+    },
+    "TFG": {
+        "TITLE_1": "TFG",
+        "TITLE_N": "TFGs"
     }
 }

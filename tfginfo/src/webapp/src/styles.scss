@@ -2,3 +2,118 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:root {
+    /* Sistema de espaciado en múltiplos de 4px */
+    --spacing-unit: 4px;
+    
+    /* Márgenes verticales */
+    --margin-top: var(--spacing-unit);
+    --margin-bottom: calc(var(--spacing-unit) * 2);
+    --margin-vertical: var(--spacing-unit);
+    
+    /* Márgenes horizontales */
+    --margin-left: var(--spacing-unit);
+    --margin-right: var(--spacing-unit);
+    --margin-horizontal: var(--spacing-unit);
+    
+    /* Márgenes compuestos */
+    --margin-sm: var(--spacing-unit);
+    --margin-md: calc(var(--spacing-unit) * 2);
+    --margin-lg: calc(var(--spacing-unit) * 3);
+    --margin-xl: calc(var(--spacing-unit) * 4);
+    
+    /* Márgenes específicos para componentes */
+    --margin-container: calc(var(--spacing-unit) * 3);
+    --margin-section: calc(var(--spacing-unit) * 2);
+    --margin-component: var(--spacing-unit);
+
+
+      /* 🎨 Colores Principales */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-light-blue: #4da8da; /* Azul Claro */
+
+    /* 🎨 Tonos Intermedios */
+    --color-gray-dark: #1c1c1c;
+    --color-gray-medium: #525252;
+    --color-gray-light: #d3d3d3;
+
+    /* 🎨 Variantes de Azul Claro */
+    --color-blue-lighter: #a8d0e6;
+    --color-blue-dark: #005f99;
+
+    /* 🎨 Fondos y Bordes */
+    --bg-light: var(--color-white);
+    --bg-dark: var(--color-gray-dark);
+    --border-color: var(--color-gray-light);
+
+    /* 🎨 Texto */
+    --text-light: var(--color-white);
+    --text-dark: var(--color-black);
+    --text-primary: var(--color-light-blue);
+
+    /* 🎨 Botones */
+    --btn-primary-bg: var(--color-light-blue);
+    --btn-primary-hover: var(--color-blue-dark);
+    --btn-secondary-bg: var(--color-gray-medium);
+    --btn-secondary-hover: var(--color-gray-dark);
+}
+
+body.dark-mode {
+    background-color: var(--color-gray-medium);
+    color: var(--text-light);
+    .dropdown-menu {
+        background-color: #333;
+        color: var(--text-light);
+    }
+    .dropdown-item {
+        color: var(--text-light);
+        &:hover {
+            background-color: #444;
+        }
+    }
+    .header {
+        background-color: var(--color-blue-dark);
+        .nav-link {
+            color: var(--text-light);
+            &:hover {
+                color: var(--color-light-blue);
+            }
+        }
+    }
+    .card {
+        border: 1px solid var(--color-light-blue);
+        .card-header {
+            background-color: var(--color-blue-dark);
+            color: var(--text-light);
+        }
+        .card-body {
+            background-color: var(--color-gray-medium);
+            color: var(--text-light);
+        }
+    }
+    table {
+        background-color: var(--color-gray-dark);
+        color: var(--text-light);
+        th {
+            background-color: var(--color-blue-dark);
+            color: var(--text-light);
+            border: 1px solid var(--color-light-blue);
+        }
+        td {
+            background-color: var(--color-gray-medium);
+            color: var(--text-light);
+            border: 1px solid var(--color-light-blue);
+        }
+    }
+    
+}
+
+.basic-page {
+    margin: var(--margin-xl);
+}
+
+.header {
+    background-color: var(--color-blue-lighter);
+}

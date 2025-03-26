@@ -1,5 +1,62 @@
 {
-    "HEADER": {
-        "BOOKING": "Mis reservas"
+    "ADMIN": {
+        "TITLE_1": "Administración",
+        "DEPARTMENT": {
+            "CREATE": "Crear departamento",
+            "EDIT": "Editar departamento",
+            "DELETE": "Eliminar departamento",
+            "TITLE_1": "Departamento",
+            "TITLE_N": "Departamentos",
+            "VIEW": "Ver departamento",
+            "VIEW_LIST": "Ver lista de departamentos"
+        },
+        "UNIVERSITY": {
+            "CREATE": "Crear universidad",
+            "EDIT": "Editar universidad",
+            "DELETE": "Eliminar universidad",
+            "TITLE_1": "Universidad",
+            "TITLE_N": "Universidades",
+            "VIEW": "Ver universidad",
+            "VIEW_LIST": "Ver lista de universidades"
+        },
+        "USER": {
+            "CREATE": "Crear usuario",
+            "EDIT": "Editar usuario",
+            "DELETE": "Eliminar usuario",
+            "TITLE_1": "Usuario",
+            "TITLE_N": "Usuarios",
+            "VIEW": "Ver usuario",
+            "VIEW_LIST": "Ver lista de usuarios"
+        }
+    },
+    "BOOKING": {
+        "GROUP": "Mis grupos",
+        "TITLE_N": "Mis reservas",
+        "TFG": "Mis reservas de TFGs"
+    },
+    "GLOBAL": {
+        "CANCEL": "Cancelar",
+        "CREATE": "Crear",
+        "DELETE": "Eliminar",
+        "EDIT": "Editar",
+        "LOGOUT": "Cerrar sesión",
+        "SAVE": "Guardar",
+        "SEARCH": "Buscar",
+        "VIEW": "Ver"
+    },
+    "PROFESSOR": {
+        "TITLE_1": "Profesor",
+        "TITLE_N": "Profesores"
+    },
+    "PROFILE": {
+        "TITLE_1": "Mi Perfil"
+    },
+    "STUDING_GROUP": {
+        "TITLE_1": "Grupo de estudio",
+        "TITLE_N": "Grupos de estudio"
+    },
+    "TFG": {
+        "TITLE_1": "TFG",
+        "TITLE_N": "TFGs"
     }
 }
