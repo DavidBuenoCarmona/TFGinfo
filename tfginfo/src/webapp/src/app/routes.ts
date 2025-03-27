@@ -27,7 +27,7 @@ export const route = {
     studingGroup: {
         create: '/studing-group/create',
         edit: '/studing-group/edit',
-        list: '/studing-groups',
+        list: '/studing-group',
     },
     tfg: {
         create: '/tfg/create',
