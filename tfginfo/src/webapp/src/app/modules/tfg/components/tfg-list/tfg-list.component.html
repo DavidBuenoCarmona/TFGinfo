@@ -8,32 +8,30 @@
                 <table class="table table-bordered">
                     <thead class="table-dark">
                         <tr>
-                            <th>Nombre</th>
-                            <th>Grados</th>
-                            <th>Plazas</th>
+                            <th>{{ 'GLOBAL.NAME' | translate }}</th>
+                            <th>{{ 'GLOBAL.DESCRIPTION' | translate }}</th>
+                            <th>{{ 'ADMIN.DEPARTMENT.TITLE_1' | translate }}</th>
+                            <th>{{ 'TFG.SLOTS' | translate }}</th>
+                            <th class="action-cell">{{ 'GLOBAL.ACTIONS' | translate }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Elemento 1</td>
-                            <td>Grado A</td>
-                            <td>10</td>
-                        </tr>
-                        <tr>
-                            <td>Elemento 2</td>
-                            <td>Grado B</td>
-                            <td>15</td>
-                        </tr>
-                        <tr>
-                            <td>Elemento 3</td>
-                            <td>Grado C</td>
-                            <td>8</td>
-                        </tr>
-                        <tr>
-                            <td>Elemento 4</td>
-                            <td>Grado D</td>
-                            <td>12</td>
-                        </tr>
+                        @for(tfg of tfgs; track tfg.id) {
+                            <tr>
+                                <td>{{ tfg.name }}</td>
+                                <td>{{ tfg.description }}</td>
+                                <td>{{ tfg.department!.name }}</td>
+                                <td>{{ tfg.slots }}</td>
+                                <td class="">
+                                    <button type="button" class="btn btn-primary m-2" (click)="onEdit(tfg)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger m-2" (click)="onDelete(tfg)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

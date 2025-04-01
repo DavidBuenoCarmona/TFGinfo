@@ -35,16 +35,21 @@
         "TFG": "Mis reservas de TFGs"
     },
     "GLOBAL": {
+        "ACCEPT": "Aceptar",
+        "ACTIONS": "Acciones",
         "CANCEL": "Cancelar",
         "CREATE": "Crear",
         "DELETE": "Eliminar",
+        "DESCRIPTION": "Descripción",
         "EDIT": "Editar",
         "ENGLISH": "Inglés",
         "LOGOUT": "Cerrar sesión",
+        "NAME": "Nombre",
         "SAVE": "Guardar",
         "SEARCH": "Buscar",
         "SPANISH": "Español",
-        "VIEW": "Ver"
+        "VIEW": "Ver",
+        "WANT_TO_CONFIRM": "¿Quieres confirmar la acción?"
     },
     "PROFESSOR": {
         "TITLE_1": "Profesor",
@@ -58,6 +63,7 @@
         "TITLE_N": "Grupos de estudio"
     },
     "TFG": {
+        "SLOTS": "Plazas",
         "TITLE_1": "TFG",
         "TITLE_N": "TFGs"
     }

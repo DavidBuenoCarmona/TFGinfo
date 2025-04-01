@@ -9,6 +9,7 @@ import { ProfileDetailComponent } from './modules/profile/pages/profile-detail/p
 import { DepartmentSearchComponent } from './modules/admin/pages/department-search/department-search.component';
 import { UniversitySearchComponent } from './modules/admin/pages/university-search/university-search.component';
 import { UserSearchComponent } from './modules/admin/pages/user-search/user-search.component';
+import { TfgDetailComponent } from './modules/tfg/pages/tfg-detail/tfg-detail.component';
 
 
 export const routes: Routes = [
@@ -27,7 +28,13 @@ export const routes: Routes = [
             },
             {
                 path: 'tfg',
-                component: TfgSearchComponent
+                component: TfgSearchComponent,
+                children: [
+                    {
+                        path: ':id',
+                        component: TfgDetailComponent
+                    }
+                ]
             },
             {
                 path: 'professor',

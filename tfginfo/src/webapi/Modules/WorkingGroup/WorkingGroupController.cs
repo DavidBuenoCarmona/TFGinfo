@@ -71,7 +71,7 @@ public class WorkingGroupController : BaseController
         }
     }
 
-    [HttpGet("{professor/id}")]
+    [HttpGet("professor/{id}")]
     public IActionResult GetProfessorsByWorkingGroup(int id)
     {
         try {
@@ -84,7 +84,7 @@ public class WorkingGroupController : BaseController
         }
     }
 
-    [HttpGet("{student/id}")]
+    [HttpGet("student/{id}")]
     public IActionResult GetStudentsByWorkingGroup(int id)
     {
         try {
@@ -97,7 +97,7 @@ public class WorkingGroupController : BaseController
         }
     }
 
-    [HttpGet("{tfg/{id}}")]
+    [HttpGet("tfg/{id}")]
     public IActionResult GetTFGsByWorkingGroup(int id)
     {
         try {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-tfg-detail',
+  selector: 'tfg-detail',
   imports: [],
   templateUrl: './tfg-detail.component.html',
   styleUrl: './tfg-detail.component.scss'

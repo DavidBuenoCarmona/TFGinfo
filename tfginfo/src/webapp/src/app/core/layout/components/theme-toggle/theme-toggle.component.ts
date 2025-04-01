@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'theme-toggle',
@@ -7,10 +7,12 @@ import { Component } from '@angular/core';
   templateUrl: './theme-toggle.component.html',
   styleUrl: './theme-toggle.component.scss'
 })
-export class ThemeToggleComponent {
+export class ThemeToggleComponent implements OnInit {
     isDarkMode = false;
 
-    constructor() {
+    constructor() { }
+
+    ngOnInit(): void {
       this.isDarkMode = localStorage.getItem('theme') === 'dark';
       this.applyTheme();
     }
