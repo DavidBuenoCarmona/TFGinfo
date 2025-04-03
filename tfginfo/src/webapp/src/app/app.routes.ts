@@ -29,12 +29,14 @@ export const routes: Routes = [
             {
                 path: 'tfg',
                 component: TfgSearchComponent,
-                children: [
-                    {
-                        path: ':id',
-                        component: TfgDetailComponent
-                    }
-                ]
+            },
+            {
+                path: 'tfg/:id',
+                component: TfgDetailComponent
+            },
+            {
+                path: 'tfg/new',
+                component: TfgDetailComponent
             },
             {
                 path: 'professor',

@@ -68,6 +68,15 @@ namespace TFGinfo.Api
             return new TFGLineDTO(model);
         }
 
+        public TFGLineDTO GetTFGLine(int id)
+        {
+            TFGLineModel? model = context.tfg_line.Include(d => d.departmentModel).FirstOrDefault(TFGLine => TFGLine.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            return new TFGLineDTO(model);
+        }
+
         public List<TFGLineDTO> GetTFGLinesByDepartment(int departmentId)
         {
             return context.tfg_line.Where(TFGLine => TFGLine.department == departmentId).Include(d => d.departmentModel).ToList().ConvertAll(model => new TFGLineDTO(model));

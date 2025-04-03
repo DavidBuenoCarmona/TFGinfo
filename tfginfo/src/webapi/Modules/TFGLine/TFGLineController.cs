@@ -65,4 +65,17 @@ public class TFGLineController : BaseController
         TFGLineManager manager = new TFGLineManager(context);
         return Ok(manager.GetTFGLinesByDepartment(departmentId));
     }
+
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        try {
+            TFGLineManager manager = new TFGLineManager(context);
+            return Ok(manager.GetTFGLine(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
 }

@@ -9,5 +9,5 @@ import { TfgListComponent } from '../../../tfg/components/tfg-list/tfg-list.comp
   styleUrl: './bookings.component.scss'
 })
 export class BookingsComponent {
-
+  public displayedTFGColumns = ['name', 'department', 'slots']
 }

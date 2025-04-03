@@ -38,16 +38,20 @@
         "ACCEPT": "Accept",
         "ACTIONS": "Actions",
         "CANCEL": "Cancel",
+        "CLEAR_FILTERS": "Clear filters",
         "CREATE": "Create",
         "DELETE": "Delete",
         "DESCRIPTION": "Description",
+        "DESCRIPTION_REQUIRED": "Description is required",
         "EDIT": "Edit",
         "ENGLISH": "English",
         "LOGOUT": "Logout",
         "NAME": "Name",
+        "NAME_REQUIRED": "Name is required",
         "SAVE": "Save",
         "SEARCH": "Search",
         "SPANISH": "Spanish",
+        "UPDATE": "Update",
         "VIEW": "View",
         "WANT_TO_CONFIRM": "Do you want to confirm the action?"
     },
@@ -63,7 +67,13 @@
         "TITLE_N": "Studing groups"
     },
     "TFG": {
+        "DEPARTMENT_REQUIRED": "Department is required",
+        "IS_GROUP": "Is group project?",
+        "LINES_TITLE_1": "TFG line",
+        "LINES_TITLE_N": "TFG lines",
+        "NEW": "New TFG",
         "SLOTS": "Slots",
+        "SLOTS_REQUIRED": "Slots are required",
         "TITLE_1": "TFG",
         "TITLE_N": "TFGs"
     }

@@ -1,1 +1,53 @@
-<p>tfg-detail works!</p>
+<div class="basic-page">
+    <h2 *ngIf="!creation" class="mb-3">{{ tfg?.name }}</h2>
+    <h2 *ngIf="creation" class="mb-3">{{ 'TFG.NEW' | translate }}</h2>
+
+    <form class="tfg-form" [formGroup]="tfgForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
+                <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
+                <mat-error *ngIf="tfgForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'ADMIN.DEPARTMENT.TITLE_1' | translate }}</mat-label>
+                <mat-select formControlName="departmentId">
+                    <mat-option *ngFor="let department of departments" [value]="department.id">
+                        {{ department.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="tfgForm.get('department')?.invalid">{{ 'GLOBAL.DEPARTMENT_REQUIRED' | translate }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'TFG.SLOTS' | translate }}</mat-label>
+                <input matInput type="number" formControlName="slots" placeholder="{{ 'TFG.SLOTS' | translate }}" />
+                <mat-error *ngIf="tfgForm.get('slots')?.invalid">{{ 'TFG.SLOTS_REQUIRED' | translate }}</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="form-row">
+            <mat-checkbox formControlName="group">
+                {{ 'TFG.IS_GROUP' | translate }}
+            </mat-checkbox>
+        </div>
+
+        <div class="form-row">
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>{{ 'GLOBAL.DESCRIPTION' | translate }}</mat-label>
+                <textarea matInput formControlName="description" placeholder="{{ 'GLOBAL.DESCRIPTION' | translate }}"></textarea>
+                <mat-error *ngIf="tfgForm.get('description')?.invalid">{{ 'GLOBAL.DESCRIPTION_REQUIRED' | translate }}</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="actions">
+            <button mat-raised-button class="action-button" [ngClass]="tfgForm.invalid ? 'disabled' : '' " type="submit" [disabled]="tfgForm.invalid">
+                {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
+            </button>
+            <button mat-raised-button class="action-button" type="button" (click)="onCancel()">
+                {{ 'GLOBAL.CANCEL' | translate }}
+            </button>
+        </div>
+    </form>
+</div>

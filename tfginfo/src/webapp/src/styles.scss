@@ -39,9 +39,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --color-gray-medium: #525252;
     --color-gray-light: #d3d3d3;
 
-    /* 🎨 Variantes de Azul Claro */
-    --color-blue-lighter: #a8d0e6;
-    --color-blue-dark: #005f99;
+    /* 🎨 Variantes de Azul */
+    --color-blue-lighter: #a8d0e6; /* Azul Muy Claro */
+    --color-blue-light: #7fb3d5; /* Azul Claro Intermedio */
+    --color-blue-medium: #4682b4; /* Azul Medio */
+    --color-blue-dark: #005f99; /* Azul Oscuro */
+    --color-blue-darker: #00334e; /* Azul Muy Oscuro */
+
+    /* 🎨 Variantes de Gris */
+    --color-gray-lighter: #f0f0f0; /* Gris Muy Claro */
+    --color-gray-light: #d3d3d3; /* Gris Claro */
+    --color-gray-medium: #525252; /* Gris Medio */
+    --color-gray-dark: #1c1c1c; /* Gris Oscuro */
+    --color-gray-darker: #0f0f0f; /* Gris Muy Oscuro */
 
     /* 🎨 Fondos y Bordes */
     --bg-light: var(--color-white);
@@ -63,16 +73,69 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 body.dark-mode {
     background-color: var(--color-gray-medium);
     color: var(--text-light);
+
+    /* Estilos globales para Angular Material */
+    mat-card {
+        background-color: var(--color-gray-dark);
+        color: var(--text-light);
+    }
+
+    mat-card-header {
+        background-color: var(--color-blue-dark);
+        color: var(--text-light);
+    }
+
+    mat-card-title {
+        color: var(--text-light);
+    }
+
+    mat-card-content {
+        background-color: var(--color-gray-medium);
+        color: var(--text-light);
+    }
+
+    mat-table {
+        background-color: var(--color-gray-dark);
+        color: var(--text-light);
+    }
+
+    mat-header-cell {
+        background-color: var(--color-blue-dark);
+        color: var(--text-light);
+    }
+
+    mat-cell {
+        background-color: var(--color-gray-medium);
+        color: var(--text-light);
+    }
+
+    mat-dialog-container {
+        background-color: var(--color-gray-dark);
+        color: var(--text-light);
+    }
+
+    mat-button {
+        color: var(--text-light);
+    }
+
+    mat-icon {
+        color: var(--text-light);
+    }
+
+    /* Dropdowns */
     .dropdown-menu {
         background-color: #333;
         color: var(--text-light);
     }
+
     .dropdown-item {
         color: var(--text-light);
         &:hover {
             background-color: #444;
         }
     }
+
+    /* Headers */
     .header {
         background-color: var(--color-blue-dark);
         .nav-link {
@@ -82,6 +145,8 @@ body.dark-mode {
             }
         }
     }
+
+    /* Cards */
     .card {
         border: 1px solid var(--color-light-blue);
         .card-header {
@@ -93,21 +158,60 @@ body.dark-mode {
             color: var(--text-light);
         }
     }
+
+    /* Tablas */
     table {
-        background-color: var(--color-gray-dark);
+        background-color: var(--color-gray-medium);
         color: var(--text-light);
         th {
             background-color: var(--color-blue-dark);
             color: var(--text-light);
-            border: 1px solid var(--color-light-blue);
         }
         td {
             background-color: var(--color-gray-medium);
             color: var(--text-light);
-            border: 1px solid var(--color-light-blue);
         }
     }
+
+    /* Checkboxes */
+    mat-checkbox {
+        color: var(--text-light);
+
+        .mdc-frame {
+            border-color: var(--color-light-blue);
+        }
+
+        .mdc-checkbox__background {
+            background-color: var(--color-gray-light);
+        }
+
+        .mdc-label {
+            color: var(--text-light);
+        }
+    }
+
+    .action-button {
+        background-color: var(--color-blue-dark) !important;
+        color: var(--color-gray-light) !important;
     
+        &.disabled {
+            background-color: var(--color-blue-darker) !important;
+            color: var(--color-gray-light) !important;
+        }
+    }
+}
+
+.action-button {
+    background-color: var(--color-light-blue) !important;
+    color: var(--color-gray-medium) !important;
+
+    &.disabled {
+        background-color: var(--color-gray-medium) !important;
+        color: var(--color-gray-light) !important;
+    }
+    &.create-button {
+      margin-left: auto;
+    }
 }
 
 .basic-page {

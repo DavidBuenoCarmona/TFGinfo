@@ -1,40 +1,51 @@
-<div class="col-md-12">
-    <div class="card">
-        <div class="card-header">
-            <h3>{{ 'TFG.TITLE_N' | translate }}</h3>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>{{ 'GLOBAL.NAME' | translate }}</th>
-                            <th>{{ 'GLOBAL.DESCRIPTION' | translate }}</th>
-                            <th>{{ 'ADMIN.DEPARTMENT.TITLE_1' | translate }}</th>
-                            <th>{{ 'TFG.SLOTS' | translate }}</th>
-                            <th class="action-cell">{{ 'GLOBAL.ACTIONS' | translate }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for(tfg of tfgs; track tfg.id) {
-                            <tr>
-                                <td>{{ tfg.name }}</td>
-                                <td>{{ tfg.description }}</td>
-                                <td>{{ tfg.department!.name }}</td>
-                                <td>{{ tfg.slots }}</td>
-                                <td class="">
-                                    <button type="button" class="btn btn-primary m-2" (click)="onEdit(tfg)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger m-2" (click)="onDelete(tfg)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+<div class="mat-elevation-z8">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title class="mb-2">{{ 'TFG.TITLE_N' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <table mat-table [dataSource]="tfgs" class="mat-table">
+                <!-- Nombre Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
+                    <td mat-cell *matCellDef="let tfg">{{ tfg.name }}</td>
+                </ng-container>
+
+                <!-- Descripción Column -->
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.DESCRIPTION' | translate }}</th>
+                    <td mat-cell *matCellDef="let tfg">{{ tfg.description }}</td>
+                </ng-container>
+
+                <!-- Departamento Column -->
+                <ng-container matColumnDef="department">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.DEPARTMENT.TITLE_1' | translate }}</th>
+                    <td mat-cell *matCellDef="let tfg">{{ tfg.department!.name }}</td>
+                </ng-container>
+
+                <!-- Plazas Column -->
+                <ng-container matColumnDef="slots">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'TFG.SLOTS' | translate }}</th>
+                    <td mat-cell *matCellDef="let tfg">{{ tfg.slots }}</td>
+                </ng-container>
+
+                <!-- Acciones Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
+                    <td mat-cell *matCellDef="let tfg">
+                        <button mat-icon-button color="primary" (click)="onEdit(tfg)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="onDelete(tfg)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Header and Row Definitions -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </mat-card-content>
+    </mat-card>
 </div>
