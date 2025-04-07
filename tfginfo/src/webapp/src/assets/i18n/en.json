@@ -62,9 +62,11 @@
     "PROFILE": {
         "TITLE_1": "My Profile"
     },
-    "STUDING_GROUP": {
-        "TITLE_1": "Studing group",
-        "TITLE_N": "Studing groups"
+    "WORKING_GROUP": {
+        "NEW": "New working group",
+        "PRIVATE": "Private group?",
+        "TITLE_1": "Working group",
+        "TITLE_N": "Working groups"
     },
     "TFG": {
         "DEPARTMENT_REQUIRED": "Department is required",

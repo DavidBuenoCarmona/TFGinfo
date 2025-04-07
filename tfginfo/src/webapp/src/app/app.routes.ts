@@ -4,12 +4,13 @@ import { LoginComponent } from './modules/login/pages/login/login.component';
 import { BookingsComponent } from './modules/bookings/pages/bookings/bookings.component';
 import { TfgSearchComponent } from './modules/tfg/pages/tfg-search/tfg-search.component';
 import { ProfesorSearchComponent } from './modules/professor/pages/profesor-search/profesor-search.component';
-import { GroupsSearchComponent } from './modules/groups/pages/groups-search/groups-search.component';
+import { GroupSearchComponent } from './modules/groups/pages/groups-search/group-search.component';
 import { ProfileDetailComponent } from './modules/profile/pages/profile-detail/profile-detail.component';
 import { DepartmentSearchComponent } from './modules/admin/pages/department-search/department-search.component';
 import { UniversitySearchComponent } from './modules/admin/pages/university-search/university-search.component';
 import { UserSearchComponent } from './modules/admin/pages/user-search/user-search.component';
 import { TfgDetailComponent } from './modules/tfg/pages/tfg-detail/tfg-detail.component';
+import { GroupDetailComponent } from './modules/groups/pages/group-detail/group-detail.component';
 
 
 export const routes: Routes = [
@@ -35,16 +36,17 @@ export const routes: Routes = [
                 component: TfgDetailComponent
             },
             {
-                path: 'tfg/new',
-                component: TfgDetailComponent
+                path: 'working-group',
+                component: GroupSearchComponent
             },
+            {
+                path: 'working-group/:id',
+                component: GroupDetailComponent
+            },
+
             {
                 path: 'professor',
                 component: ProfesorSearchComponent
-            },
-            {
-                path: 'studing-group',
-                component: GroupsSearchComponent
             },
             {
                 path: 'profile',
@@ -68,5 +70,10 @@ export const routes: Routes = [
                 ]
             }
         ]
+    },
+    {
+        path: '**',
+        redirectTo: '',
+        pathMatch: 'full'
     }
 ];

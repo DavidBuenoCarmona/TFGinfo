@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TfgService } from '../../services/tfg.service';
-import { TFGLineDTO } from '../../models/tfg.model';
+import { WorkingGroupBase } from '../../models/group.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,11 +9,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { DepartmentService } from '../../../admin/services/department.service';
-import { DepartmentDTO } from '../../../admin/models/department.model';
+import { GroupService } from '../../services/group-service';
 
 @Component({
-    selector: 'tfg-detail',
+    selector: 'group-detail',
     standalone: true,
     imports: [
         TranslateModule,
@@ -24,23 +22,22 @@ import { DepartmentDTO } from '../../../admin/models/department.model';
         MatInputModule,
         MatSelectModule,
         MatButtonModule,
-        CommonModule],
-    templateUrl: './tfg-detail.component.html',
-    styleUrls: ['./tfg-detail.component.scss']
+        CommonModule
+    ],
+    templateUrl: './group-detail.component.html',
+    styleUrls: ['./group-detail.component.scss']
 })
-export class TfgDetailComponent implements OnInit {
+export class GroupDetailComponent implements OnInit {
     id: string | null = null;
-    tfg: TFGLineDTO | null = null;
+    group: WorkingGroupBase | null = null;
     creation: boolean = false;
-    tfgForm!: FormGroup;
-    departments: DepartmentDTO[] = [];
+    groupForm!: FormGroup;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private tfgService: TfgService,
-        private fb: FormBuilder,
-        private departmentService: DepartmentService
+        private groupService: GroupService,
+        private fb: FormBuilder
     ) { }
 
     ngOnInit(): void {
@@ -48,41 +45,35 @@ export class TfgDetailComponent implements OnInit {
         if (this.id !== "new" && isNaN(Number(this.id))) {
             this.router.navigate(['/']);
         }
-        this.creation = this.id == "new";
+        this.creation = this.id === "new";
 
-        this.tfgForm = this.fb.group({
+        this.groupForm = this.fb.group({
             id: [this.creation ? null : this.id],
             name: ['', Validators.required],
             description: ['', Validators.required],
-            departmentId: ['', Validators.required],
-            slots: [1, [Validators.required, Validators.min(1)]],
-            group: [false],
+            isPrivate: [false, Validators.required]
         });
 
-        this.departmentService.getDepartments().subscribe((data) => this.departments = data);
-
         if (!this.creation) {
-            this.tfgService.getTfg(+this.id!).subscribe((data) => {
-                this.tfg = data;
-                this.tfgForm.patchValue(data);
-                this.tfgForm.get('departmentId')?.setValue(data.department?.id);
+            this.groupService.getGroup(+this.id!).subscribe((data) => {
+                this.group = data;
+                this.groupForm.patchValue(data);
             });
         }
-
     }
 
     onSubmit(): void {
-        if (this.tfgForm.valid) {
-            const tfgData = this.tfgForm.value;
+        if (this.groupForm.valid) {
+            const groupData = this.groupForm.value;
             if (this.creation) {
-                this.tfgService.createTfg(tfgData).subscribe(() => this.router.navigate(['/tfg']));
+                this.groupService.createGroup(groupData).subscribe(() => this.router.navigate(['/working-group']));
             } else {
-                this.tfgService.updateTfg(tfgData).subscribe(() => this.router.navigate(['/tfg']));
+                this.groupService.updateGroup(groupData).subscribe(() => this.router.navigate(['/working-group']));
             }
         }
     }
 
     onCancel(): void {
-        this.router.navigate(['/tfg']);
+        this.router.navigate(['/working-group']);
     }
 }

@@ -62,7 +62,9 @@
     "PROFILE": {
         "TITLE_1": "Mi Perfil"
     },
-    "STUDING_GROUP": {
+    "WORKING_GROUP": {
+        "NEW": "Nuevo grupo de trabajo",
+        "PRIVATE": "¿Grupo privado?",
         "TITLE_1": "Grupo de estudio",
         "TITLE_N": "Grupos de estudio"
     },

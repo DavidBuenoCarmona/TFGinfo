@@ -1,1 +1,46 @@
-<p>groups-list works!</p>
+<div class="mat-elevation-z8">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title class="mb-2">{{ 'WORKING_GROUP.TITLE_N' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <table mat-table [dataSource]="groups" class="mat-table">
+                <!-- Nombre Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
+                    <td mat-cell *matCellDef="let group">{{ group.name }}</td>
+                </ng-container>
+
+                <!-- Descripción Column -->
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.DESCRIPTION' | translate }}</th>
+                    <td mat-cell *matCellDef="let group">{{ group.description }}</td>
+                </ng-container>
+
+                <!-- Is Private Column -->
+                <ng-container matColumnDef="isPrivate">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'WORKING_GROUP.PRIVATE' | translate }}</th>
+                    <td mat-cell *matCellDef="let group"><mat-icon>{{ group.isPrivate ? 'lock' : 'lock_open' }}</mat-icon></td>
+                    
+                </ng-container>
+
+                <!-- Acciones Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
+                    <td mat-cell *matCellDef="let group">
+                        <button mat-icon-button color="primary" (click)="onEdit(group)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="onDelete(group)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Header and Row Definitions -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </mat-card-content>
+    </mat-card>
+</div>

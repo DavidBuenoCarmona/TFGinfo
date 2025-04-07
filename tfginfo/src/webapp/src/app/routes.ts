@@ -24,10 +24,10 @@ export const route = {
         list: '/professor',
     },
     profile: '/profile',
-    studingGroup: {
-        create: '/studing-group/create',
-        edit: '/studing-group/edit',
-        list: '/studing-group',
+    workingGroup: {
+        create: '/working-group/create',
+        edit: '/working-group/edit',
+        list: '/working-group',
     },
     tfg: {
         create: '/tfg/create',

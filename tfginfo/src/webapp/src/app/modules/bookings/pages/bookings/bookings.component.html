@@ -9,19 +9,7 @@
 
         <!-- Grupos de estudio -->
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3>{{ 'BOOKING.GROUP' | translate }}</h3>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        <li class="list-group-item">Elemento A</li>
-                        <li class="list-group-item">Elemento B</li>
-                        <li class="list-group-item">Elemento C</li>
-                        <li class="list-group-item">Elemento D</li>
-                    </ul>
-                </div>
-            </div>
+            <group-list [displayedColumns]="displayedGroupColumns"></group-list>
         </div>
     </div>
 </div>
