@@ -1,0 +1,15 @@
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-field.small-field {
+    flex: 1;
+    max-width: 300px;
+}
+
+.search-button,
+.clear-button {
+    white-space: nowrap;
+}

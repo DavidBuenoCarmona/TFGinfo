@@ -3,7 +3,7 @@ import { MainLayoutComponent } from './core/layout/components/main-layout/main-l
 import { LoginComponent } from './modules/login/pages/login/login.component';
 import { BookingsComponent } from './modules/bookings/pages/bookings/bookings.component';
 import { TfgSearchComponent } from './modules/tfg/pages/tfg-search/tfg-search.component';
-import { ProfesorSearchComponent } from './modules/professor/pages/profesor-search/profesor-search.component';
+import { ProfessorSearchComponent } from './modules/professor/pages/profesor-search/professor-search.component';
 import { GroupSearchComponent } from './modules/groups/pages/groups-search/group-search.component';
 import { ProfileDetailComponent } from './modules/profile/pages/profile-detail/profile-detail.component';
 import { DepartmentSearchComponent } from './modules/admin/pages/department-search/department-search.component';
@@ -11,6 +11,7 @@ import { UniversitySearchComponent } from './modules/admin/pages/university-sear
 import { UserSearchComponent } from './modules/admin/pages/user-search/user-search.component';
 import { TfgDetailComponent } from './modules/tfg/pages/tfg-detail/tfg-detail.component';
 import { GroupDetailComponent } from './modules/groups/pages/group-detail/group-detail.component';
+import { ProfessorDetailComponent } from './modules/professor/pages/professor-detail/professor-detail.component';
 
 
 export const routes: Routes = [
@@ -46,7 +47,11 @@ export const routes: Routes = [
 
             {
                 path: 'professor',
-                component: ProfesorSearchComponent
+                component: ProfessorSearchComponent
+            },
+            {
+                path: 'professor/:id',
+                component: ProfessorDetailComponent
             },
             {
                 path: 'profile',

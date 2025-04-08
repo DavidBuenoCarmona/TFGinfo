@@ -61,4 +61,15 @@ export class TfgSearchComponent implements OnInit {
         this.filteredTfgs = [...this.tfgs]; // Restaurar la lista completa
     }
 
+    deleteTfg(tfgId: number): void {
+        this.tfgService.deleteTfg(tfgId).subscribe({
+            next: () => {},
+            error: (err) => console.error(err),
+            complete: () => {
+              this.tfgs = this.tfgs.filter((item) => item.id !== tfgId);
+              this.filteredTfgs = this.filteredTfgs.filter((item) => item.id !== tfgId);
+            }
+          });
+        }
+
 }

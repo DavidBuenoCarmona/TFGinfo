@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,13 +27,14 @@ import { MatCardModule } from '@angular/material/card';
 export class TfgListComponent {
   @Input() tfgs: TFGLineDTO[] = [];
   @Input() displayedColumns: string[] = ['name', 'description', 'department', 'slots', 'actions'];
+  @Output() onDeleteTfg = new EventEmitter<number>();
 
   constructor(
     private dialog: MatDialog,
     private tfgService: TfgService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   onEdit(tfg: TFGLineDTO) {
     this.router.navigate([tfg.id], { relativeTo: this.route });
@@ -44,13 +45,7 @@ export class TfgListComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.tfgService.deleteTfg(tfg.id!).subscribe({
-          next: () => {},
-          error: (err) => console.error(err),
-          complete: () => {
-            this.tfgs = this.tfgs.filter((item) => item.id !== tfg.id);
-          }
-        });
+        this.onDeleteTfg.emit(tfg.id!);
       }
     });
   }

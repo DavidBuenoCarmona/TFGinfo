@@ -66,7 +66,7 @@ public class ProfessorController : BaseController
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetProfessorById([FromBody] int id)
+    public IActionResult GetProfessorById(int id)
     {
         try {
             ProfessorManager manager = new ProfessorManager(context);

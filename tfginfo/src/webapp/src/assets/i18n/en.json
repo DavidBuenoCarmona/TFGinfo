@@ -44,6 +44,7 @@
         "DESCRIPTION": "Description",
         "DESCRIPTION_REQUIRED": "Description is required",
         "EDIT": "Edit",
+        "EMAIL": "Email",
         "ENGLISH": "English",
         "LOGOUT": "Logout",
         "NAME": "Name",
@@ -51,11 +52,14 @@
         "SAVE": "Save",
         "SEARCH": "Search",
         "SPANISH": "Spanish",
+        "SURNAME": "Surname",
         "UPDATE": "Update",
         "VIEW": "View",
         "WANT_TO_CONFIRM": "Do you want to confirm the action?"
     },
     "PROFESSOR": {
+        "NEW": "New professor",
+        "IS_DEPARTMENT_BOSS": "Is department boss?",
         "TITLE_1": "Professor",
         "TITLE_N": "Professors"
     },

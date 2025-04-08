@@ -62,4 +62,11 @@ export class GroupSearchComponent implements OnInit {
         this.filteredGroups = [...this.groups]; // Restaurar la lista completa
     }
 
+    deleteGroup(groupId: number): void {
+        this.groupService.deleteGroup(groupId).subscribe(() => {
+            this.groups = this.groups.filter(group => group.id !== groupId);
+            this.filteredGroups = [...this.groups]; // Actualizar la lista filtrada
+        });
+    }
+
 }

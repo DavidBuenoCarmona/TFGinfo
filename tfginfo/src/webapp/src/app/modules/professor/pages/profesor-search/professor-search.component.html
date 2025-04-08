@@ -1,6 +1,5 @@
-
 <div class="basic-page">
-    <h2 class="mb-4">{{ 'TFG.LINES_TITLE_N' | translate }}</h2>
+    <h2 class="mb-4">{{ 'PROFESSOR.TITLE_N' | translate }}</h2>
     <div class="form-row">
         <form [formGroup]="filterForm" (ngSubmit)="onSearch()" class="form-row">
             <mat-form-field appearance="fill" class="form-field small-field">
@@ -20,5 +19,5 @@
             {{ 'GLOBAL.CREATE' | translate }}
         </button>
     </div>
-    <tfg-list (onDeleteTfg)="deleteTfg($event)" [tfgs]="filteredTfgs"></tfg-list>
+    <professor-list (onDeleteProfessor)="deleteProfessor($event)" [professors]="filteredProfessors"></professor-list>
 </div>

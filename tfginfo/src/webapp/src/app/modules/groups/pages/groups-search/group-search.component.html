@@ -19,5 +19,5 @@
             {{ 'GLOBAL.CREATE' | translate }}
         </button>
     </div>
-    <group-list [groups]="filteredGroups"></group-list>
+    <group-list (onDeleteGroup)="deleteGroup($event)" [groups]="filteredGroups"></group-list>
 </div>
