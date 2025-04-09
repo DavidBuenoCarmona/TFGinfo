@@ -1,1 +1,22 @@
-<p>department-detail works!</p>
+<div class="basic-page">
+    <h2 *ngIf="!creation" class="mb-3">{{ department?.name }}</h2>
+    <h2 *ngIf="creation" class="mb-3">{{ 'DEPARTMENT.NEW' | translate }}</h2>
+
+    <form class="department-form" [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
+                <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
+                <mat-error *ngIf="departmentForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="actions">
+            <button mat-raised-button class="action-button" [ngClass]="departmentForm.invalid ? 'disabled' : ''" type="submit" [disabled]="departmentForm.invalid">
+                {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
+            </button>
+            <button mat-raised-button class="action-button" type="button" (click)="onCancel()">
+                {{ 'GLOBAL.CANCEL' | translate }}
+            </button>
+        </div>
+    </form>
+</div>

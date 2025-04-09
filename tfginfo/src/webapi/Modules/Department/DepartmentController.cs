@@ -58,6 +58,17 @@ public class DepartmentController : BaseController
         }
     }
 
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        try {
+            DepartmentManager manager = new DepartmentManager(context);
+            return Ok(manager.GetDepartment(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        }
+    }
+
 
     [HttpGet("university/{universityId}")]
     public IActionResult GetAllByUniversity(int universityId)

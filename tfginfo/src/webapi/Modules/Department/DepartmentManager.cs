@@ -67,6 +67,15 @@ namespace TFGinfo.Api
             return context.department.Where(department => department.university == universityId).Include(d => d.universityModel).ToList().ConvertAll(model => new DepartmentDTO(model));
         }
 
+        public DepartmentDTO GetDepartment(int id)
+        {
+            DepartmentModel? model = context.department.Include(d => d.universityModel).FirstOrDefault(department => department.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            return new DepartmentDTO(model);
+        }
+
         #region Private Methods
         private void CheckNameIsNotRepeated(string name)
         {
