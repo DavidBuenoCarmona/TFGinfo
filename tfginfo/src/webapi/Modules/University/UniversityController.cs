@@ -57,4 +57,17 @@ public class UniversityController : BaseController
             return UnprocessableEntity(e.GetError());
         }
     }
+
+    [HttpGet("{id}")]
+    public IActionResult Get(int id)
+    {
+        try {
+            UniversityManager universityManager = new UniversityManager(context);
+            return Ok(universityManager.GetUniversity(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
 }

@@ -5,7 +5,7 @@ import { TFGLineDTO } from '../../models/tfg.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -31,7 +31,8 @@ export class TfgSearchComponent implements OnInit {
     constructor(
         public tfgService: TfgService,
         private router: Router,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private route: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
@@ -46,7 +47,7 @@ export class TfgSearchComponent implements OnInit {
     }
     
     onCreate(): void {
-        this.router.navigate(['/tfg/new']);
+        this.router.navigate(['new'], { relativeTo: this.route });
     }
 
     onSearch(): void {

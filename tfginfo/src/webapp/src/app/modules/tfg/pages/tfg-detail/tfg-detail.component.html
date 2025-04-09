@@ -11,7 +11,7 @@
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'ADMIN.DEPARTMENT.TITLE_1' | translate }}</mat-label>
+                <mat-label>{{ 'DEPARTMENT.TITLE_1' | translate }}</mat-label>
                 <mat-select formControlName="departmentId">
                     <mat-option *ngFor="let department of departments" [value]="department.id">
                         {{ department.name }}

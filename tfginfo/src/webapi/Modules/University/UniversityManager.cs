@@ -56,6 +56,15 @@ namespace TFGinfo.Api
             return new UniversityBase(model);
         }
 
+        public UniversityBase GetUniversity(int id)
+        {
+            UniversityModel? model = context.university.FirstOrDefault(u => u.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            return new UniversityBase(model);
+        }
+
         #region Private Methods
         private void CheckNameIsNotRepeated(UniversityBase university)
         {

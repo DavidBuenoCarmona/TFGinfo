@@ -1,33 +1,35 @@
 {
     "ADMIN": {
-        "TITLE_1": "Administración",
-        "DEPARTMENT": {
-            "CREATE": "Crear departamento",
-            "EDIT": "Editar departamento",
-            "DELETE": "Eliminar departamento",
-            "TITLE_1": "Departamento",
-            "TITLE_N": "Departamentos",
-            "VIEW": "Ver departamento",
-            "VIEW_LIST": "Ver lista de departamentos"
-        },
-        "UNIVERSITY": {
-            "CREATE": "Crear universidad",
-            "EDIT": "Editar universidad",
-            "DELETE": "Eliminar universidad",
-            "TITLE_1": "Universidad",
-            "TITLE_N": "Universidades",
-            "VIEW": "Ver universidad",
-            "VIEW_LIST": "Ver lista de universidades"
-        },
-        "USER": {
-            "CREATE": "Crear usuario",
-            "EDIT": "Editar usuario",
-            "DELETE": "Eliminar usuario",
-            "TITLE_1": "Usuario",
-            "TITLE_N": "Usuarios",
-            "VIEW": "Ver usuario",
-            "VIEW_LIST": "Ver lista de usuarios"
-        }
+        "TITLE_1": "Administración"
+    },
+    "DEPARTMENT": {
+        "CREATE": "Crear departamento",
+        "EDIT": "Editar departamento",
+        "DELETE": "Eliminar departamento",
+        "TITLE_1": "Departamento",
+        "TITLE_N": "Departamentos",
+        "VIEW": "Ver departamento",
+        "VIEW_LIST": "Ver lista de departamentos"
+    },
+    "UNIVERSITY": {
+        "ADDRESS": "Dirección",
+        "CREATE": "Crear universidad",
+        "EDIT": "Editar universidad",
+        "DELETE": "Eliminar universidad",
+        "NEW": "Nueva universidad",
+        "TITLE_1": "Universidad",
+        "TITLE_N": "Universidades",
+        "VIEW": "Ver universidad",
+        "VIEW_LIST": "Ver lista de universidades"
+    },
+    "USER": {
+        "CREATE": "Crear usuario",
+        "EDIT": "Editar usuario",
+        "DELETE": "Eliminar usuario",
+        "TITLE_1": "Usuario",
+        "TITLE_N": "Usuarios",
+        "VIEW": "Ver usuario",
+        "VIEW_LIST": "Ver lista de usuarios"
     },
     "BOOKING": {
         "GROUP": "Mis grupos",

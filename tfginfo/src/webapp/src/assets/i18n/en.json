@@ -1,33 +1,35 @@
 {
     "ADMIN": {
-        "TITLE_1": "Administration",
-        "DEPARTMENT": {
-            "CREATE": "Create department",
-            "EDIT": "Edit department",
-            "DELETE": "Delete department",
-            "TITLE_1": "Department",
-            "TITLE_N": "Departments",
-            "VIEW": "View department",
-            "VIEW_LIST": "View department list"
-        },
-        "UNIVERSITY": {
-            "CREATE": "Create university",
-            "EDIT": "Edit university",
-            "DELETE": "Delete university",
-            "TITLE_1": "University",
-            "TITLE_N": "Universities",
-            "VIEW": "View university",
-            "VIEW_LIST": "View university list"
-        },
-        "USER": {
-            "CREATE": "Create user",
-            "EDIT": "Edit user",
-            "DELETE": "Delete user",
-            "TITLE_1": "User",
-            "TITLE_N": "Users",
-            "VIEW": "View user",
-            "VIEW_LIST": "View user list"
-        }
+        "TITLE_1": "Administration"
+    },
+    "DEPARTMENT": {
+        "CREATE": "Create department",
+        "EDIT": "Edit department",
+        "DELETE": "Delete department",
+        "TITLE_1": "Department",
+        "TITLE_N": "Departments",
+        "VIEW": "View department",
+        "VIEW_LIST": "View department list"
+    },
+    "UNIVERSITY": {
+        "ADDRESS": "Address",
+        "CREATE": "Create university",
+        "EDIT": "Edit university",
+        "DELETE": "Delete university",
+        "NEW": "New university",
+        "TITLE_1": "University",
+        "TITLE_N": "Universities",
+        "VIEW": "View university",
+        "VIEW_LIST": "View university list"
+    },
+    "USER": {
+        "CREATE": "Create user",
+        "EDIT": "Edit user",
+        "DELETE": "Delete user",
+        "TITLE_1": "User",
+        "TITLE_N": "Users",
+        "VIEW": "View user",
+        "VIEW_LIST": "View user list"
     },
     "BOOKING": {
         "GROUP": "My groups",

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -31,7 +31,8 @@ export class GroupSearchComponent implements OnInit {
     constructor(
         public groupService: GroupService,
         private router: Router,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private route: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
@@ -47,7 +48,7 @@ export class GroupSearchComponent implements OnInit {
     }
     
     onCreate(): void {
-        this.router.navigate(['/working-group/new']);
+        this.router.navigate(['new'], { relativeTo: this.route });
     }
 
     onSearch(): void {

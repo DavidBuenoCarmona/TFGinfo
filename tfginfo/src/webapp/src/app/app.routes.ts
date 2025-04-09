@@ -12,6 +12,7 @@ import { UserSearchComponent } from './modules/admin/pages/user-search/user-sear
 import { TfgDetailComponent } from './modules/tfg/pages/tfg-detail/tfg-detail.component';
 import { GroupDetailComponent } from './modules/groups/pages/group-detail/group-detail.component';
 import { ProfessorDetailComponent } from './modules/professor/pages/professor-detail/professor-detail.component';
+import { UniversityDetailComponent } from './modules/admin/pages/university-detail/university-detail.component';
 
 
 export const routes: Routes = [
@@ -67,6 +68,10 @@ export const routes: Routes = [
                     {
                         path: 'university',
                         component: UniversitySearchComponent
+                    },
+                    {
+                        path: 'university/:id',
+                        component: UniversityDetailComponent
                     },
                     {
                         path: 'user',
