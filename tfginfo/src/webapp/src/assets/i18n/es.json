@@ -2,40 +2,30 @@
     "ADMIN": {
         "TITLE_1": "Administración"
     },
-    "DEPARTMENT": {
-        "CREATE": "Crear departamento",
-        "EDIT": "Editar departamento",
-        "DELETE": "Eliminar departamento",
-        "TITLE_1": "Departamento",
-        "TITLE_N": "Departamentos",
-        "VIEW": "Ver departamento",
-        "VIEW_LIST": "Ver lista de departamentos"
-    },
-    "UNIVERSITY": {
-        "ADDRESS": "Dirección",
-        "CREATE": "Crear universidad",
-        "CHANGE": "Cambiar universidad",
-        "EDIT": "Editar universidad",
-        "DELETE": "Eliminar universidad",
-        "NEW": "Nueva universidad",
-        "TITLE_1": "Universidad",
-        "TITLE_N": "Universidades",
-        "VIEW": "Ver universidad",
-        "VIEW_LIST": "Ver lista de universidades"
-    },
-    "USER": {
-        "CREATE": "Crear usuario",
-        "EDIT": "Editar usuario",
-        "DELETE": "Eliminar usuario",
-        "TITLE_1": "Usuario",
-        "TITLE_N": "Usuarios",
-        "VIEW": "Ver usuario",
-        "VIEW_LIST": "Ver lista de usuarios"
-    },
     "BOOKING": {
         "GROUP": "Mis grupos",
         "TITLE_N": "Mis reservas",
         "TFG": "Mis reservas de TFGs"
+    },
+    "CAREER": {
+        "CREATE": "Crear carrera",
+        "EDIT": "Editar carrera",
+        "DELETE": "Eliminar carrera",
+        "NEW": "Nueva carrera",
+        "TITLE_1": "Carrera",
+        "TITLE_N": "Carreras",
+        "VIEW": "Ver carrera",
+        "VIEW_LIST": "Ver lista de carreras"
+    },
+    "DEPARTMENT": {
+        "CREATE": "Crear departamento",
+        "EDIT": "Editar departamento",
+        "DELETE": "Eliminar departamento",
+        "NEW": "Nuevo departamento",
+        "TITLE_1": "Departamento",
+        "TITLE_N": "Departamentos",
+        "VIEW": "Ver departamento",
+        "VIEW_LIST": "Ver lista de departamentos"
     },
     "GLOBAL": {
         "ACCEPT": "Aceptar",
@@ -69,12 +59,6 @@
     "PROFILE": {
         "TITLE_1": "Mi Perfil"
     },
-    "WORKING_GROUP": {
-        "NEW": "Nuevo grupo de trabajo",
-        "PRIVATE": "¿Grupo privado?",
-        "TITLE_1": "Grupo de estudio",
-        "TITLE_N": "Grupos de estudio"
-    },
     "TFG": {
         "DEPARTMENT_REQUIRED": "El departamento es requerido",
         "IS_GROUP": "¿Proyecto en grupo?",
@@ -85,5 +69,32 @@
         "SLOTS_REQUIRED": "Plazas son requeridas",
         "TITLE_1": "TFG",
         "TITLE_N": "TFGs"
+    },
+    "UNIVERSITY": {
+        "ADDRESS": "Dirección",
+        "CREATE": "Crear universidad",
+        "CHANGE": "Cambiar universidad",
+        "EDIT": "Editar universidad",
+        "DELETE": "Eliminar universidad",
+        "NEW": "Nueva universidad",
+        "TITLE_1": "Universidad",
+        "TITLE_N": "Universidades",
+        "VIEW": "Ver universidad",
+        "VIEW_LIST": "Ver lista de universidades"
+    },
+    "USER": {
+        "CREATE": "Crear usuario",
+        "EDIT": "Editar usuario",
+        "DELETE": "Eliminar usuario",
+        "TITLE_1": "Usuario",
+        "TITLE_N": "Usuarios",
+        "VIEW": "Ver usuario",
+        "VIEW_LIST": "Ver lista de usuarios"
+    },
+    "WORKING_GROUP": {
+        "NEW": "Nuevo grupo de trabajo",
+        "PRIVATE": "¿Grupo privado?",
+        "TITLE_1": "Grupo de estudio",
+        "TITLE_N": "Grupos de estudio"
     }
 }

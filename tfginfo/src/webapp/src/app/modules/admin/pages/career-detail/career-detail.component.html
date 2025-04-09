@@ -1,0 +1,31 @@
+<div class="basic-page">
+    <h2 *ngIf="!creation" class="mb-3">{{ career?.name }}</h2>
+    <h2 *ngIf="creation" class="mb-3">{{ 'CAREER.NEW' | translate }}</h2>
+
+    <form class="career-form" [formGroup]="careerForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
+                <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
+                <mat-error *ngIf="careerForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'UNIVERSITY.TITLE_1' | translate }}</mat-label>
+                <mat-select formControlName="universityId">
+                  <mat-option *ngFor="let university of universities" [value]="university.id">
+                    {{ university.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="careerForm.get('universityId')?.invalid">{{ 'GLOBAL.UNIVERSITY_REQUIRED' | translate }}</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="actions">
+            <button mat-raised-button class="action-button" [ngClass]="careerForm.invalid ? 'disabled' : ''" type="submit" [disabled]="careerForm.invalid">
+                {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
+            </button>
+            <button mat-raised-button class="action-button" type="button" (click)="onCancel()">
+                {{ 'GLOBAL.CANCEL' | translate }}
+            </button>
+        </div>
+    </form>
+</div>

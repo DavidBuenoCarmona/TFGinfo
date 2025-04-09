@@ -62,6 +62,15 @@ namespace TFGinfo.Api
             return new CareerDTO(model);
         }
 
+        public CareerDTO GetCareerById(int id)
+        {
+            CareerModel? model = context.career.Include(d => d.universityModel).FirstOrDefault(Career => Career.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            return new CareerDTO(model);
+        }
+
         public List<CareerDTO> GetCareersByUniversity(int universityId)
         {
             return context.career.Where(Career => Career.university == universityId).Include(d => d.universityModel).ToList().ConvertAll(model => new CareerDTO(model));

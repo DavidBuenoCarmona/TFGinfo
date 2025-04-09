@@ -1,0 +1,15 @@
+.form-row {
+    display: flex;
+    gap: 16px; /* Espaciado entre los elementos de la fila */
+    margin-bottom: 16px; /* Espaciado entre filas */
+}
+
+.full-width {
+    width: 100%; /* El textarea ocupa todo el ancho */
+}
+
+.actions {
+    margin-top: 16px; /* Separación entre el formulario y los botones */
+    display: flex;
+    gap: 8px; /* Espaciado entre los botones */
+}

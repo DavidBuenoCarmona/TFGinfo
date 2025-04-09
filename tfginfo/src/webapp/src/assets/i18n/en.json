@@ -2,40 +2,30 @@
     "ADMIN": {
         "TITLE_1": "Administration"
     },
-    "DEPARTMENT": {
-        "CREATE": "Create department",
-        "EDIT": "Edit department",
-        "DELETE": "Delete department",
-        "TITLE_1": "Department",
-        "TITLE_N": "Departments",
-        "VIEW": "View department",
-        "VIEW_LIST": "View department list"
-    },
-    "UNIVERSITY": {
-        "ADDRESS": "Address",
-        "CREATE": "Create university",
-        "CHANGE": "Change university",
-        "EDIT": "Edit university",
-        "DELETE": "Delete university",
-        "NEW": "New university",
-        "TITLE_1": "University",
-        "TITLE_N": "Universities",
-        "VIEW": "View university",
-        "VIEW_LIST": "View university list"
-    },
-    "USER": {
-        "CREATE": "Create user",
-        "EDIT": "Edit user",
-        "DELETE": "Delete user",
-        "TITLE_1": "User",
-        "TITLE_N": "Users",
-        "VIEW": "View user",
-        "VIEW_LIST": "View user list"
-    },
     "BOOKING": {
         "GROUP": "My groups",
         "TITLE_N": "My bookings",
         "TFG": "My TFG bookings"
+    },
+    "CAREER": {
+        "CREATE": "Create career",
+        "EDIT": "Edit career",
+        "DELETE": "Delete career",
+        "NEW": "New career",
+        "TITLE_1": "Career",
+        "TITLE_N": "Careers",
+        "VIEW": "View career",
+        "VIEW_LIST": "View career list"
+    },
+    "DEPARTMENT": {
+        "CREATE": "Create department",
+        "EDIT": "Edit department",
+        "DELETE": "Delete department",
+        "NEW": "New department",
+        "TITLE_1": "Department",
+        "TITLE_N": "Departments",
+        "VIEW": "View department",
+        "VIEW_LIST": "View department list"
     },
     "GLOBAL": {
         "ACCEPT": "Accept",
@@ -69,12 +59,6 @@
     "PROFILE": {
         "TITLE_1": "My Profile"
     },
-    "WORKING_GROUP": {
-        "NEW": "New working group",
-        "PRIVATE": "Private group?",
-        "TITLE_1": "Working group",
-        "TITLE_N": "Working groups"
-    },
     "TFG": {
         "DEPARTMENT_REQUIRED": "Department is required",
         "IS_GROUP": "Is group project?",
@@ -85,5 +69,32 @@
         "SLOTS_REQUIRED": "Slots are required",
         "TITLE_1": "TFG",
         "TITLE_N": "TFGs"
+    },
+    "UNIVERSITY": {
+        "ADDRESS": "Address",
+        "CREATE": "Create university",
+        "CHANGE": "Change university",
+        "EDIT": "Edit university",
+        "DELETE": "Delete university",
+        "NEW": "New university",
+        "TITLE_1": "University",
+        "TITLE_N": "Universities",
+        "VIEW": "View university",
+        "VIEW_LIST": "View university list"
+    },
+    "USER": {
+        "CREATE": "Create user",
+        "EDIT": "Edit user",
+        "DELETE": "Delete user",
+        "TITLE_1": "User",
+        "TITLE_N": "Users",
+        "VIEW": "View user",
+        "VIEW_LIST": "View user list"
+    },
+    "WORKING_GROUP": {
+        "NEW": "New working group",
+        "PRIVATE": "Private group?",
+        "TITLE_1": "Working group",
+        "TITLE_N": "Working groups"
     }
 }

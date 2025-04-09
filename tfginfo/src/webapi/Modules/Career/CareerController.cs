@@ -58,6 +58,13 @@ public class CareerController : BaseController
         }
     }
 
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        CareerManager manager = new CareerManager(context);
+        return Ok(manager.GetCareerById(id));
+    }
+
 
     [HttpGet("university/{universityId}")]
     public IActionResult GetAllByUniversity(int universityId)

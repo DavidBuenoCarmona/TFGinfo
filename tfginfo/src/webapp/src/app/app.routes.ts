@@ -14,6 +14,8 @@ import { GroupDetailComponent } from './modules/groups/pages/group-detail/group-
 import { ProfessorDetailComponent } from './modules/professor/pages/professor-detail/professor-detail.component';
 import { UniversityDetailComponent } from './modules/admin/pages/university-detail/university-detail.component';
 import { DepartmentDetailComponent } from './modules/admin/pages/department-detail/department-detail.component';
+import { CareerSearchComponent } from './modules/admin/pages/career-search/career-search.component';
+import { CareerDetailComponent } from './modules/admin/pages/career-detail/career-detail.component';
 
 
 export const routes: Routes = [
@@ -77,6 +79,18 @@ export const routes: Routes = [
                     {
                         path: 'university/:id',
                         component: UniversityDetailComponent
+                    },
+                    {
+                        path: 'department/:id',
+                        component: DepartmentDetailComponent
+                    },
+                    {
+                        path: 'career',
+                        component: CareerSearchComponent
+                    },
+                    {
+                        path: 'career/:id',
+                        component: CareerDetailComponent
                     },
                     {
                         path: 'user',

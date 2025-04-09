@@ -14,7 +14,12 @@ export const route = {
             create: '/admin/user/create',
             edit: '/admin/user/edit',
             list: '/admin/user',
-        }
+        },
+        career: {
+            create: '/admin/career/create',
+            edit: '/admin/career/edit',
+            list: '/admin/career',
+        },
     },
     booking: '/',
     login: '/login',

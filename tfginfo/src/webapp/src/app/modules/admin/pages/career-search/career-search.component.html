@@ -1,0 +1,23 @@
+<div class="basic-page">
+    <h2 class="mb-4">{{ 'CAREER.TITLE_N' | translate }}</h2>
+    <div class="form-row">
+        <form [formGroup]="filterForm" (ngSubmit)="onSearch()" class="form-row">
+            <mat-form-field appearance="fill" class="form-field small-field">
+                <mat-label>{{ 'GLOBAL.SEARCH' | translate }}</mat-label>
+                <input matInput formControlName="filter" />
+            </mat-form-field>
+    
+            <button mat-raised-button class="action-button" type="submit">
+                {{ 'GLOBAL.SEARCH' | translate }}
+            </button>
+    
+            <button mat-raised-button class="action-button" type="button" (click)="onClearFilters()">
+                {{ 'GLOBAL.CLEAR_FILTERS' | translate }}
+            </button>
+        </form>
+        <button mat-raised-button class="action-button create-button" type="button" (click)="onCreate()">
+            {{ 'GLOBAL.CREATE' | translate }}
+        </button>
+    </div>
+    <career-list (onDeleteCareer)="deleteCareer($event)" [careers]="filteredCareers"></career-list>
+</div>
