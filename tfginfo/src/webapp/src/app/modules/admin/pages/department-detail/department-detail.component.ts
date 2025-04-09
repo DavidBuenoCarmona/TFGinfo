@@ -8,6 +8,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { UniversityBase } from '../../models/university.model';
+import { MatSelectModule } from '@angular/material/select';
+import { UniversityService } from '../../services/university.service';
 
 @Component({
     selector: 'department-detail',
@@ -17,6 +20,7 @@ import { CommonModule } from '@angular/common';
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
+        MatSelectModule,
         MatButtonModule,
         CommonModule
     ],
@@ -27,13 +31,15 @@ export class DepartmentDetailComponent implements OnInit {
     id: string | null = null;
     department: DepartmentDTO | null = null;
     creation: boolean = false;
+    public universities: UniversityBase[] = [];
     departmentForm!: FormGroup;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private departmentService: DepartmentService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private universityService: UniversityService
     ) { }
 
     ngOnInit(): void {
@@ -46,12 +52,18 @@ export class DepartmentDetailComponent implements OnInit {
         this.departmentForm = this.fb.group({
             id: [this.creation ? null : this.id],
             name: ['', Validators.required],
+            universityId : ['', Validators.required],
+        });
+
+        this.universityService.getUniversities().subscribe((data) => {
+            this.universities = data;
         });
 
         if (!this.creation) {
             this.departmentService.getDepartment(+this.id!).subscribe((data) => {
                 this.department = data;
                 this.departmentForm.patchValue(data);
+                this.departmentForm.get('universityId')?.setValue(data.university!.id);
             });
         }
     }
@@ -60,9 +72,9 @@ export class DepartmentDetailComponent implements OnInit {
         if (this.departmentForm.valid) {
             const departmentData = this.departmentForm.value;
             if (this.creation) {
-                this.departmentService.createDepartment(departmentData).subscribe(() => this.router.navigate(['/department']));
+                this.departmentService.createDepartment(departmentData).subscribe(() => this.router.navigate(['admin/department']));
             } else {
-                this.departmentService.updateDepartment(departmentData).subscribe(() => this.router.navigate(['/department']));
+                this.departmentService.updateDepartment(departmentData).subscribe(() => this.router.navigate(['admin/department']));
             }
         }
     }

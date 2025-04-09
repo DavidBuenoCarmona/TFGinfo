@@ -14,6 +14,7 @@
     "UNIVERSITY": {
         "ADDRESS": "Dirección",
         "CREATE": "Crear universidad",
+        "CHANGE": "Cambiar universidad",
         "EDIT": "Editar universidad",
         "DELETE": "Eliminar universidad",
         "NEW": "Nueva universidad",

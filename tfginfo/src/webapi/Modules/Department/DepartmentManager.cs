@@ -19,7 +19,7 @@ namespace TFGinfo.Api
 
         public DepartmentDTO CreateDepartment(DepartmentFlatDTO department)
         { 
-            CheckNameIsNotRepeated(department.name);
+            CheckNameIsNotRepeated(department);
 
             DepartmentModel model = new DepartmentModel {
                 name = department.name,
@@ -53,7 +53,7 @@ namespace TFGinfo.Api
                 throw new NotFoundException();
             }
 
-            CheckNameIsNotRepeated(department.name);
+            CheckNameIsNotRepeated(department);
 
             model.name = department.name;
             model.university = department.universityId;
@@ -77,9 +77,9 @@ namespace TFGinfo.Api
         }
 
         #region Private Methods
-        private void CheckNameIsNotRepeated(string name)
+        private void CheckNameIsNotRepeated(DepartmentFlatDTO department)
         {
-            if (context.department.Any(department => department.name.ToLower() == name.ToLower())) {
+            if (context.department.Any(d => d.name.ToLower() == department.name.ToLower() && d.id != department.id)) {
                 throw new UnprocessableException("Department name already exists");
             }
         }

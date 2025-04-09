@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { route } from '../../../../routes';
 import { CommonModule } from '@angular/common';
@@ -12,8 +12,14 @@ import { CommonModule } from '@angular/common';
 })
 export class ProfileDropdownComponent {
     route = route;
+
+    constructor(public router: Router) {}
     
     logout() {
-        window.location.href = '/login';
+        this.router.navigate(['/login']);
+    }
+
+    changeUniversity() {
+        this.router.navigate(['/admin/university']);
     }
 }

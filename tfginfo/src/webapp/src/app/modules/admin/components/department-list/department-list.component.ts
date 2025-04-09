@@ -25,7 +25,7 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class DepartmentListComponent {
   @Input() departments: DepartmentDTO[] = [];
-  @Input() displayedColumns: string[] = ['name', 'actions'];
+  @Input() displayedColumns: string[] = ['name', 'university', 'actions'];
   @Output() onDeleteDepartment = new EventEmitter<number>();
 
   constructor(

@@ -28,11 +28,15 @@ export class UniversityListComponent {
   @Input() displayedColumns: string[] = ['name', 'address', 'actions'];
   @Output() onDeleteUniversity = new EventEmitter<number>();
 
+  public selectedUniversity: number | undefined;
+
   constructor(
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.selectedUniversity = Number(localStorage.getItem('selectedUniversity'));
+   }
 
   onEdit(university: UniversityBase) {
     this.router.navigate([university.id], { relativeTo: this.route });
@@ -43,8 +47,23 @@ export class UniversityListComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        if (this.selectedUniversity === university.id) {
+          this.selectedUniversity = undefined;
+          localStorage.removeItem('selectedUniversity');
+        }
+        
         this.onDeleteUniversity.emit(university.id!);
       }
     });
+  }
+
+  selectUniversity(university: UniversityBase) {
+    if (this.selectedUniversity === university.id) {
+      this.selectedUniversity = undefined;
+      localStorage.removeItem('selectedUniversity');
+    } else {
+      localStorage.setItem('selectedUniversity', university.id!.toString());
+      this.selectedUniversity = university.id;
+    }
   }
 }

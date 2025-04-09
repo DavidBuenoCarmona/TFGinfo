@@ -9,6 +9,14 @@
                 <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
                 <mat-error *ngIf="departmentForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'UNIVERSITY.TITLE_1' | translate }}</mat-label>
+                <mat-select formControlName="universityId">
+                  <mat-option *ngFor="let university of universities" [value]="university.id">
+                    {{ university.name }}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
         <div class="actions">
             <button mat-raised-button class="action-button" [ngClass]="departmentForm.invalid ? 'disabled' : ''" type="submit" [disabled]="departmentForm.invalid">

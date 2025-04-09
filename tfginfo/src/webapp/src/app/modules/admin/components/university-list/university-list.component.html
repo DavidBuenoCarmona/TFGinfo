@@ -27,6 +27,9 @@
                         <button mat-icon-button color="warn" (click)="onDelete(university)">
                             <mat-icon>delete</mat-icon>
                         </button>
+                        <button mat-icon-button color="warn" (click)="selectUniversity(university)">
+                            <mat-icon>{{ university.id == selectedUniversity ? 'check_circle' : 'check circle_outline'}}</mat-icon>
+                        </button>
                     </td>
                 </ng-container>
 
