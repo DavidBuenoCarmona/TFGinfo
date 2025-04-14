@@ -10,6 +10,9 @@ import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GroupService } from '../../services/group-service';
+import { TfgListComponent } from '../../../tfg/components/tfg-list/tfg-list.component';
+import { ProfessorListComponent } from '../../../professor/components/profesor-list/professor-list.component';
+import { ProfessorDTO } from '../../../professor/models/professor.model';
 
 @Component({
     selector: 'group-detail',
@@ -22,7 +25,9 @@ import { GroupService } from '../../services/group-service';
         MatInputModule,
         MatSelectModule,
         MatButtonModule,
-        CommonModule
+        CommonModule,
+        TfgListComponent,
+        ProfessorListComponent,
     ],
     templateUrl: './group-detail.component.html',
     styleUrls: ['./group-detail.component.scss']
@@ -30,6 +35,7 @@ import { GroupService } from '../../services/group-service';
 export class GroupDetailComponent implements OnInit {
     id: string | null = null;
     group: WorkingGroupBase | null = null;
+    professors: ProfessorDTO[] = [];
     creation: boolean = false;
     groupForm!: FormGroup;
 
@@ -58,6 +64,10 @@ export class GroupDetailComponent implements OnInit {
             this.groupService.getGroup(+this.id!).subscribe((data) => {
                 this.group = data;
                 this.groupForm.patchValue(data);
+            });
+
+            this.groupService.getGroupProfessors(+this.id!).subscribe((data) => {
+                this.professors = data;
             });
         }
     }

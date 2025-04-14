@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { WorkingGroupBase } from "../models/group.model";
+import { ProfessorDTO } from "../../professor/models/professor.model";
 
 @Injectable({
     providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
@@ -35,5 +36,9 @@ export class GroupService extends BaseService {
 
     deleteGroup(id: number): Observable<any> {
         return this.delete(`${this.url}/working-group/${id}`);
+    }
+
+    getGroupProfessors(id: number): Observable<ProfessorDTO[]> {
+        return this.get(`${this.url}/working-group/professor/${id}`);
     }
 }

@@ -225,3 +225,44 @@ body.dark-mode {
 .action-cell {
     width: 10%
 }
+
+/* Estilos globales para formularios de Angular Material */
+mat-form-field {
+    border-radius: 25px; /* Ajusta el valor para cambiar el nivel de redondez */
+
+    .mat-mdc-text-field-wrapper {
+        border-radius: inherit;
+
+    }
+
+    .mat-form-field-flex {
+        border-radius: inherit;
+        background-color: var(--color-gray-light); /* Cambia el color si es necesario */
+
+    }
+
+    .mat-input-element {
+        border-radius: inherit;
+        padding: 0.5rem; /* Ajusta el padding si es necesario */
+    }
+
+    .mat-form-field-outline {
+        border-radius: inherit;
+    }
+}
+
+mat-select {
+    border-radius: 25px; /* Ajusta el valor para cambiar el nivel de redondez */
+
+    .mat-select-trigger {
+        border-radius: inherit;
+    }
+}
+
+button.mat-raised-button {
+    border-radius: 25px; /* Botones redondeados */
+}
+
+mat-input {
+    border-radius: 25px; /* Ajusta el valor para cambiar el nivel de redondez */
+}

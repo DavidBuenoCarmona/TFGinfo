@@ -22,7 +22,7 @@
                 {{ 'WORKING_GROUP.PRIVATE' | translate }}
             </mat-checkbox>
         </div>
-
+        <professor-list *ngIf="professors.length > 0" [professors]="professors"></professor-list>
         <div class="actions">
             <button mat-raised-button class="action-button" [ngClass]="groupForm.invalid ? 'disabled' : ''" type="submit" [disabled]="groupForm.invalid">
                 {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
