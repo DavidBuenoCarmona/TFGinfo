@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 @Component({
     selector: 'logo',
     imports: [RouterModule],
+    standalone: true,
     templateUrl: './logo.component.html',
     styleUrl: './logo.component.scss'
 })

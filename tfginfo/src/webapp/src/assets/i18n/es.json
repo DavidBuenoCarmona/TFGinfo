@@ -30,18 +30,24 @@
     "GLOBAL": {
         "ACCEPT": "Aceptar",
         "ACTIONS": "Acciones",
+        "ADDRESS": "Dirección",
+        "BIRTH_DATE": "Fecha de nacimiento",
         "CANCEL": "Cancelar",
         "CLEAR_FILTERS": "Limpiar filtros",
         "CREATE": "Crear",
         "DELETE": "Eliminar",
         "DESCRIPTION": "Descripción",
         "DESCRIPTION_REQUIRED": "La descripción es requerida",
+        "DNI": "DNI",
         "EDIT": "Editar",
         "EMAIL": "Correo electrónico",
         "ENGLISH": "Inglés",
+        "LOGIN": "Iniciar sesión",
         "LOGOUT": "Cerrar sesión",
         "NAME": "Nombre",
         "NAME_REQUIRED": "El nombre es requerido",
+        "PASSWORD": "Contraseña",
+        "PHONE": "Teléfono",
         "SAVE": "Guardar",
         "SEARCH": "Buscar",
         "SPANISH": "Español",
@@ -59,6 +65,16 @@
     "PROFILE": {
         "TITLE_1": "Mi Perfil"
     },
+    "STUDENT": {
+        "CREATE": "Crear estudiante",
+        "EDIT": "Editar estudiante",
+        "DELETE": "Eliminar estudiante",
+        "NEW": "Nuevo estudiante",
+        "TITLE_1": "Estudiante",
+        "TITLE_N": "Estudiantes",
+        "VIEW": "Ver estudiante",
+        "VIEW_LIST": "Ver lista de estudiantes"
+    },
     "TFG": {
         "DEPARTMENT_REQUIRED": "El departamento es requerido",
         "IS_GROUP": "¿Proyecto en grupo?",
@@ -71,7 +87,6 @@
         "TITLE_N": "TFGs"
     },
     "UNIVERSITY": {
-        "ADDRESS": "Dirección",
         "CREATE": "Crear universidad",
         "CHANGE": "Cambiar universidad",
         "EDIT": "Editar universidad",

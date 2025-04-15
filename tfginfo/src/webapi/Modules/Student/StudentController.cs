@@ -58,6 +58,18 @@ public class StudentController : BaseController
         }
     }
 
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id) {
+        try {
+            StudentManager manager = new StudentManager(context);
+            return Ok(manager.GetById(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
 
     [HttpGet("career/{careerId}")]
     public IActionResult GetAllByCareer(int careerId) {

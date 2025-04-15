@@ -8,7 +8,7 @@ import { GroupSearchComponent } from './modules/groups/pages/groups-search/group
 import { ProfileDetailComponent } from './modules/profile/pages/profile-detail/profile-detail.component';
 import { DepartmentSearchComponent } from './modules/admin/pages/department-search/department-search.component';
 import { UniversitySearchComponent } from './modules/admin/pages/university-search/university-search.component';
-import { UserSearchComponent } from './modules/admin/pages/user-search/user-search.component';
+import { StudentSearchComponent } from './modules/admin/pages/student-search/student-search.component';
 import { TfgDetailComponent } from './modules/tfg/pages/tfg-detail/tfg-detail.component';
 import { GroupDetailComponent } from './modules/groups/pages/group-detail/group-detail.component';
 import { ProfessorDetailComponent } from './modules/professor/pages/professor-detail/professor-detail.component';
@@ -93,9 +93,13 @@ export const routes: Routes = [
                         component: CareerDetailComponent
                     },
                     {
-                        path: 'user',
-                        component: UserSearchComponent
-                    }
+                        path: 'student',
+                        component: StudentSearchComponent
+                    },
+                    {
+                        path: 'student/:id',
+                        component: ProfileDetailComponent
+                    },
                 ]
             }
         ]

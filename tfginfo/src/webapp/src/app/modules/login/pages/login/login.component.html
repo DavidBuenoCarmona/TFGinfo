@@ -1,1 +1,28 @@
-<p>login works!</p>
+<div class="basic-page">
+    <div class="login-form">
+        <logo [isAuth]="true"></logo>
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'GLOBAL.EMAIL' | translate }}</mat-label>
+                <input matInput formControlName="email" type="email" placeholder="{{ 'GLOBAL.EMAIL' | translate }}" />
+                <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                    {{ 'LOGIN.EMAIL_REQUIRED' | translate }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'GLOBAL.PASSWORD' | translate }}</mat-label>
+                <input matInput formControlName="password" type="password" placeholder="{{ 'GLOBAL.PASSWORD' | translate }}" />
+                <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                    {{ 'LOGIN.PASSWORD_REQUIRED' | translate }}
+                </mat-error>
+            </mat-form-field>
+
+            <div class="actions">
+                <button mat-raised-button class="action-button create-button" type="submit" [disabled]="loginForm.invalid">
+                    {{ 'GLOBAL.LOGIN' | translate }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

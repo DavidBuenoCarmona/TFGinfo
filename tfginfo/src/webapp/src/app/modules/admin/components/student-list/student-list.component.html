@@ -1,0 +1,51 @@
+<div class="mat-elevation-z8">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title class="mb-2">{{ 'STUDENT.TITLE_N' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <table mat-table [dataSource]="students" class="mat-table">
+                <!-- Nombre Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
+                    <td mat-cell *matCellDef="let student">{{ student.name }}</td>
+                </ng-container>
+
+                <!-- Apellido Column -->
+                <ng-container matColumnDef="surname">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.SURNAME' | translate }}</th>
+                    <td mat-cell *matCellDef="let student">{{ student.surname }}</td>
+                </ng-container>
+
+                <!-- Correo Electrónico Column -->
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.EMAIL' | translate }}</th>
+                    <td mat-cell *matCellDef="let student">{{ student.email }}</td>
+                </ng-container>
+
+                <!-- Carrera Column -->
+                <ng-container matColumnDef="career">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'CAREER.TITLE_1' | translate }}</th>
+                    <td mat-cell *matCellDef="let student">{{ student.career.name }}</td>
+                </ng-container>
+
+                <!-- Acciones Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
+                    <td mat-cell *matCellDef="let student">
+                        <button mat-icon-button color="primary" (click)="onEdit(student)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="onDelete(student)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Header and Row Definitions -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </mat-card-content>
+    </mat-card>
+</div>

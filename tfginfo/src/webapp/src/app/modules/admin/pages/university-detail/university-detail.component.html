@@ -11,8 +11,8 @@
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'UNIVERSITY.ADDRESS' | translate }}</mat-label>
-                <input matInput formControlName="address" placeholder="{{ 'UNIVERSITY.ADDRESS' | translate }}" />
+                <mat-label>{{ 'GLOBAL.ADDRESS' | translate }}</mat-label>
+                <input matInput formControlName="address" placeholder="{{ 'GLOBAL.ADDRESS' | translate }}" />
                 <mat-error *ngIf="universityForm.get('address')?.invalid">{{ 'UNIVERSITY.LOCATION_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
         </div>

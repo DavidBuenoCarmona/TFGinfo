@@ -78,6 +78,7 @@ namespace TFGinfo.Api
 
             model.phone = Student.phone;
             model.address = Student.address;
+            model.birthdate = Student.birthdate;
             context.SaveChanges();
 
             return new StudentDTO(model);
@@ -86,6 +87,15 @@ namespace TFGinfo.Api
         public List<StudentDTO> GetAllByCareer(int careerId)
         {
             return context.student.AsNoTracking().Where(Student => Student.career == careerId).Include(d => d.careerModel).ToList().ConvertAll(model => new StudentDTO(model));
+        }
+
+        public StudentDTO GetById(int id)
+        {
+            StudentModel? model = context.student.Include(d => d.careerModel).FirstOrDefault(Student => Student.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            return new StudentDTO(model);
         }
 
         #region Private Methods

@@ -30,18 +30,24 @@
     "GLOBAL": {
         "ACCEPT": "Accept",
         "ACTIONS": "Actions",
+        "ADDRESS": "Address",
+        "BIRTH_DATE": "Birth date",
         "CANCEL": "Cancel",
         "CLEAR_FILTERS": "Clear filters",
         "CREATE": "Create",
         "DELETE": "Delete",
         "DESCRIPTION": "Description",
         "DESCRIPTION_REQUIRED": "Description is required",
+        "DNI": "DNI",
         "EDIT": "Edit",
         "EMAIL": "Email",
         "ENGLISH": "English",
+        "LOGIN": "Login",
         "LOGOUT": "Logout",
         "NAME": "Name",
         "NAME_REQUIRED": "Name is required",
+        "PASSWORD": "Password",
+        "PHONE": "Phone",
         "SAVE": "Save",
         "SEARCH": "Search",
         "SPANISH": "Spanish",
@@ -59,6 +65,16 @@
     "PROFILE": {
         "TITLE_1": "My Profile"
     },
+    "STUDENT": {
+        "CREATE": "Create student",
+        "EDIT": "Edit student",
+        "DELETE": "Delete student",
+        "NEW": "New student",
+        "TITLE_1": "Student",
+        "TITLE_N": "Students",
+        "VIEW": "View student",
+        "VIEW_LIST": "View student list"
+    },
     "TFG": {
         "DEPARTMENT_REQUIRED": "Department is required",
         "IS_GROUP": "Is group project?",
@@ -71,7 +87,6 @@
         "TITLE_N": "TFGs"
     },
     "UNIVERSITY": {
-        "ADDRESS": "Address",
         "CREATE": "Create university",
         "CHANGE": "Change university",
         "EDIT": "Edit university",

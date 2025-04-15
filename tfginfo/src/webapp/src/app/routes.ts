@@ -11,9 +11,9 @@ export const route = {
             list: '/admin/university',
         },
         user: {
-            create: '/admin/user/create',
-            edit: '/admin/user/edit',
-            list: '/admin/user',
+            create: '/admin/student/create',
+            edit: '/admin/student/edit',
+            list: '/admin/student',
         },
         career: {
             create: '/admin/career/create',

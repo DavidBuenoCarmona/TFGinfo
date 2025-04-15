@@ -1,0 +1,39 @@
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { BaseService } from "../../../core/services/base.service";
+import { AppConfigService } from "../../../core/services/app-config.service";
+import { Injectable } from "@angular/core";
+import { StudentDTO, StudentFlatDTO } from "../models/student.model";
+
+@Injectable({
+    providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
+})
+export class StudentService extends BaseService {
+  
+    constructor(
+        protected override http: HttpClient,
+        protected override appConfigService: AppConfigService
+    ) {
+        super(http, appConfigService);
+    }
+
+    getStudents(): Observable<StudentDTO[]> {
+        return this.get(`${this.url}/student`);
+    }
+
+    deleteStudent(id: number): Observable<any> {
+        return this.delete(`${this.url}/student/${id}`);
+    }
+
+    getStudent(id: number): Observable<StudentDTO> {
+        return this.get(`${this.url}/student/${id}`);
+    }
+
+    createStudent(student: StudentFlatDTO): Observable<StudentFlatDTO> {
+        return this.post(`${this.url}/student`, student);
+    }
+
+    updateStudent(student: StudentFlatDTO): Observable<StudentFlatDTO> {
+        return this.put(`${this.url}/student`, student);
+    }
+}

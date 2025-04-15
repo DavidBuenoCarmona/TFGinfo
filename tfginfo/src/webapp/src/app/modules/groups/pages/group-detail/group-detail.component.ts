@@ -26,7 +26,6 @@ import { ProfessorDTO } from '../../../professor/models/professor.model';
         MatSelectModule,
         MatButtonModule,
         CommonModule,
-        TfgListComponent,
         ProfessorListComponent,
     ],
     templateUrl: './group-detail.component.html',
