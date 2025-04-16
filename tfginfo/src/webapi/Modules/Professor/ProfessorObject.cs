@@ -39,4 +39,13 @@ namespace TFGinfo.Objects
             departmentId = model.department;
         }
     }
+
+    public class NewProfessorDTO {
+        public ProfessorDTO professor { get; set; }
+        public string auth_code { get; set; }
+        public NewProfessorDTO (ProfessorDTO professor, string auth_code) {
+            this.professor = professor;
+            this.auth_code = auth_code;
+        }
+    }
 }

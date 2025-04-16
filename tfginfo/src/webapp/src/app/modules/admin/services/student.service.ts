@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { Injectable } from "@angular/core";
-import { StudentDTO, StudentFlatDTO } from "../models/student.model";
+import { NewStudentDTO, StudentDTO, StudentFlatDTO } from "../models/student.model";
 
 @Injectable({
     providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
@@ -29,11 +29,11 @@ export class StudentService extends BaseService {
         return this.get(`${this.url}/student/${id}`);
     }
 
-    createStudent(student: StudentFlatDTO): Observable<StudentFlatDTO> {
+    createStudent(student: StudentFlatDTO): Observable<NewStudentDTO> {
         return this.post(`${this.url}/student`, student);
     }
 
-    updateStudent(student: StudentFlatDTO): Observable<StudentFlatDTO> {
+    updateStudent(student: StudentFlatDTO): Observable<StudentDTO> {
         return this.put(`${this.url}/student`, student);
     }
 }

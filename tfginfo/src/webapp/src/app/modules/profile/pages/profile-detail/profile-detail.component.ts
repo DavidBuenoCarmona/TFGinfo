@@ -11,6 +11,8 @@ import { StudentDTO } from '../../../admin/models/student.model';
 import { StudentService } from '../../../admin/services/student.service';
 import { CareerDTO } from '../../../admin/models/career.model';
 import { CareerService } from '../../../admin/services/career.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AuthCodeDialogComponent } from '../../../../core/layout/components/auth-code-dialog/auth-code-dialog.component';
 
 @Component({
     selector: 'profile-detail',
@@ -22,7 +24,8 @@ import { CareerService } from '../../../admin/services/career.service';
         MatInputModule,
         MatSelectModule,
         MatButtonModule,
-        CommonModule
+        CommonModule,
+        MatDialogModule,
     ],
     templateUrl: './profile-detail.component.html',
     styleUrls: ['./profile-detail.component.scss']
@@ -39,7 +42,8 @@ export class ProfileDetailComponent implements OnInit {
         private router: Router,
         private studentService: StudentService,
         private careerService: CareerService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private dialog: MatDialog
     ) { }
 
     ngOnInit(): void {
@@ -86,7 +90,7 @@ export class ProfileDetailComponent implements OnInit {
               profileData.birthdate = new Date(profileData.birthdate).toISOString();
             }
             if (this.creation) {
-                this.studentService.createStudent(profileData).subscribe(() => this.router.navigate(['/admin/student']));
+                this.studentService.createStudent(profileData).subscribe((data) => this.openAuthCodeDialog(data.student.email, data.auth_code));
             } else {
                 this.studentService.updateStudent(profileData).subscribe(() => this.router.navigate(['/admin/student']));
             }
@@ -95,5 +99,15 @@ export class ProfileDetailComponent implements OnInit {
 
     onCancel(): void {
         this.router.navigate(['/admin/student']);
+    }
+
+    openAuthCodeDialog(user: string, auth_code: string): void {
+        const dialogRef = this.dialog.open(AuthCodeDialogComponent, {
+          data: { user: user, auth_code: auth_code },
+        });
+      
+        dialogRef.afterClosed().subscribe((result) => {
+            this.router.navigate(['/admin/student'])
+        });
     }
 }

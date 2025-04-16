@@ -34,6 +34,7 @@
         "BIRTH_DATE": "Fecha de nacimiento",
         "CANCEL": "Cancelar",
         "CLEAR_FILTERS": "Limpiar filtros",
+        "CONFIRM_ACTION": "¿Quieres confirmar la acción?",
         "CREATE": "Crear",
         "DELETE": "Eliminar",
         "DESCRIPTION": "Descripción",
@@ -98,6 +99,7 @@
         "VIEW_LIST": "Ver lista de universidades"
     },
     "USER": {
+        "AUTH_CODE_TEXT": "Se ha generado una contraseña temporal para el usuario: ",
         "CREATE": "Crear usuario",
         "EDIT": "Editar usuario",
         "DELETE": "Eliminar usuario",

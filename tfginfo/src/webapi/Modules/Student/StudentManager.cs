@@ -17,14 +17,14 @@ namespace TFGinfo.Api
             return context.student.AsNoTracking().Include(d => d.careerModel).ToList().ConvertAll(model => new StudentDTO(model));
         }
 
-        public StudentDTO CreateStudent(StudentFlatDTO Student)
+        public NewStudentDTO CreateStudent(StudentFlatDTO Student)
         { 
             
             CheckEmailIsNotRepeated(Student);
             CheckDniIsNotRepeated(Student);
             
             UserManager userManager = new UserManager(context);
-            int userId = userManager.CreateUser(new UserFlatDTO {
+            UserDTO user = userManager.CreateUser(new UserFlatDTO {
                 username = Student.email,
                 roleId = (int)RoleTypes.Student
             });
@@ -34,7 +34,7 @@ namespace TFGinfo.Api
                 dni = Student.dni,
                 surname = Student.surname,
                 email = Student.email,
-                user = userId,
+                user = user.id.Value,
                 phone = Student.phone,
                 address = Student.address,
                 career = Student.careerId,
@@ -48,7 +48,8 @@ namespace TFGinfo.Api
                 .Include(d => d.careerModel)
                 .FirstOrDefault() ?? model;
 
-            return new StudentDTO(savedStudent);
+            var newStudentDTO = new NewStudentDTO(new(savedStudent), user.auth_code);
+            return newStudentDTO;
         }
 
         public void DeleteStudent(int id)

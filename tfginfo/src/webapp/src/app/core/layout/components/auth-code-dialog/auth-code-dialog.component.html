@@ -1,0 +1,5 @@
+<p mat-dialog-title>{{ 'USER.AUTH_CODE_TEXT' | translate }}<b>{{ data.user }}</b></p>
+<p mat-dialog-title>{{ data.auth_code }}</p>
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="onConfirm()">{{ 'GLOBAL.ACCEPT' | translate }}</button>
+</mat-dialog-actions>

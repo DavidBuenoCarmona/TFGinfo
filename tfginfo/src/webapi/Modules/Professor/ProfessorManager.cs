@@ -17,12 +17,12 @@ namespace TFGinfo.Api
             return context.professor.AsNoTracking().Include(d => d.departmentModel).ToList().ConvertAll(model => new ProfessorDTO(model));
         }
 
-        public ProfessorDTO CreateProfessor(ProfessorFlatDTO Professor)
+        public NewProfessorDTO CreateProfessor(ProfessorFlatDTO Professor)
         { 
             CheckEmailIsNotRepeated(Professor);
 
             UserManager userManager = new UserManager(context);
-            int userId = userManager.CreateUser(new UserFlatDTO {
+            UserDTO user = userManager.CreateUser(new UserFlatDTO {
                 username = Professor.email,
                 roleId = (int)RoleTypes.Professor
             });
@@ -32,7 +32,7 @@ namespace TFGinfo.Api
                 department = Professor.departmentId,
                 surname = Professor.surname,
                 email = Professor.email,
-                user = userId,
+                user = user.id.Value,
                 department_boss = Professor.department_boss ? 1 : 0,
 
             };
@@ -44,7 +44,9 @@ namespace TFGinfo.Api
                 .Include(d => d.departmentModel)
                 .FirstOrDefault();
 
-            return new ProfessorDTO(model);
+            NewProfessorDTO newProfessorDTO = new NewProfessorDTO(new(savedProfessor), user.auth_code);
+
+            return newProfessorDTO;
         }
 
         public void DeleteProfessor(int id)

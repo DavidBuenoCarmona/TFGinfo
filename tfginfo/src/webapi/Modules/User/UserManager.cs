@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TFGinfo.Common;
@@ -12,18 +13,19 @@ namespace TFGinfo.Api
     {
         public UserManager(ApplicationDbContext context) : base(context) {}
 
-        public int CreateUser(UserFlatDTO User)
+        public UserDTO CreateUser(UserFlatDTO User)
         { 
             CheckNameIsNotRepeated(User);
 
             UserModel model = new UserModel {
                 username = User.username,
                 role = User.roleId,
+                auth_code = GenerateTemporaryPassword(),
             };
             context.user.Add(model);
             context.SaveChanges();
 
-            return model.id;
+            return new(model);
         }
 
         public void DeleteUser(int id)
@@ -42,6 +44,23 @@ namespace TFGinfo.Api
             if (context.user.Any(u => u.id != user.id && u.username.ToLower() == user.username.ToLower())) {
                 throw new UnprocessableException("User name already exists");
             }
+        }
+
+        private static string GenerateTemporaryPassword(int length = 12)
+        {
+            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
+            char[] password = new char[length];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                byte[] randomBytes = new byte[length];
+                rng.GetBytes(randomBytes);
+
+                for (int i = 0; i < password.Length; i++)
+                {
+                    password[i] = validChars[randomBytes[i] % validChars.Length];
+                }
+            }
+            return new string(password);
         }
         #endregion
     }

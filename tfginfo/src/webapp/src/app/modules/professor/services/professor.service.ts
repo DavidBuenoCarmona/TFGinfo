@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { Injectable } from "@angular/core";
-import { ProfessorDTO, ProfessorFlatDTO } from "../models/professor.model";
+import { NewProfessorDTO, ProfessorDTO, ProfessorFlatDTO } from "../models/professor.model";
 
 @Injectable({
     providedIn: 'root'
@@ -29,11 +29,11 @@ export class ProfessorService extends BaseService {
         return this.get(`${this.url}/professor/${id}`);
     }
 
-    createProfessor(professor: ProfessorDTO): Observable<ProfessorFlatDTO> {
+    createProfessor(professor: ProfessorFlatDTO): Observable<NewProfessorDTO> {
         return this.post(`${this.url}/professor`, professor);
     }
 
-    updateProfessor(professor: ProfessorDTO): Observable<ProfessorFlatDTO> {
+    updateProfessor(professor: ProfessorFlatDTO): Observable<ProfessorDTO> {
         return this.put(`${this.url}/professor`, professor);
     }
 }

@@ -13,6 +13,11 @@ export interface StudentDTO extends StudentBase {
     career: CareerBase;
 }
 
+export interface NewStudentDTO {
+    student: StudentDTO;
+    auth_code: string;
+}
+
 export interface StudentFlatDTO extends StudentBase {
     careerId: number;
 }

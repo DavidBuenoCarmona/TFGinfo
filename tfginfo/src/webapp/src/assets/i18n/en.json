@@ -34,6 +34,7 @@
         "BIRTH_DATE": "Birth date",
         "CANCEL": "Cancel",
         "CLEAR_FILTERS": "Clear filters",
+        "CONFIRM_ACTION": "Do you want to confirm the action?",
         "CREATE": "Create",
         "DELETE": "Delete",
         "DESCRIPTION": "Description",
@@ -98,6 +99,7 @@
         "VIEW_LIST": "View university list"
     },
     "USER": {
+        "AUTH_CODE_TEXT": "A temporal password has beed generated for user: ",
         "CREATE": "Create user",
         "EDIT": "Edit user",
         "DELETE": "Delete user",

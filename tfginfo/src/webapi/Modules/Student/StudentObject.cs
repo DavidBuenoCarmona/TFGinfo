@@ -45,4 +45,13 @@ namespace TFGinfo.Objects
             careerId = model.career;
         }
     }
+
+    public class NewStudentDTO {
+        public StudentDTO student { get; set; }
+        public string auth_code { get; set; }
+        public NewStudentDTO (StudentDTO student, string auth_code) {
+            this.student = student;
+            this.auth_code = auth_code;
+        }
+    }
 }

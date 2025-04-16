@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
 import { DepartmentService } from '../../../admin/services/department.service';
 import { DepartmentDTO } from '../../../admin/models/department.model';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { AuthCodeDialogComponent } from '../../../../core/layout/components/auth-code-dialog/auth-code-dialog.component';
 
 @Component({
     selector: 'professor-detail',
@@ -41,7 +43,8 @@ export class ProfessorDetailComponent implements OnInit {
         private router: Router,
         private professorService: ProfessorService,
         private fb: FormBuilder,
-        private departmentService: DepartmentService
+        private departmentService: DepartmentService,
+        private dialog: MatDialog
     ) { }
 
     ngOnInit(): void {
@@ -57,7 +60,7 @@ export class ProfessorDetailComponent implements OnInit {
             surname: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             departmentId: ['', Validators.required],
-            departmentBoss: [false]
+            department_boss: [false]
         });
 
         this.departmentService.getDepartments().subscribe((data) => this.departments = data);
@@ -75,7 +78,7 @@ export class ProfessorDetailComponent implements OnInit {
         if (this.professorForm.valid) {
             const professorData = this.professorForm.value;
             if (this.creation) {
-                this.professorService.createProfessor(professorData).subscribe(() => this.router.navigate(['/professor']));
+                this.professorService.createProfessor(professorData).subscribe((data) => this.openAuthCodeDialog(data.professor.email, data.auth_code));
             } else {
                 this.professorService.updateProfessor(professorData).subscribe(() => this.router.navigate(['/professor']));
             }
@@ -84,5 +87,15 @@ export class ProfessorDetailComponent implements OnInit {
 
     onCancel(): void {
         this.router.navigate(['/professor']);
+    }
+
+    openAuthCodeDialog(user: string, auth_code: string): void {
+        const dialogRef = this.dialog.open(AuthCodeDialogComponent, {
+            data: { user: user, auth_code: auth_code },
+        });
+        
+        dialogRef.afterClosed().subscribe((result) => {
+            this.router.navigate(['/admin/student'])
+        });
     }
 }

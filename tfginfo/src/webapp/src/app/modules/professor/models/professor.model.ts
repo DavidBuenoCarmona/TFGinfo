@@ -25,3 +25,8 @@ export class ProfessorDTO extends ProfessorBase {
 export class ProfessorFlatDTO extends ProfessorBase {
     departmentId!: number; // ID del departamento
 }
+
+export class NewProfessorDTO {
+    professor!: ProfessorDTO;
+    auth_code!: string; // Código de autorización
+}
