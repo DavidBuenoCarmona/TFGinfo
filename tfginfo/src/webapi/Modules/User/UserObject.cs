@@ -20,6 +20,7 @@ namespace TFGinfo.Objects
 
     public class UserDTO : UserBase {
         public RoleBase role { get; set; }
+        public string? token { get; set; }
 
         public UserDTO () {}
 
@@ -36,5 +37,23 @@ namespace TFGinfo.Objects
         public UserFlatDTO (UserModel model) : base(model) {
             roleId = model.role;
         }
+    }
+
+    public class AppUserDTO {
+        public int id { get; set; }
+        public string? token { get; set; }
+        public RoleModel role { get; set; }
+        public string username { get; set; }
+        public AppUserDTO (UserModel model){
+            id = model.id;
+            role = model.roleModel;
+            username = model.username;
+            
+        }
+    }
+
+    public class NewUserDTO {
+        public AppUserDTO user { get; set; }
+        public bool firstLogin { get; set; }
     }
 }

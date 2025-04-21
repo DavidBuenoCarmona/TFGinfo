@@ -2,6 +2,16 @@
     "ADMIN": {
         "TITLE_1": "Administration"
     },
+    "AUTH": {
+        "CHANGE_PASSWORD": "Change password",
+        "CHANGE_PASSWORD_FOR": "Change password for: ",
+        "CONFIRM_PASSWORD": "Confirm password",
+        "CONFIRM_PASSWORD_REQUIRED": "Confirm password is required",
+        "CURRENT_PASSWORD": "Current password",
+        "CURRENT_PASSWORD_REQUIRED": "Current password is required",
+        "NEW_PASSWORD": "New password",
+        "NEW_PASSWORD_REQUIRED": "New password is required"
+    },
     "BOOKING": {
         "GROUP": "My groups",
         "TITLE_N": "My bookings",

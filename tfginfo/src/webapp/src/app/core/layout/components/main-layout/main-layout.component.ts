@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-main-layout',
@@ -9,5 +9,12 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './main-layout.component.scss'
 })
 export class MainLayoutComponent {
+  constructor(public router: Router) { }
+
+  ngOnInit(): void {
+    if (!localStorage.getItem("user")) {
+      this.router.navigate(['/login']);
+    }
+  }
 
 }

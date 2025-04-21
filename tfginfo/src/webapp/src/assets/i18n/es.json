@@ -2,6 +2,16 @@
     "ADMIN": {
         "TITLE_1": "Administración"
     },
+    "AUTH": {
+        "CHANGE_PASSWORD": "Cambiar contraseña",
+        "CHANGE_PASSWORD_FOR": "Cambiar contraseña para: ",
+        "CONFIRM_PASSWORD": "Confirmar contraseña",
+        "CONFIRM_PASSWORD_REQUIRED": "Confirmar contraseña es requerida",
+        "CURRENT_PASSWORD": "Contraseña actual",
+        "CURRENT_PASSWORD_REQUIRED": "Contraseña actual es requerida",
+        "NEW_PASSWORD": "Nueva contraseña",
+        "NEW_PASSWORD_REQUIRED": "Nueva contraseña es requerida"
+    },
     "BOOKING": {
         "GROUP": "Mis grupos",
         "TITLE_N": "Mis reservas",

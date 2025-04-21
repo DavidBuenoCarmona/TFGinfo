@@ -6,7 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProfessorDTO } from '../../models/professor.model';
 import { ConfirmDialogComponent } from '../../../../core/layout/components/confirm-dialog/confirm-dialog.component';
-import { ProfessorService } from '../../services/professor.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { EventEmitter } from '@angular/core';

@@ -4,8 +4,8 @@
         <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.EMAIL' | translate }}</mat-label>
-                <input matInput formControlName="email" type="email" placeholder="{{ 'GLOBAL.EMAIL' | translate }}" />
-                <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                <input matInput formControlName="username" type="email" placeholder="{{ 'GLOBAL.EMAIL' | translate }}" />
+                <mat-error *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
                     {{ 'LOGIN.EMAIL_REQUIRED' | translate }}
                 </mat-error>
             </mat-form-field>

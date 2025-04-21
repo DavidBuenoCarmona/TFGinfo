@@ -16,14 +16,10 @@ import { UniversityDetailComponent } from './modules/admin/pages/university-deta
 import { DepartmentDetailComponent } from './modules/admin/pages/department-detail/department-detail.component';
 import { CareerSearchComponent } from './modules/admin/pages/career-search/career-search.component';
 import { CareerDetailComponent } from './modules/admin/pages/career-detail/career-detail.component';
+import { AuthLayoutComponent } from './modules/login/pages/auth-layout/auth-layout.component';
 
 
 export const routes: Routes = [
-    {
-        path: 'login',
-        component: LoginComponent,
-        children: []
-    },
     {
         path: '',
         component: MainLayoutComponent,
@@ -105,8 +101,19 @@ export const routes: Routes = [
         ]
     },
     {
+        path: '',
+        component: AuthLayoutComponent,
+        children: [
+            {
+                path: 'login',
+                component: LoginComponent,
+                children: []
+            }
+        ]
+    },
+    {
         path: '**',
-        redirectTo: '',
+        redirectTo: '/login',
         pathMatch: 'full'
     }
 ];
