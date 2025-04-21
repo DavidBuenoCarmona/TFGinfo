@@ -10,16 +10,19 @@ using TFGinfo.Objects;
 [ApiController]
 public class TFGController : BaseController
 {
-    public TFGController(ApplicationDbContext context) : base(context) {}
-    
+    public TFGController(ApplicationDbContext context) : base(context) { }
+
 
     [HttpPost]
     public IActionResult Save([FromBody] TFGFlatDTO TFG)
     {
-        try {
-           TFGManager manager = new TFGManager(context);
-           return Ok(manager.CreateTFG(TFG));
-        } catch (UnprocessableException e) {
+        try
+        {
+            TFGManager manager = new TFGManager(context);
+            return Ok(manager.CreateTFG(TFG));
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -34,13 +37,18 @@ public class TFGController : BaseController
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        try {
+        try
+        {
             TFGManager manager = new TFGManager(context);
             manager.DeleteTFG(id);
             return Ok();
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -48,12 +56,17 @@ public class TFGController : BaseController
     [HttpPut]
     public IActionResult Update([FromBody] TFGFlatDTO TFG)
     {
-        try {
+        try
+        {
             TFGManager manager = new TFGManager(context);
             return Ok(manager.UpdateTFG(TFG));
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -69,12 +82,17 @@ public class TFGController : BaseController
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
-        try {
+        try
+        {
             TFGManager manager = new TFGManager(context);
             return Ok(manager.GetTFGById(id));
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }

@@ -88,6 +88,37 @@ namespace TFGinfo.Api
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        public static bool IsTokenValid(string token, IConfiguration configuration)
+    {
+        var jwtKey = configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured.");
+        var jwtIssuer = configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT Issuer is not configured.");
+        var jwtAudience = configuration["Jwt:Audience"] ?? throw new InvalidOperationException("JWT Audience is not configured.");
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        try
+        {
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = key,
+                ValidateIssuer = true,
+                ValidIssuer = jwtIssuer,
+                ValidateAudience = true,
+                ValidAudience = jwtAudience,
+                ValidateLifetime = true, // Verifica que el token no haya expirado
+                ClockSkew = TimeSpan.Zero // Opcional: elimina la tolerancia de tiempo por defecto (5 minutos)
+            }, out SecurityToken validatedToken);
+
+            return true; // El token es válido
+        }
+        catch
+        {
+            return false; // El token no es válido
+        }
+    }
+
         private string HashPassword(string password)
         {
             using (var sha256 = System.Security.Cryptography.SHA256.Create())
