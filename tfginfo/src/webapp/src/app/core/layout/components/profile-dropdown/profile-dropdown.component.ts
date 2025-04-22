@@ -17,6 +17,7 @@ export class ProfileDropdownComponent {
     
     logout() {
         localStorage.removeItem('user');
+        localStorage.removeItem('role');
         this.router.navigate(['/login']);
     }
 

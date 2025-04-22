@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from '../../../../core/layout/components/confi
 import { TfgService } from '../../services/tfg.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { RoleId } from '../../../admin/models/role.model';
 
 @Component({
   selector: 'tfg-list',
@@ -24,10 +25,11 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './tfg-list.component.html',
   styleUrls: ['./tfg-list.component.scss']
 })
-export class TfgListComponent {
+export class TfgListComponent implements OnInit {
   @Input() tfgs: TFGLineDTO[] = [];
   @Input() displayedColumns: string[] = ['name', 'description', 'department', 'slots', 'actions'];
   @Output() onDeleteTfg = new EventEmitter<number>();
+  public isAdmin: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -35,6 +37,11 @@ export class TfgListComponent {
     private router: Router,
     private route: ActivatedRoute
   ) { }
+
+  ngOnInit(): void {
+    let role = Number.parseInt(localStorage.getItem('role')!);
+    this.isAdmin = role === RoleId.Admin;
+  }
 
   onEdit(tfg: TFGLineDTO) {
     this.router.navigate([tfg.id], { relativeTo: this.route });

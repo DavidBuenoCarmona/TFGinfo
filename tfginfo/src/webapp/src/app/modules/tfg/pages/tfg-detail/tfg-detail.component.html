@@ -41,8 +41,19 @@
             </mat-form-field>
         </div>
 
+        <div *ngIf="!creation" class="form-row">
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>{{ 'CAREER.SELECT' | translate }}</mat-label>
+                <mat-select formControlName="careers" multiple>
+                    <mat-option *ngFor="let career of careers" [value]="career.id">
+                        {{ career.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
         <div class="actions">
-            <button mat-raised-button class="action-button" [ngClass]="tfgForm.invalid ? 'disabled' : '' " type="submit" [disabled]="tfgForm.invalid">
+            <button *ngIf="isAdmin" mat-raised-button class="action-button" [ngClass]="tfgForm.invalid ? 'disabled' : '' " type="submit" [disabled]="tfgForm.invalid">
                 {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
             </button>
             <button mat-raised-button class="action-button" type="button" (click)="onCancel()">

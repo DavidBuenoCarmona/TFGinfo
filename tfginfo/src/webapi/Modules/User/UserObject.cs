@@ -44,6 +44,8 @@ namespace TFGinfo.Objects
         public string? token { get; set; }
         public RoleModel role { get; set; }
         public string username { get; set; }
+        public int? department { get; set; }
+        public int? career { get; set; }
         public AppUserDTO (UserModel model){
             id = model.id;
             role = model.roleModel;

@@ -22,12 +22,18 @@ namespace TFGinfo.Objects
 
     public class TFGLineDTO : TFGLineBase {
         public DepartmentDTO department { get; set; }
+        public CareerDTO[] careers { get; set; }
+        public TFGDTO[] tfgs { get; set; }
 
         public TFGLineDTO () {}
 
         public TFGLineDTO (TFGLineModel model) : base(model) {
             if (model.departmentModel != null) {
                 department = new DepartmentDTO(model.departmentModel);
+            }
+            if (model.Careers != null) {
+                Console.WriteLine("Careers: " + model.Careers.Count);
+                careers = model.Careers.ConvertAll(c => new CareerDTO(c.careerModel)).ToArray();
             }
         }
     }

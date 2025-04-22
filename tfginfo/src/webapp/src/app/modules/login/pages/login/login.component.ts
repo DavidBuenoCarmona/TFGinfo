@@ -53,7 +53,12 @@ export class LoginComponent implements OnInit {
                 });
             } else {
                 localStorage.setItem('user', JSON.stringify(response.user));
-                this.router.navigate(['/']);
+                localStorage.setItem('role', response.user.role.id.toString());
+                if (response.user.role.id === 1) {
+                    this.router.navigate(['/tfg']);
+                } else {
+                    this.router.navigate(['/']);
+                }    
             }
         });
 

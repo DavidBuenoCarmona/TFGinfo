@@ -34,6 +34,20 @@ public class TFGController : BaseController
         return Ok(manager.GetAllTFGs());
     }
 
+    [HttpPost("search")]
+    public IActionResult Search([FromBody] List<Filter> filters)
+    {
+        try
+        {
+            TFGManager manager = new TFGManager(context);
+            return Ok(manager.SearchTFGs(filters));
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {

@@ -1,3 +1,4 @@
+import { CareerDTO } from "../../admin/models/career.model";
 import { DepartmentDTO } from "../../admin/models/department.model";
 
 export interface TFGLineBase {
@@ -11,6 +12,7 @@ export interface TFGLineBase {
 
 export interface TFGLineDTO extends TFGLineBase {
     department?: DepartmentDTO;
+    careers?: CareerDTO[];
 }
 
 

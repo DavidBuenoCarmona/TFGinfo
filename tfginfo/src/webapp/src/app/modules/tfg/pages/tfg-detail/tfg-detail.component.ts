@@ -12,6 +12,11 @@ import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DepartmentService } from '../../../admin/services/department.service';
 import { DepartmentDTO } from '../../../admin/models/department.model';
+import { CareerService } from '../../../admin/services/career.service';
+import { CareerDTO } from '../../../admin/models/career.model';
+import { fork } from 'child_process';
+import { forkJoin } from 'rxjs';
+import { RoleId } from '../../../admin/models/role.model';
 
 @Component({
     selector: 'tfg-detail',
@@ -34,16 +39,21 @@ export class TfgDetailComponent implements OnInit {
     creation: boolean = false;
     tfgForm!: FormGroup;
     departments: DepartmentDTO[] = [];
+    careers: CareerDTO[] = [];
+    isAdmin: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private tfgService: TfgService,
         private fb: FormBuilder,
-        private departmentService: DepartmentService
+        private departmentService: DepartmentService,
+        private careerService: CareerService
     ) { }
 
     ngOnInit(): void {
+        let role = Number.parseInt(localStorage.getItem('role')!);
+        this.isAdmin = role === RoleId.Admin;
         this.id = this.route.snapshot.paramMap.get('id');
         if (this.id !== "new" && isNaN(Number(this.id))) {
             this.router.navigate(['/']);
@@ -57,15 +67,31 @@ export class TfgDetailComponent implements OnInit {
             departmentId: ['', Validators.required],
             slots: [1, [Validators.required, Validators.min(1)]],
             group: [false],
+            careers: [[]]
         });
 
-        this.departmentService.getDepartments().subscribe((data) => this.departments = data);
+        if (!this.isAdmin) {
+            this.tfgForm.disable();
+        }
+
+        const departmentRequest = this.departmentService.getDepartments();
+        const careerRequest = this.careerService.getCareers();
 
         if (!this.creation) {
-            this.tfgService.getTfg(+this.id!).subscribe((data) => {
-                this.tfg = data;
-                this.tfgForm.patchValue(data);
-                this.tfgForm.get('departmentId')?.setValue(data.department?.id);
+            const tfgRequest = this.tfgService.getTfg(+this.id!);
+
+            forkJoin([departmentRequest, careerRequest, tfgRequest]).subscribe(([departments, careers, tfg]) => {
+                this.departments = departments;
+                this.careers = careers;
+                this.tfg = tfg;
+                this.tfgForm.patchValue(tfg);
+                this.tfgForm.get('departmentId')?.setValue(tfg.department?.id);
+                this.tfgForm.get('careers')?.setValue(tfg.careers?.map((career) => career.id));
+            });
+        } else {
+            forkJoin([departmentRequest, careerRequest]).subscribe(([departments, careers]) => {
+                this.departments = departments;
+                this.careers = careers;
             });
         }
 
@@ -75,9 +101,12 @@ export class TfgDetailComponent implements OnInit {
         if (this.tfgForm.valid) {
             const tfgData = this.tfgForm.value;
             if (this.creation) {
-                this.tfgService.createTfg(tfgData).subscribe(() => this.router.navigate(['/tfg']));
+                this.tfgService.createTfg(tfgData).subscribe((data) => this.router.navigate(['/tfg/' + data.id]));
             } else {
-                this.tfgService.updateTfg(tfgData).subscribe(() => this.router.navigate(['/tfg']));
+                forkJoin([
+                    this.tfgService.updateTfg(tfgData),
+                    this.tfgService.addCareersToTfg(tfgData.id, tfgData.careers)
+                ]).subscribe(() => this.router.navigate(['/tfg']));
             }
         }
     }

@@ -36,4 +36,16 @@ public class AuthController : BaseController
             return UnprocessableEntity(e.GetError());
         }
     }
+
+    [HttpPost("create-admin")]
+    public IActionResult CreateAdmin([FromBody] LoginCredentials credentials)
+    {
+        try {
+           AuthManager manager = new AuthManager(context, configuration);
+           manager.CreateAdmin(credentials);
+           return Ok();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
 }

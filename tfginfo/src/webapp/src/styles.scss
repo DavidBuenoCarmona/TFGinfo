@@ -122,6 +122,13 @@ body.dark-mode {
         color: var(--text-light);
     }
 
+    .mat-form-field-disabled {
+        .mat-mdc-text-field-wrapper {
+            background-color: var(--color-gray-light);
+            
+        }
+    }
+
     /* Dropdowns */
     .dropdown-menu {
         background-color: #333;

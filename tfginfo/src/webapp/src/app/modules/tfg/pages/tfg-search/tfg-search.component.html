@@ -16,7 +16,7 @@
                 {{ 'GLOBAL.CLEAR_FILTERS' | translate }}
             </button>
         </form>
-        <button mat-raised-button class="action-button create-button" type="button" (click)="onCreate()">
+        <button *ngIf="isAdmin" mat-raised-button class="action-button create-button" type="button" (click)="onCreate()">
             {{ 'GLOBAL.CREATE' | translate }}
         </button>
     </div>

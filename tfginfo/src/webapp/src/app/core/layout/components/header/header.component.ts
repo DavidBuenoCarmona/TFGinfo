@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LogoComponent } from '../logo/logo.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router, RouterModule } from '@angular/router';
@@ -7,6 +7,7 @@ import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.c
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { LanguageToggleComponent } from '../language-toggle/language-toggle.component';
 import { CommonModule } from '@angular/common';
+import { RoleId } from '../../../../modules/admin/models/role.model';
 
 @Component({
     selector: 'layout-header',
@@ -22,7 +23,14 @@ import { CommonModule } from '@angular/common';
     styleUrl: './header.component.scss'
 })
 
-export class HeaderComponent {
-
+export class HeaderComponent implements OnInit {
+    RoleId = RoleId;
+    role!: number;
     route = route;
+
+    constructor(private router: Router) { }
+
+    ngOnInit(): void {
+        this.role = localStorage.getItem('role') ? parseInt(localStorage.getItem('role')!) : RoleId.Student;
+    }
 }

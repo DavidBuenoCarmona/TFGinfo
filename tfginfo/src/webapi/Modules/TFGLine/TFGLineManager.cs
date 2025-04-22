@@ -70,11 +70,62 @@ namespace TFGinfo.Api
 
         public TFGLineDTO GetTFGLine(int id)
         {
-            TFGLineModel? model = context.tfg_line.Include(d => d.departmentModel).FirstOrDefault(TFGLine => TFGLine.id == id);
+            TFGLineModel? model = context.tfg_line.Include(d => d.departmentModel).Include(d => d.Careers).ThenInclude(c => c.careerModel).FirstOrDefault(TFGLine => TFGLine.id == id);
             if (model == null) {
                 throw new NotFoundException();
             }
             return new TFGLineDTO(model);
+        }
+
+        public List<TFGLineDTO> SearchTFGLines(List<Filter> filters)
+        {
+            var query = context.tfg_line.Include(d => d.departmentModel).Include(t => t.Careers).ThenInclude(t => t.careerModel).AsQueryable();
+
+            foreach (var filter in filters)
+            {
+                if (filter.value == null || filter.value == "") continue;
+                if (filter.key == "university")
+                {
+                    query = query.Where(tfg => tfg.departmentModel.university == int.Parse(filter.value));
+                }
+                else if (filter.key == "career")
+                {
+                    query = query.Where(tfg => tfg.Careers.Any(c => c.careerModel.id == int.Parse(filter.value)));
+                }
+                else if (filter.key == "department")
+                {
+                    query = query.Where(tfg => tfg.department == int.Parse(filter.value));
+                } else if (filter.key == "generic") {
+                    query = query.Where(tfg => tfg.name.ToLower().Contains(filter.value.ToLower()) || tfg.description.ToLower().Contains(filter.value.ToLower()) || tfg.departmentModel.name.ToLower().Contains(filter.value.ToLower()));
+                }
+            }
+
+            return query.ToList().ConvertAll(model => new TFGLineDTO(model));
+        }
+
+        public void AddCareers(int id, List<int> careers)
+        {
+            var tfgLine = context.tfg_line.Include(d => d.departmentModel).Include(t => t.Careers).FirstOrDefault(t => t.id == id);
+            if (tfgLine == null) {
+                throw new NotFoundException();
+            }
+
+            tfgLine.Careers.Clear();
+            foreach (var careerId in careers) {
+                var career = context.career.FirstOrDefault(c => c.id == careerId);
+                if (career == null) {
+                    throw new NotFoundException($"Career with id {careerId} not found");
+                }
+                if (career.university != tfgLine.departmentModel.university) {
+                    throw new UnprocessableException($"Career with id {careerId} does not belong to the same university as TFGLine with id {id}");
+                }
+                if (tfgLine.Careers.Any(c => c.career == careerId)) {
+                    throw new UnprocessableException($"Career with id {careerId} already exists in TFGLine with id {id}");
+                }
+                // context.tfg_line_career.Add(new TFGLineCareerModel { career = careerId, tfg_line = id });
+                tfgLine.Careers.Add(new TFGLineCareerModel { career = careerId, tfg_line = id });
+            }
+            context.SaveChanges();
         }
 
         public List<TFGLineDTO> GetTFGLinesByDepartment(int departmentId)

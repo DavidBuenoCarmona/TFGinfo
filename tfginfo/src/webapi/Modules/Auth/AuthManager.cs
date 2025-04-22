@@ -35,6 +35,17 @@ namespace TFGinfo.Api
                 throw new UnprocessableException("Invalid username or password");
             }
             newUser.user = new AppUserDTO(model);
+            if (newUser.user.role.id == (int)UserRole.Student) {
+                var student = context.student.FirstOrDefault(s => s.user == newUser.user.id);
+                if (student != null) {
+                    newUser.user.career = student.career;
+                }
+            } else if (newUser.user.role.id == (int)UserRole.Professor) {
+                var teacher = context.professor.FirstOrDefault(t => t.user == newUser.user.id);
+                if (teacher != null) {
+                    newUser.user.department = teacher.department;
+                }
+            }
             var token = GenerateJwtToken(newUser.user);
             newUser.user.token = token;
             return newUser;
@@ -61,6 +72,21 @@ namespace TFGinfo.Api
             model.password = HashPassword(request.NewPassword);
             context.SaveChanges();
             return true;
+        }
+
+        public void CreateAdmin(LoginCredentials credentials)
+        {
+            if (context.user.Any(u => u.username.ToLower() == credentials.Username.ToLower())) {
+                throw new UnprocessableException("User name already exists");
+            }
+
+            UserModel model = new UserModel {
+                username = credentials.Username,
+                role = 1,
+                password = HashPassword(credentials.Password),
+            };
+            context.user.Add(model);
+            context.SaveChanges();
         }
 
         #region "Private methods"

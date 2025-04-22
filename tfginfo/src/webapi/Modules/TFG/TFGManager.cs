@@ -72,6 +72,25 @@ namespace TFGinfo.Api
             return new TFGDTO(model);
         }
 
+        public List<TFGDTO> SearchTFGs(List<Filter> filters)
+        {
+            var query = context.tfg.Include(d => d.tfgLineModel).ThenInclude(d => d.departmentModel).AsQueryable();
+
+            foreach (var filter in filters)
+            {
+                if (filter.key == "university")
+                {
+                    query = query.Where(tfg => tfg.tfgLineModel.departmentModel.university == int.Parse(filter.value));
+                }
+                else if (filter.key == "startDate")
+                {
+                    query = query.Where(tfg => tfg.startDate == DateTime.Parse(filter.value));
+                }
+            }
+
+            return query.ToList().ConvertAll(model => new TFGDTO(model));
+        }
+
         #region Private Methods
         #endregion
     }

@@ -24,12 +24,12 @@ namespace TFGinfo.Models
         {
             builder.HasOne(d => d.tfgLineModel)
                    .WithMany(u => u.Careers)
-                   .HasForeignKey(d => d.career)
+                   .HasForeignKey(d => d.tfg_line)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(d => d.careerModel)
                     .WithMany(u => u.TFGLines)
-                    .HasForeignKey(d => d.tfg_line)
+                    .HasForeignKey(d => d.career)
                     .OnDelete(DeleteBehavior.Cascade);
         }
     }
