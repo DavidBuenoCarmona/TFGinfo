@@ -87,19 +87,19 @@ public class TFGLineController : BaseController
         }
     }
 
-    // [HttpPost("add-professor/{id}")]
-    // public IActionResult AddProfessor(int id, [FromBody] List<int> professors)
-    // {
-    //     try {
-    //         TFGLineManager manager = new TFGLineManager(context);
-    //         manager.AddProfessors(id, professors);
-    //         return Ok();
-    //     } catch (NotFoundException) {
-    //         return NotFound();
-    //     } catch (UnprocessableException e) {
-    //         return UnprocessableEntity(e.GetError());
-    //     }
-    // }
+    [HttpPost("add-professor/{id}")]
+    public IActionResult AddProfessor(int id, [FromBody] List<int> professors)
+    {
+        try {
+            TFGLineManager manager = new TFGLineManager(context);
+            manager.AddProfessors(id, professors);
+            return Ok();
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
 
     [HttpGet("department/{departmentId}")]
     public IActionResult GetAllByDepartment(int departmentId)

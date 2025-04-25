@@ -20,6 +20,7 @@ namespace TFGinfo.Models
         public List<TFGProfessorModel> TFGs { get; set; }
 
         public List<WorkingGroupProfessorModel> WorkingGroups { get; set; }
+        public List<TFGLineProfessorModel> TFGLines { get; set; }
     }
 
     public class ProfessorConfiguration : IEntityTypeConfiguration<ProfessorModel>

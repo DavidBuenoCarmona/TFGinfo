@@ -70,7 +70,12 @@ namespace TFGinfo.Api
 
         public TFGLineDTO GetTFGLine(int id)
         {
-            TFGLineModel? model = context.tfg_line.Include(d => d.departmentModel).Include(d => d.Careers).ThenInclude(c => c.careerModel).FirstOrDefault(TFGLine => TFGLine.id == id);
+            TFGLineModel? model = context.tfg_line.
+                Include(d => d.departmentModel).
+                Include(d => d.Careers).
+                    ThenInclude(c => c.careerModel).
+                Include(p => p.Professors).
+                    ThenInclude(p => p.professorModel).FirstOrDefault(TFGLine => TFGLine.id == id);
             if (model == null) {
                 throw new NotFoundException();
             }
@@ -124,6 +129,31 @@ namespace TFGinfo.Api
                 }
                 // context.tfg_line_career.Add(new TFGLineCareerModel { career = careerId, tfg_line = id });
                 tfgLine.Careers.Add(new TFGLineCareerModel { career = careerId, tfg_line = id });
+            }
+            context.SaveChanges();
+        }
+
+        public void AddProfessors(int id, List<int> professors)
+        {
+            var tfgLine = context.tfg_line.Include(d => d.departmentModel).Include(t => t.Professors).FirstOrDefault(t => t.id == id);
+            if (tfgLine == null) {
+                throw new NotFoundException();
+            }
+
+            tfgLine.Professors.Clear();
+            foreach (var professorId in professors) {
+                var professor = context.professor.FirstOrDefault(c => c.id == professorId);
+                if (professor == null) {
+                    throw new NotFoundException($"Professor with id {professorId} not found");
+                }
+                if (professor.department != tfgLine.departmentModel.id) {
+                    throw new UnprocessableException($"Professor with id {professorId} does not belong to the same department as TFGLine with id {id}");
+                }
+                if (tfgLine.Professors.Any(c => c.professor == professorId)) {
+                    throw new UnprocessableException($"Professor with id {professorId} already exists in TFGLine with id {id}");
+                }
+                // context.tfg_line_professor.Add(new TFGLineProfessorModel { professor = professorId, tfg_line = id });
+                tfgLine.Professors.Add(new TFGLineProfessorModel { professor = professorId, tfg_line = id });
             }
             context.SaveChanges();
         }

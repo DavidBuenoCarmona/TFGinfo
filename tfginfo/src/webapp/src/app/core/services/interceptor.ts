@@ -24,7 +24,6 @@ export class AuthInterceptor implements HttpInterceptor {
       : req;
 
     // Pasa la solicitud al siguiente manejador
-    console.log('authReq :>> ', authReq);
     return next.handle(authReq);
   }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TFGinfo.Api;
 using TFGinfo.Common;
 using TFGinfo.Data;
@@ -9,8 +10,13 @@ using TFGinfo.Objects;
 [Route("/tfg")]
 [ApiController]
 public class TFGController : BaseController
-{
-    public TFGController(ApplicationDbContext context) : base(context) { }
+{   
+    private readonly EmailService emailService;
+    private readonly IConfiguration configuration;
+    public TFGController(ApplicationDbContext context, EmailService emailService, IConfiguration configuration) : base(context) {
+        this.emailService = emailService;
+        this.configuration = configuration;
+     }
 
 
     [HttpPost]
@@ -100,6 +106,25 @@ public class TFGController : BaseController
         {
             TFGManager manager = new TFGManager(context);
             return Ok(manager.GetTFGById(id));
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpPost("request")]
+    public async Task<IActionResult> Request([FromBody] TFGRequest request)
+    {
+        try
+        {
+            TFGManager manager = new TFGManager(context, emailService, configuration);
+            await manager.RequestTFG(request);
+            return Ok();
         }
         catch (NotFoundException)
         {

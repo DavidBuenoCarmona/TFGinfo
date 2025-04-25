@@ -95,7 +95,7 @@ export class ProfessorDetailComponent implements OnInit {
         });
         
         dialogRef.afterClosed().subscribe((result) => {
-            this.router.navigate(['/admin/student'])
+            this.router.navigate(['/professor']);
         });
     }
 }

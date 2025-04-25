@@ -36,6 +36,12 @@ builder.Services.AddAuthentication("Bearer")
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+// Configurar EmailSettings desde appsettings.json
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
+// Registrar EmailService
+builder.Services.AddSingleton<EmailService>();
+
 var app = builder.Build();
 app.UseCors("AllowAngularApp");
 // Configure the HTTP request pipeline.

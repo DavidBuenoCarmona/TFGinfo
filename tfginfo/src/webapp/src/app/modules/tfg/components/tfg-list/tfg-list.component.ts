@@ -10,6 +10,7 @@ import { TfgService } from '../../services/tfg.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { RoleId } from '../../../admin/models/role.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'tfg-list',
@@ -20,7 +21,8 @@ import { RoleId } from '../../../admin/models/role.model';
     MatDialogModule,
     MatIconModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    CommonModule
   ],
   templateUrl: './tfg-list.component.html',
   styleUrls: ['./tfg-list.component.scss']

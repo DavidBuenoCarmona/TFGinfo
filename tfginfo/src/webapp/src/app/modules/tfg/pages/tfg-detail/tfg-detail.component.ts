@@ -17,6 +17,11 @@ import { CareerDTO } from '../../../admin/models/career.model';
 import { fork } from 'child_process';
 import { forkJoin } from 'rxjs';
 import { RoleId } from '../../../admin/models/role.model';
+import { ProfessorDTO } from '../../../professor/models/professor.model';
+import { ProfessorSearchComponent } from '../../../professor/pages/profesor-search/professor-search.component';
+import { ProfessorService } from '../../../professor/services/professor.service';
+import { MatDialog } from '@angular/material/dialog';
+import { StartTfgDialogComponent } from '../../components/start-tfg-dialog/start-tfg-dialog.component';
 
 @Component({
     selector: 'tfg-detail',
@@ -40,7 +45,9 @@ export class TfgDetailComponent implements OnInit {
     tfgForm!: FormGroup;
     departments: DepartmentDTO[] = [];
     careers: CareerDTO[] = [];
+    professors: ProfessorDTO[] = [];
     isAdmin: boolean = false;
+    isStudent: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -48,12 +55,15 @@ export class TfgDetailComponent implements OnInit {
         private tfgService: TfgService,
         private fb: FormBuilder,
         private departmentService: DepartmentService,
-        private careerService: CareerService
+        private careerService: CareerService,
+        private professorService: ProfessorService,
+        private dialog: MatDialog
     ) { }
 
     ngOnInit(): void {
         let role = Number.parseInt(localStorage.getItem('role')!);
         this.isAdmin = role === RoleId.Admin;
+        this.isStudent = role === RoleId.Student;
         this.id = this.route.snapshot.paramMap.get('id');
         if (this.id !== "new" && isNaN(Number(this.id))) {
             this.router.navigate(['/']);
@@ -67,7 +77,8 @@ export class TfgDetailComponent implements OnInit {
             departmentId: ['', Validators.required],
             slots: [1, [Validators.required, Validators.min(1)]],
             group: [false],
-            careers: [[]]
+            careers: [[]],
+            professors: [[]],
         });
 
         if (!this.isAdmin) {
@@ -76,17 +87,20 @@ export class TfgDetailComponent implements OnInit {
 
         const departmentRequest = this.departmentService.getDepartments();
         const careerRequest = this.careerService.getCareers();
+        const professorRequest = this.professorService.getProfessors();
 
         if (!this.creation) {
             const tfgRequest = this.tfgService.getTfg(+this.id!);
 
-            forkJoin([departmentRequest, careerRequest, tfgRequest]).subscribe(([departments, careers, tfg]) => {
+            forkJoin([departmentRequest, careerRequest, tfgRequest, professorRequest]).subscribe(([departments, careers, tfg, professors]) => {
                 this.departments = departments;
                 this.careers = careers;
                 this.tfg = tfg;
+                this.professors = professors;
                 this.tfgForm.patchValue(tfg);
                 this.tfgForm.get('departmentId')?.setValue(tfg.department?.id);
                 this.tfgForm.get('careers')?.setValue(tfg.careers?.map((career) => career.id));
+                this.tfgForm.get('professors')?.setValue(tfg.professors?.map((professor) => professor.id));
             });
         } else {
             forkJoin([departmentRequest, careerRequest]).subscribe(([departments, careers]) => {
@@ -101,11 +115,12 @@ export class TfgDetailComponent implements OnInit {
         if (this.tfgForm.valid) {
             const tfgData = this.tfgForm.value;
             if (this.creation) {
-                this.tfgService.createTfg(tfgData).subscribe((data) => this.router.navigate(['/tfg/' + data.id]));
+                this.tfgService.createTfg(tfgData).subscribe((data) => this.router.navigate(['/tfg']));
             } else {
                 forkJoin([
                     this.tfgService.updateTfg(tfgData),
-                    this.tfgService.addCareersToTfg(tfgData.id, tfgData.careers)
+                    this.tfgService.addCareersToTfg(tfgData.id, tfgData.careers),
+                    this.tfgService.addProfessorsToTfg(tfgData.id, tfgData.professors)
                 ]).subscribe(() => this.router.navigate(['/tfg']));
             }
         }
@@ -113,5 +128,20 @@ export class TfgDetailComponent implements OnInit {
 
     onCancel(): void {
         this.router.navigate(['/tfg']);
+    }
+
+    onRequest() {
+        const dialogRef = this.dialog.open(StartTfgDialogComponent, {
+            data: {
+                professors: this.professors.filter((professor) => this.tfgForm.get('professors')?.value.includes(professor.id)),
+                tfgLineId: this.tfg?.id,
+            }
+        });
+        
+          dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+              console.log('Selected Tutors:', result);
+            }
+          });
     }
 }

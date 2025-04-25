@@ -24,6 +24,7 @@ namespace TFGinfo.Objects
         public DepartmentDTO department { get; set; }
         public CareerDTO[] careers { get; set; }
         public TFGDTO[] tfgs { get; set; }
+        public ProfessorDTO[] professors { get; set; }
 
         public TFGLineDTO () {}
 
@@ -32,8 +33,10 @@ namespace TFGinfo.Objects
                 department = new DepartmentDTO(model.departmentModel);
             }
             if (model.Careers != null) {
-                Console.WriteLine("Careers: " + model.Careers.Count);
                 careers = model.Careers.ConvertAll(c => new CareerDTO(c.careerModel)).ToArray();
+            }
+            if (model.Professors != null) {
+                professors = model.Professors.ConvertAll(c => new ProfessorDTO(c.professorModel)).ToArray();
             }
         }
     }

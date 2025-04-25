@@ -17,6 +17,7 @@ namespace TFGinfo.Models
         public DepartmentModel departmentModel { get; set; }
         public List<TFGModel> TFGs { get; set; }
         public List<TFGLineCareerModel> Careers { get; set; }
+        public List<TFGLineProfessorModel> Professors { get; set; }
     }
 
     public class TFGLineConfiguration : IEntityTypeConfiguration<TFGLineModel>

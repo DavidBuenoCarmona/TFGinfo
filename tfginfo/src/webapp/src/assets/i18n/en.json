@@ -60,6 +60,7 @@
         "NAME_REQUIRED": "Name is required",
         "PASSWORD": "Password",
         "PHONE": "Phone",
+        "REQUEST": "Request",
         "SAVE": "Save",
         "SEARCH": "Search",
         "SPANISH": "Spanish",
@@ -71,6 +72,7 @@
     "PROFESSOR": {
         "NEW": "New professor",
         "IS_DEPARTMENT_BOSS": "Is department boss?",
+        "SELECT": "Select professor(s)",
         "TITLE_1": "Professor",
         "TITLE_N": "Professors"
     },

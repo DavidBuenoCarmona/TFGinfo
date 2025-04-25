@@ -8,13 +8,14 @@ namespace TFGinfo.Models
     {
         public int id { get; set; }
         public DateTime startDate { get; set; }
-        public int tfgLine { get; set; }
-
+        public int tfg_line { get; set; }
+        public string? external_tutor_name { get; set; }
+        public string? external_tutor_email { get; set; }
+        public bool accepted { get; set; }
         [JsonIgnore]
         public TFGLineModel tfgLineModel { get; set; }
         public List<TFGStudentModel> Students { get; set; }
         public List<TFGProfessorModel> Professors { get; set; }
-        public List<TFGExternalTutorModel> ExternalTutors { get; set; }
         public List<WorkingGroupTFGModel> WorkingGroups { get; set; }
     }
 
@@ -24,7 +25,7 @@ namespace TFGinfo.Models
         {
             builder.HasOne(d => d.tfgLineModel)
                    .WithMany(u => u.TFGs)
-                   .HasForeignKey(d => d.tfgLine)
+                   .HasForeignKey(d => d.tfg_line)
                    .OnDelete(DeleteBehavior.Cascade);
         }
     }
