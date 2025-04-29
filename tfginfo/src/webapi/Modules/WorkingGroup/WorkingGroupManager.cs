@@ -99,13 +99,13 @@ namespace TFGinfo.Api
 
         public List<ProfessorDTO> GetProfessorsByWorkingGroup(int id)
         {
-            List<ProfessorModel> professors = context.working_group_professor.Where(WorkingGroup => WorkingGroup.id == id).Select(p => p.professorModel).ToList();
+            List<ProfessorModel> professors = context.working_group_professor.Where(WorkingGroup => WorkingGroup.working_group == id).Select(p => p.professorModel).ToList();
             return professors.ConvertAll(model => new ProfessorDTO(model));
         }
 
         public List<StudentDTO> GetStudentsByWorkingGroup(int id)
         {
-            List<StudentModel> students = context.working_group_student.Where(WorkingGroup => WorkingGroup.id == id).Select(p => p.studentModel).ToList();
+            List<StudentModel> students = context.working_group_student.Where(WorkingGroup => WorkingGroup.working_group == id).Select(p => p.studentModel).ToList();
             return students.ConvertAll(model => new StudentDTO(model));
         }
 
@@ -113,6 +113,18 @@ namespace TFGinfo.Api
         {
             List<TFGModel> TFGs = context.working_group_tfg.Where(WorkingGroup => WorkingGroup.id == id).Select(p => p.tfgModel).ToList();
             return TFGs.ConvertAll(model => new TFGDTO(model));
+        }
+
+        public List<WorkingGroupBase> GetWorkingGroupsByProfessor(int id)
+        {
+            List<WorkingGroupModel> workingGroups = context.working_group_professor.Where(WorkingGroup => WorkingGroup.professor == id).Select(p => p.workingGroupModel).ToList();
+            return workingGroups.ConvertAll(model => new WorkingGroupBase(model));
+        }
+
+        public List<WorkingGroupBase> GetWorkingGroupsByStudent(int id)
+        {
+            List<WorkingGroupModel> workingGroups = context.working_group_student.Where(WorkingGroup => WorkingGroup.student == id).Select(p => p.workingGroupModel).ToList();
+            return workingGroups.ConvertAll(model => new WorkingGroupBase(model));
         }
 
 

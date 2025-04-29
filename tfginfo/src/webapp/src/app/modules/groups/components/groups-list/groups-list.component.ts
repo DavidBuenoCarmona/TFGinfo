@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from '../../../../core/layout/components/confi
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { GroupService } from '../../services/group-service';
+import { RoleId } from '../../../admin/models/role.model';
 
 @Component({
   selector: 'group-list',
@@ -24,10 +25,11 @@ import { GroupService } from '../../services/group-service';
   templateUrl: './groups-list.component.html',
   styleUrls: ['./groups-list.component.scss']
 })
-export class GroupListComponent {
+export class GroupListComponent implements OnInit {
   @Input() groups: WorkingGroupBase[] = [];
   @Input() displayedColumns: string[] = ['name', 'description', 'isPrivate', 'actions'];
   @Output() onDeleteGroup = new EventEmitter<number>();
+  public canEdit: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -37,8 +39,14 @@ export class GroupListComponent {
   ) {
   }
 
+
+  ngOnInit(): void {
+    let role = Number.parseInt(localStorage.getItem('role')!);
+    this.canEdit = role === RoleId.Admin || role === RoleId.Professor;
+  }
+
   onEdit(group: WorkingGroupBase) {
-    this.router.navigate([group.id], { relativeTo: this.route });
+    this.router.navigate(["/working-group/" + group.id]);
   }
 
   onDelete(group: WorkingGroupBase) {

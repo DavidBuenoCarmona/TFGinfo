@@ -71,7 +71,7 @@ public class WorkingGroupController : BaseController
         }
     }
 
-    [HttpGet("professor/{id}")]
+    [HttpGet("{id}/professor")]
     public IActionResult GetProfessorsByWorkingGroup(int id)
     {
         try {
@@ -84,7 +84,7 @@ public class WorkingGroupController : BaseController
         }
     }
 
-    [HttpGet("student/{id}")]
+    [HttpGet("{id}/student/")]
     public IActionResult GetStudentsByWorkingGroup(int id)
     {
         try {
@@ -97,12 +97,37 @@ public class WorkingGroupController : BaseController
         }
     }
 
-    [HttpGet("tfg/{id}")]
+    [HttpGet("{id}/tfg")]
     public IActionResult GetTFGsByWorkingGroup(int id)
     {
         try {
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.GetTFGsByWorkingGroup(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpGet("professor/{id}")]
+    public IActionResult GetWorkingGroupByProfessor(int id)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            return Ok(manager.GetWorkingGroupsByProfessor(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+    [HttpGet("student/{id}")]
+    public IActionResult GetWorkingGroupByStudent(int id)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            return Ok(manager.GetWorkingGroupsByStudent(id));
         } catch (NotFoundException) {
             return NotFound();
         } catch (UnprocessableException e) {

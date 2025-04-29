@@ -5,6 +5,7 @@ import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { WorkingGroupBase } from "../models/group.model";
 import { ProfessorDTO } from "../../professor/models/professor.model";
+import { StudentDTO } from "../../admin/models/student.model";
 
 @Injectable({
     providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
@@ -39,6 +40,18 @@ export class GroupService extends BaseService {
     }
 
     getGroupProfessors(id: number): Observable<ProfessorDTO[]> {
+        return this.get(`${this.url}/working-group/${id}/professor`);
+    }
+
+    getGroupStudents(id: number): Observable<StudentDTO[]> {
+        return this.get(`${this.url}/working-group/${id}/student`);
+    }
+
+    getGroupByProfessor(id: number): Observable<WorkingGroupBase[]> {
         return this.get(`${this.url}/working-group/professor/${id}`);
+    }
+
+    getGroupByStudent(id: number): Observable<WorkingGroupBase[]> {
+        return this.get(`${this.url}/working-group/student/${id}`);
     }
 }

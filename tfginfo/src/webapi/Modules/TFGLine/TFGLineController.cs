@@ -134,4 +134,17 @@ public class TFGLineController : BaseController
         }
     }
 
+    [HttpGet("professor/{id}")]
+    public IActionResult GetByProfessorId(int id)
+    {
+        try {
+            TFGLineManager manager = new TFGLineManager(context);
+            return Ok(manager.GetByProfessorId(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
 }

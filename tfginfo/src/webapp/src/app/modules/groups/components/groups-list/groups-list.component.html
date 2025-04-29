@@ -29,9 +29,9 @@
                     <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
                     <td mat-cell *matCellDef="let group">
                         <button mat-icon-button color="primary" (click)="onEdit(group)">
-                            <mat-icon>edit</mat-icon>
+                            <mat-icon>{{ canEdit ? 'edit' : 'remove_red_eye'}}</mat-icon>
                         </button>
-                        <button mat-icon-button color="warn" (click)="onDelete(group)">
+                        <button *ngIf="canEdit" mat-icon-button color="warn" (click)="onDelete(group)">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </td>

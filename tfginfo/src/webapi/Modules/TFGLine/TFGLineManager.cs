@@ -169,6 +169,12 @@ namespace TFGinfo.Api
             return context.tfg_line.Where(TFGLine => TFGLine.department == departmentId).Include(d => d.departmentModel).ToList().ConvertAll(model => new TFGLineDTO(model));
         }
 
+        public List<TFGLineDTO> GetByProfessorId(int professorId)
+        {
+            var query = context.tfg_line.Include(d => d.departmentModel).Include(d => d.Professors).ThenInclude(d => d.professorModel).AsQueryable();
+            return query.Where(tfg => tfg.Professors.Any(t => t.professor == professorId)).ToList().ConvertAll(model => new TFGLineDTO(model));
+        }
+
         #region Private Methods
         private void CheckNameIsNotRepeated(TFGLineFlatDTO TFGLine)
         {

@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { WorkingGroupBase } from '../../models/group.model';
 import { GroupService } from '../../services/group-service';
 import { GroupListComponent } from '../../components/groups-list/groups-list.component';
+import { RoleId } from '../../../admin/models/role.model';
 
 @Component({
     selector: 'app-group-search',
@@ -27,6 +28,7 @@ export class GroupSearchComponent implements OnInit {
     public filterForm!: FormGroup;
     public groups: WorkingGroupBase[] = [];
     public filteredGroups: WorkingGroupBase[] = [];
+    public canEdit: boolean = false;
 
     constructor(
         public groupService: GroupService,
@@ -36,6 +38,8 @@ export class GroupSearchComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        let role = Number.parseInt(localStorage.getItem('role')!);
+        this.canEdit = role === RoleId.Admin || role === RoleId.Professor;
         this.filterForm = this.fb.group({
             filter: [''] 
         });

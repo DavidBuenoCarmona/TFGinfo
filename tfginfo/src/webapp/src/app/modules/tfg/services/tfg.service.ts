@@ -60,4 +60,8 @@ export class TfgService extends BaseService {
         return this.get(`${this.url}/tfg-line/student/${id}`);
     }
 
+    getTfgsByProfessor(id: number): Observable<TFGLineDTO[]> {
+        return this.get(`${this.url}/tfg-line/professor/${id}`);
+    }
+
 }

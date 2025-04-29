@@ -13,6 +13,10 @@ import { GroupService } from '../../services/group-service';
 import { TfgListComponent } from '../../../tfg/components/tfg-list/tfg-list.component';
 import { ProfessorListComponent } from '../../../professor/components/profesor-list/professor-list.component';
 import { ProfessorDTO } from '../../../professor/models/professor.model';
+import { RoleId } from '../../../admin/models/role.model';
+import { StudentDTO } from '../../../admin/models/student.model';
+import { forkJoin } from 'rxjs';
+import { StudentListComponent } from '../../../admin/components/student-list/student-list.component';
 
 @Component({
     selector: 'group-detail',
@@ -27,6 +31,7 @@ import { ProfessorDTO } from '../../../professor/models/professor.model';
         MatButtonModule,
         CommonModule,
         ProfessorListComponent,
+        StudentListComponent
     ],
     templateUrl: './group-detail.component.html',
     styleUrls: ['./group-detail.component.scss']
@@ -35,8 +40,12 @@ export class GroupDetailComponent implements OnInit {
     id: string | null = null;
     group: WorkingGroupBase | null = null;
     professors: ProfessorDTO[] = [];
+    professorColumns: string[] = ['name','surname', 'email'];
+    students: StudentDTO[] = [];
+    studentColumns: string[] = ['name', 'surname', 'email'];
     creation: boolean = false;
     groupForm!: FormGroup;
+    canEdit: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -46,6 +55,8 @@ export class GroupDetailComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        let role = Number.parseInt(localStorage.getItem('role')!);
+        this.canEdit = role === RoleId.Admin || role === RoleId.Professor;
         this.id = this.route.snapshot.paramMap.get('id');
         if (this.id !== "new" && isNaN(Number(this.id))) {
             this.router.navigate(['/']);
@@ -59,14 +70,22 @@ export class GroupDetailComponent implements OnInit {
             isPrivate: [false, Validators.required]
         });
 
+        if (!this.canEdit) {
+            this.groupForm.disable();
+        }
+
         if (!this.creation) {
             this.groupService.getGroup(+this.id!).subscribe((data) => {
                 this.group = data;
                 this.groupForm.patchValue(data);
             });
 
-            this.groupService.getGroupProfessors(+this.id!).subscribe((data) => {
-                this.professors = data;
+            forkJoin([
+                this.groupService.getGroupStudents(+this.id!),
+                this.groupService.getGroupProfessors(+this.id!)
+            ]).subscribe(([students, professors]) => {
+                this.students = students;
+                this.professors = professors;
             });
         }
     }
