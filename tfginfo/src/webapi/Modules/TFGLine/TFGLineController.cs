@@ -120,4 +120,18 @@ public class TFGLineController : BaseController
             return UnprocessableEntity(e.GetError());
         }
     }
+
+    [HttpGet("student/{id}")]
+    public IActionResult GetByStudentId(int id)
+    {
+        try {
+            TFGLineManager manager = new TFGLineManager(context);
+            return Ok(manager.GetByStudentId(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
 }

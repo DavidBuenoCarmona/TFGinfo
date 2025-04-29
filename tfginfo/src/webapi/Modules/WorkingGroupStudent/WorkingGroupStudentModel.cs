@@ -8,7 +8,7 @@ namespace TFGinfo.Models
     {
         public int id { get; set; }
         public int student { get; set; }
-        public int workinGroup { get; set; }
+        public int working_group { get; set; }
 
         [JsonIgnore]
         public WorkingGroupModel workingGroupModel { get; set; }
@@ -24,7 +24,7 @@ namespace TFGinfo.Models
         {
             builder.HasOne(d => d.workingGroupModel)
                    .WithMany(u => u.Students)
-                   .HasForeignKey(d => d.workinGroup)
+                   .HasForeignKey(d => d.working_group)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(d => d.studentModel)

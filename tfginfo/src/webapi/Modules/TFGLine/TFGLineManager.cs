@@ -82,6 +82,12 @@ namespace TFGinfo.Api
             return new TFGLineDTO(model);
         }
 
+        public List<TFGLineDTO> GetByStudentId(int studentId)
+        {
+            var query = context.tfg_line.Include(d => d.departmentModel).Include(d => d.TFGs).ThenInclude(d => d.Students).AsQueryable();
+            return query.Where(tfg => tfg.TFGs.Any(t => t.Students.Any(s => s.student == studentId))).ToList().ConvertAll(model => new TFGLineDTO(model));
+        }
+
         public List<TFGLineDTO> SearchTFGLines(List<Filter> filters)
         {
             var query = context.tfg_line.Include(d => d.departmentModel).Include(t => t.Careers).ThenInclude(t => t.careerModel).AsQueryable();

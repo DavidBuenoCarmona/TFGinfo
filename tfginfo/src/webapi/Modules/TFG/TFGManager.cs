@@ -172,8 +172,20 @@ namespace TFGinfo.Api
             $"Has recibido una solicitud de TFG de {request.studentEmail} para la línea {tfg.name}.\n\n" +
             $"Puedes ver la solicitud en el portal de gestión de TFGs: {configuration.GetSection("app:url").Value}.\n\n");
 
-            // context.tfg.Update(tfgModel);
-            // context.SaveChanges();
+            context.tfg.Update(tfgModel);
+            context.SaveChanges();
+
+            WorkingGroupManager wgManager = new WorkingGroupManager(context);
+            WorkingGroupBase wg = new WorkingGroupBase
+            {
+                name = tfg.name,
+                description = tfg.description,
+                isPrivate = true
+            };
+            List<int> students = new List<int> { studentId };
+            List<int> professors = new List<int> { request.professorId, request.secondaryProfessorId ?? 0 };
+            List<int> tfgs = new List<int> { tfgModel.id };
+            wgManager.CreateWorkingGroup(wg, professors, students, tfgs);
         }
 
         #region Private Methods

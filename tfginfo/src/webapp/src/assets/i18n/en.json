@@ -91,10 +91,18 @@
     },
     "TFG": {
         "DEPARTMENT_REQUIRED": "Department is required",
+        "EXTERNAL_TUTOR": {
+            "TITLE_1": "External tutor",
+            "NAME": "External tutor name",
+            "EMAIL": "External tutor email"
+        },
         "IS_GROUP": "Is group project?",
         "LINES_TITLE_1": "TFG line",
         "LINES_TITLE_N": "TFG lines",
         "NEW": "New TFG",
+        "PRIMARY_TUTOR": "Primary tutor",
+        "SECONDARY_TUTOR": "Secondary tutor",
+        "SELECT_TUTORS": "Select tutors",
         "SLOTS": "Slots",
         "SLOTS_REQUIRED": "Slots are required",
         "TITLE_1": "TFG",

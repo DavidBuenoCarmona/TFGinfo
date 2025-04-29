@@ -55,4 +55,9 @@ export class TfgService extends BaseService {
     requestTfg(tfg: TFGRequest): Observable<void> {
         return this.post(`${this.url}/tfg/request`, tfg);
     }
+
+    getTfgsByStudent(id: number): Observable<TFGLineDTO[]> {
+        return this.get(`${this.url}/tfg-line/student/${id}`);
+    }
+
 }

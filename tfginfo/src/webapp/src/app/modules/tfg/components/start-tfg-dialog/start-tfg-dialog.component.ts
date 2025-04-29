@@ -43,7 +43,10 @@ export class StartTfgDialogComponent {
             externalTutorName: [''], // Nombre del tutor externo
             externalTutorEmail: ['', [Validators.email]] // Email del tutor externo
         });
+        this.tutorForm.get('secondaryTutor')?.disable(); // Deshabilitar el campo de tutor secundario inicialmente
         this.tutorForm.get('primaryTutor')?.valueChanges.subscribe((value) => {
+            this.tutorForm.get('secondaryTutor')?.enable();
+            this.tutorForm.get('secondaryTutor')?.setValue('');
             this.filteredProfessors = this.data.professors.filter((professor) => professor.id != value );
         })
     }

@@ -46,7 +46,7 @@ export class TfgListComponent implements OnInit {
   }
 
   onEdit(tfg: TFGLineDTO) {
-    this.router.navigate([tfg.id], { relativeTo: this.route });
+    this.router.navigate(["/tfg/" + tfg.id]);
   }
 
   onDelete(tfg: TFGLineDTO) {

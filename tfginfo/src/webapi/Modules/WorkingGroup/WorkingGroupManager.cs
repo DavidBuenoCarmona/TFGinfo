@@ -17,7 +17,7 @@ namespace TFGinfo.Api
             return context.working_group.ToList().ConvertAll(model => new WorkingGroupBase(model));
         }
 
-        public WorkingGroupBase CreateWorkingGroup(WorkingGroupBase WorkingGroup)
+        public WorkingGroupBase CreateWorkingGroup(WorkingGroupBase WorkingGroup, List<int>? professors = null, List<int>? students = null, List<int>? TFGs = null)
         { 
 
             WorkingGroupModel model = new WorkingGroupModel {
@@ -26,6 +26,39 @@ namespace TFGinfo.Api
                 isPrivate = WorkingGroup.isPrivate ? 1 : 0
             };
             context.working_group.Add(model);
+            context.SaveChanges();
+
+            model.Professors = new List<WorkingGroupProfessorModel>();
+            if (professors != null) {
+                foreach (int professorId in professors) {
+                    WorkingGroupProfessorModel workingGroupProfessor = new WorkingGroupProfessorModel {
+                        working_group = model.id,
+                        professor = professorId
+                    };
+                    model.Professors.Add(workingGroupProfessor);
+                }
+            }
+            model.Students = new List<WorkingGroupStudentModel>();
+            if (students != null) {
+                foreach (int studentId in students) {
+                    WorkingGroupStudentModel workingGroupStudent = new WorkingGroupStudentModel {
+                        working_group = model.id,
+                        student = studentId
+                    };
+                    model.Students.Add(workingGroupStudent);
+                }
+            }
+            model.TFGs = new List<WorkingGroupTFGModel>();
+            if (TFGs != null) {
+                foreach (int TFGId in TFGs) {
+                    WorkingGroupTFGModel workingGroupTFG = new WorkingGroupTFGModel {
+                        working_group = model.id,
+                        tfg = TFGId
+                    };
+                    model.TFGs.Add(workingGroupTFG);
+                }
+            }
+            context.Update(model);
             context.SaveChanges();
 
             return new WorkingGroupBase(model);

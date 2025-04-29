@@ -39,11 +39,13 @@ namespace TFGinfo.Api
                 var student = context.student.FirstOrDefault(s => s.user == newUser.user.id);
                 if (student != null) {
                     newUser.user.career = student.career;
+                    newUser.user.id = student.id;
                 }
             } else if (newUser.user.role.id == (int)UserRole.Professor) {
                 var teacher = context.professor.FirstOrDefault(t => t.user == newUser.user.id);
                 if (teacher != null) {
                     newUser.user.department = teacher.department;
+                    newUser.user.id = teacher.id;
                 }
             }
             var token = GenerateJwtToken(newUser.user);

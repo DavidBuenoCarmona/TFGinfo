@@ -91,10 +91,18 @@
     },
     "TFG": {
         "DEPARTMENT_REQUIRED": "El departamento es requerido",
+        "EXTERNAL_TUTOR": {
+            "TITLE_1": "Tutor externo",
+            "NAME": "Nombre del tutor externo",
+            "EMAIL": "Correo electrónico del tutor externo"
+        },
         "IS_GROUP": "¿Proyecto en grupo?",
         "LINES_TITLE_1": "Línea de TFG",
         "LINES_TITLE_N": "Líneas de TFG",
         "NEW": "Nuevo TFG",
+        "PRIMARY_TUTOR": "Tutor principal",
+        "SECONDARY_TUTOR": "Tutor secundario",
+        "SELECT_TUTORS": "Seleccionar tutores",
         "SLOTS": "Plazas",
         "SLOTS_REQUIRED": "Plazas son requeridas",
         "TITLE_1": "TFG",
