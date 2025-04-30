@@ -14,6 +14,10 @@ import { DepartmentDTO } from '../../../admin/models/department.model';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthCodeDialogComponent } from '../../../../core/layout/components/auth-code-dialog/auth-code-dialog.component';
+import { TFGLineDTO } from '../../../tfg/models/tfg.model';
+import { TfgService } from '../../../tfg/services/tfg.service';
+import { TfgListComponent } from '../../../tfg/components/tfg-list/tfg-list.component';
+import { RoleId } from '../../../admin/models/role.model';
 
 @Component({
     selector: 'professor-detail',
@@ -26,7 +30,8 @@ import { AuthCodeDialogComponent } from '../../../../core/layout/components/auth
         MatSelectModule,
         MatButtonModule,
         MatCheckboxModule,
-        CommonModule
+        CommonModule,
+        TfgListComponent
     ],
     templateUrl: './professor-detail.component.html',
     styleUrls: ['./professor-detail.component.scss']
@@ -37,6 +42,9 @@ export class ProfessorDetailComponent implements OnInit {
     creation: boolean = false;
     professorForm!: FormGroup;
     departments: DepartmentDTO[] = [];
+    tfgs: TFGLineDTO[] = [];
+    tfgDisplayedColumns: string[] = ['name', 'description', 'actions'];
+    canEdit: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -44,10 +52,13 @@ export class ProfessorDetailComponent implements OnInit {
         private professorService: ProfessorService,
         private fb: FormBuilder,
         private departmentService: DepartmentService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private tfgService: TfgService
     ) { }
 
     ngOnInit(): void {
+        let role = Number.parseInt(localStorage.getItem('role')!);
+        this.canEdit = role === RoleId.Admin;
         this.id = this.route.snapshot.paramMap.get('id');
         if (this.id !== "new" && isNaN(Number(this.id))) {
             this.router.navigate(['/']);
@@ -62,6 +73,9 @@ export class ProfessorDetailComponent implements OnInit {
             departmentId: ['', Validators.required],
             department_boss: [false]
         });
+        if (!this.canEdit) {
+            this.professorForm.disable();
+        }
 
         this.departmentService.getDepartments().subscribe((data) => this.departments = data);
 
@@ -70,6 +84,10 @@ export class ProfessorDetailComponent implements OnInit {
                 this.professor = data;
                 this.professorForm.patchValue(data);
                 this.professorForm.get('departmentId')?.setValue(data.department?.id);
+            });
+
+            this.tfgService.getTfgsByProfessor(+this.id!).subscribe((data) => {
+                this.tfgs = data;
             });
         }
     }

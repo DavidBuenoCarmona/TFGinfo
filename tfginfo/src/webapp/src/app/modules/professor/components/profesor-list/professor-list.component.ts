@@ -1,4 +1,4 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from '../../../../core/layout/components/confi
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { EventEmitter } from '@angular/core';
+import { RoleId } from '../../../admin/models/role.model';
 
 @Component({
   selector: 'professor-list',
@@ -24,10 +25,11 @@ import { EventEmitter } from '@angular/core';
   templateUrl: './professor-list.component.html',
   styleUrls: ['./professor-list.component.scss']
 })
-export class ProfessorListComponent {
+export class ProfessorListComponent implements OnInit {
   @Input() professors: ProfessorDTO[] = [];
   @Input() displayedColumns: string[] = ['name', 'surname', 'email', 'department', 'actions'];
   @Output() onDeleteProfessor = new EventEmitter<number>();
+  public canEdit: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -35,6 +37,10 @@ export class ProfessorListComponent {
     private route: ActivatedRoute
   ) {}
 
+  ngOnInit(): void {
+    let role = Number.parseInt(localStorage.getItem('role')!);
+    this.canEdit = role === RoleId.Admin;
+  }
   onEdit(professor: ProfessorDTO) {
     this.router.navigate([professor.id], { relativeTo: this.route });
   }

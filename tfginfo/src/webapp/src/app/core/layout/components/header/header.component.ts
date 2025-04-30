@@ -24,13 +24,13 @@ import { RoleId } from '../../../../modules/admin/models/role.model';
 })
 
 export class HeaderComponent implements OnInit {
-    RoleId = RoleId;
-    role!: number;
+    isAdmin: boolean = false;
     route = route;
 
     constructor(private router: Router) { }
 
     ngOnInit(): void {
-        this.role = localStorage.getItem('role') ? parseInt(localStorage.getItem('role')!) : RoleId.Student;
+        let role = Number.parseInt(localStorage.getItem('role')!);
+        this.isAdmin = role === RoleId.Admin;
     }
 }

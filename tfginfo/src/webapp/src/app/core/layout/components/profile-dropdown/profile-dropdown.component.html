@@ -9,13 +9,13 @@
         </a>
     </li>
     <li>
-        <a class="dropdown-item" (click)="logout()">
-            {{ 'GLOBAL.LOGOUT' | translate }}
+        <a *ngIf="isAdmin" class="dropdown-item" (click)="changeUniversity()">
+            {{ 'UNIVERSITY.CHANGE' | translate }}
         </a>
     </li>
     <li>
-        <a class="dropdown-item" (click)="changeUniversity()">
-            {{ 'UNIVERSITY.CHANGE' | translate }}
+        <a class="dropdown-item" (click)="logout()">
+            {{ 'GLOBAL.LOGOUT' | translate }}
         </a>
     </li>
 </ul>

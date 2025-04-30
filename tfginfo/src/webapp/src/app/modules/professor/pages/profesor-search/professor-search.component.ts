@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { ProfessorListComponent } from '../../components/profesor-list/professor-list.component';
+import { RoleId } from '../../../admin/models/role.model';
 
 @Component({
     selector: 'app-professor-search',
@@ -27,6 +28,7 @@ export class ProfessorSearchComponent implements OnInit {
     public filterForm!: FormGroup;
     public professors: ProfessorDTO[] = [];
     public filteredProfessors: ProfessorDTO[] = [];
+    public canEdit: boolean = false;
 
     constructor(
         public professorService: ProfessorService,
@@ -36,6 +38,8 @@ export class ProfessorSearchComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        let role = Number.parseInt(localStorage.getItem('role')!);
+        this.canEdit = role === RoleId.Admin
         this.filterForm = this.fb.group({
             filter: [''] 
         });
