@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { GroupService } from '../../services/group-service';
 import { RoleId } from '../../../admin/models/role.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'group-list',
@@ -20,7 +21,8 @@ import { RoleId } from '../../../admin/models/role.model';
     MatDialogModule,
     MatIconModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    CommonModule
   ],
   templateUrl: './groups-list.component.html',
   styleUrls: ['./groups-list.component.scss']
@@ -42,7 +44,7 @@ export class GroupListComponent implements OnInit {
 
   ngOnInit(): void {
     let role = Number.parseInt(localStorage.getItem('role')!);
-    this.canEdit = role === RoleId.Admin || role === RoleId.Professor;
+    this.canEdit = role === RoleId.Admin;
   }
 
   onEdit(group: WorkingGroupBase) {

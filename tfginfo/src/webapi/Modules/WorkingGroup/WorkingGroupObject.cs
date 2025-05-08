@@ -17,4 +17,20 @@ namespace TFGinfo.Objects
             isPrivate = model.isPrivate == 1;
         }
     }
+
+    public class WorkingGroupUser {
+        public int working_group { get; set; }
+        public int user { get; set; }
+    }
+
+    public class WorkingGroupProfessor {
+        public WorkingGroupBase working_group { get; set; }
+        public int professor { get; set; }
+    }
+
+    public class WorkingGroupMessage {
+        public int working_group { get; set; }
+        public int professor { get; set; }
+        public string message { get; set; }
+    }
 }

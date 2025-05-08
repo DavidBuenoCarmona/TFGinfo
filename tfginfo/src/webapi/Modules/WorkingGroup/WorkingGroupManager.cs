@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TFGinfo.Common;
@@ -10,7 +11,10 @@ namespace TFGinfo.Api
 {
     public class WorkingGroupManager : BaseManager
     {
-        public WorkingGroupManager(ApplicationDbContext context) : base(context) {}
+        public EmailService? emailService { get; set; }
+        public WorkingGroupManager(ApplicationDbContext context, EmailService? emailService = null) : base(context) {
+            this.emailService = emailService;
+        }
 
         public List<WorkingGroupBase> GetAllWorkingGroups()
         {
@@ -64,11 +68,110 @@ namespace TFGinfo.Api
             return new WorkingGroupBase(model);
         }
 
+        public void AddStudentToWorkingGroup(int id, int studentId)
+        {
+            WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            WorkingGroupStudentModel workingGroupStudent = new WorkingGroupStudentModel {
+                working_group = model.id,
+                student = studentId
+            };
+            context.working_group_student.Add(workingGroupStudent);
+            context.SaveChanges();
+        }
+
+        public StudentDTO AddStudentToWorkingGroupByEmail(int id, string email)
+        {
+            WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
+            if (model == null) {
+                throw new NotFoundException("Working group not found");
+            }
+            StudentModel? student = context.student.FirstOrDefault(Student => Student.email == email);
+            if (student == null) {
+                throw new NotFoundException("Student not found");
+            }
+            WorkingGroupStudentModel? existingWorkingGroupStudent = context.working_group_student.FirstOrDefault(WorkingGroup => WorkingGroup.working_group == model.id && WorkingGroup.student == student.id);
+            if (existingWorkingGroupStudent != null) {
+                throw new UnprocessableException("Student already in working group");
+            }
+            WorkingGroupStudentModel workingGroupStudent = new WorkingGroupStudentModel {
+                working_group = model.id,
+                student = student.id
+            };
+            context.working_group_student.Add(workingGroupStudent);
+            context.SaveChanges();
+            return new StudentDTO(student);
+        }
+
+        public void RemoveStudentFromWorkingGroup(int id, int studentId)
+        {
+            WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            WorkingGroupStudentModel? workingGroupStudent = context.working_group_student.FirstOrDefault(WorkingGroup => WorkingGroup.working_group == model.id && WorkingGroup.student == studentId);
+            if (workingGroupStudent == null) {
+                throw new NotFoundException();
+            }
+            context.working_group_student.Remove(workingGroupStudent);
+            context.SaveChanges();
+        }
+
+        public void AddProfessorToWorkingGroup(int id, int professorId)
+        {
+            WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
+            if (model == null) {
+                throw new NotFoundException("Working group not found");
+            }
+            ProfessorModel? professor = context.professor.FirstOrDefault(Professor => Professor.id == professorId);
+            if (professor == null) {
+                throw new NotFoundException("Professor not found");
+            }
+            WorkingGroupProfessorModel workingGroupProfessor = new WorkingGroupProfessorModel {
+                working_group = model.id,
+                professor = professorId
+            };
+            context.working_group_professor.Add(workingGroupProfessor);
+            context.SaveChanges();
+        }
+
+        public void RemoveProfessorFromWorkingGroup(int id, int professorId)
+        {
+            WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+            List<WorkingGroupProfessorModel> professors = context.working_group_professor.Where(WorkingGroup => WorkingGroup.working_group == model.id).ToList();
+            WorkingGroupProfessorModel? workingGroupProfessor = professors.FirstOrDefault(WorkingGroup => WorkingGroup.professor == professorId);
+            if (workingGroupProfessor == null) {
+                throw new NotFoundException();
+            }
+            if (professors.Count <= 1) {
+                throw new UnprocessableException("Cannot remove last professor from working group");
+            }
+            context.working_group_professor.Remove(workingGroupProfessor);
+            context.SaveChanges();
+        }
+
         public void DeleteWorkingGroup(int id)
         {
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
             if (model == null) {
                 throw new NotFoundException();
+            }
+            List<WorkingGroupStudentModel> students = context.working_group_student.Where(WorkingGroup => WorkingGroup.working_group == id).ToList();
+            foreach (WorkingGroupStudentModel student in students) {
+                context.working_group_student.Remove(student);
+            }
+            List<WorkingGroupProfessorModel> professors = context.working_group_professor.Where(WorkingGroup => WorkingGroup.working_group == id).ToList();
+            foreach (WorkingGroupProfessorModel professor in professors) {
+                context.working_group_professor.Remove(professor);
+            }
+            List<WorkingGroupTFGModel> TFGs = context.working_group_tfg.Where(WorkingGroup => WorkingGroup.working_group == id).ToList();
+            foreach (WorkingGroupTFGModel TFG in TFGs) {
+                context.working_group_tfg.Remove(TFG);
             }
             context.working_group.Remove(model);
             context.SaveChanges();
@@ -125,6 +228,33 @@ namespace TFGinfo.Api
         {
             List<WorkingGroupModel> workingGroups = context.working_group_student.Where(WorkingGroup => WorkingGroup.student == id).Select(p => p.workingGroupModel).ToList();
             return workingGroups.ConvertAll(model => new WorkingGroupBase(model));
+        }
+
+        public async Task SendMessage(int id, int professorId, string message)
+        {
+            WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
+            if (model == null) {
+                throw new NotFoundException("Working group not found");
+            }
+            ProfessorModel? professor = context.professor.FirstOrDefault(Professor => Professor.id == professorId);
+            if (professor == null) {
+                throw new NotFoundException("Professor not found");
+            }
+            if (emailService == null) {
+                throw new NotFoundException("Email service not found");
+            }
+            string subject = $"Notificación del grupo {model.name}";
+            string body = $"El profesor {professor.name} {professor.surname} ({professor.email}) ha enviado el siguiente mensaje al grupo de trabajo {model.name}:\n\n{message}\n\n";
+
+            List<StudentModel> student = context.working_group_student.Where(WorkingGroup => WorkingGroup.working_group == id).Select(p => p.studentModel).ToList();
+            foreach (StudentModel studentModel in student) {
+                await emailService.SendEmailAsync(studentModel.email, subject, body);
+            }
+
+            List<ProfessorModel> professors = context.working_group_professor.Where(WorkingGroup => WorkingGroup.working_group == id && WorkingGroup.professorModel.id != professorId).Select(p => p.professorModel).ToList();
+            foreach (ProfessorModel professorModel in professors) {
+                await emailService.SendEmailAsync(professorModel.email, subject, body);
+            }
         }
 
 

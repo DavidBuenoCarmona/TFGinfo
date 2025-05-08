@@ -56,6 +56,7 @@
         "ENGLISH": "Inglés",
         "LOGIN": "Iniciar sesión",
         "LOGOUT": "Cerrar sesión",
+        "MESSAGE": "Mensaje",
         "NAME": "Nombre",
         "NAME_REQUIRED": "El nombre es requerido",
         "PASSWORD": "Contraseña",
@@ -130,8 +131,12 @@
         "VIEW_LIST": "Ver lista de usuarios"
     },
     "WORKING_GROUP": {
+        "ADD_STUDENT_EMAIL": "Añadir estudiante por correo electrónico",
+        "JOIN": "Unirse",
+        "LEAVE": "Dejar",
         "NEW": "Nuevo grupo de trabajo",
         "PRIVATE": "¿Grupo privado?",
+        "SEND_MESSAGE": "Enviar mensaje",
         "TITLE_1": "Grupo de estudio",
         "TITLE_N": "Grupos de estudio"
     }

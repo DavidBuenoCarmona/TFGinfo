@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TFGinfo.Api;
 using TFGinfo.Common;
 using TFGinfo.Data;
@@ -10,15 +11,18 @@ using TFGinfo.Objects;
 [ApiController]
 public class WorkingGroupController : BaseController
 {
-    public WorkingGroupController(ApplicationDbContext context) : base(context) {}
+    private readonly EmailService emailService;
+    public WorkingGroupController(ApplicationDbContext context, EmailService emailService) : base(context) {
+        this.emailService = emailService;
+    }
     
 
     [HttpPost]
-    public IActionResult Save([FromBody] WorkingGroupBase WorkingGroup)
+    public IActionResult Save([FromBody] WorkingGroupProfessor WorkingGroup)
     {
         try {
            WorkingGroupManager manager = new WorkingGroupManager(context);
-           return Ok(manager.CreateWorkingGroup(WorkingGroup));
+           return Ok(manager.CreateWorkingGroup(WorkingGroup.working_group, [WorkingGroup.professor]));
         } catch (UnprocessableException e) {
             return UnprocessableEntity(e.GetError());
         }
@@ -128,6 +132,87 @@ public class WorkingGroupController : BaseController
         try {
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.GetWorkingGroupsByStudent(id));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpPost("add-student")]
+    public IActionResult AddStudent([FromBody] WorkingGroupUser workingGroupStudent)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            manager.AddStudentToWorkingGroup(workingGroupStudent.working_group, workingGroupStudent.user);
+            return Ok();
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpPost("{id}/add-student/{email}")]
+    public IActionResult AddStudentFromEmail(int id, string email)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            return Ok(manager.AddStudentToWorkingGroupByEmail(id,  email));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpPost("remove-student")]
+    public IActionResult RemoveStudent([FromBody] WorkingGroupUser workingGroupStudent)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            manager.RemoveStudentFromWorkingGroup(workingGroupStudent.working_group, workingGroupStudent.user);
+            return Ok();
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+    [HttpPost("add-professor")]
+    public IActionResult AddProfessor([FromBody] WorkingGroupUser workingGroupProfessor)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            manager.AddProfessorToWorkingGroup(workingGroupProfessor.working_group, workingGroupProfessor.user);
+            return Ok();
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+    [HttpPost("remove-professor")]
+    public IActionResult RemoveProfessor([FromBody] WorkingGroupUser workingGroupProfessor)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            manager.RemoveProfessorFromWorkingGroup(workingGroupProfessor.working_group, workingGroupProfessor.user);
+            return Ok();
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpPost("send-message")]
+    public async Task<IActionResult> SendMessage([FromBody] WorkingGroupMessage message)
+    {
+        try {
+            WorkingGroupManager manager = new WorkingGroupManager(context, emailService);
+            await manager.SendMessage(message.working_group, message.professor, message.message);
+            return Ok();
         } catch (NotFoundException) {
             return NotFound();
         } catch (UnprocessableException e) {

@@ -168,9 +168,9 @@ namespace TFGinfo.Api
                 throw new UnprocessableException("Configuration not available");
             }
             // Send email to the professor
-            await emailService.SendEmailAsync(professor.email, "Solicitud TFG", 
-            $"Has recibido una solicitud de TFG de {request.studentEmail} para la línea {tfg.name}.\n\n" +
-            $"Puedes ver la solicitud en el portal de gestión de TFGs: {configuration.GetSection("app:url").Value}.\n\n");
+            var body = $"Has recibido una solicitud de TFG de {request.studentEmail} para la línea {tfg.name}.\n\n" +
+                $"Puedes ver la solicitud en el portal de gestión de TFGs: {configuration.GetSection("app:url").Value}.\n\n";
+            await emailService.SendEmailAsync(professor.email, "Solicitud TFG", body);
 
             context.tfg.Update(tfgModel);
             context.SaveChanges();

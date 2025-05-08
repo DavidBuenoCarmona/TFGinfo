@@ -56,6 +56,7 @@
         "ENGLISH": "English",
         "LOGIN": "Login",
         "LOGOUT": "Logout",
+        "MESSAGE": "Message",
         "NAME": "Name",
         "NAME_REQUIRED": "Name is required",
         "PASSWORD": "Password",
@@ -130,8 +131,12 @@
         "VIEW_LIST": "View user list"
     },
     "WORKING_GROUP": {
+        "ADD_STUDENT_EMAIL": "Add student by email",
+        "JOIN": "Join",
+        "LEAVE": "Leave",
         "NEW": "New working group",
         "PRIVATE": "Private group?",
+        "SEND_MESSAGE": "Send message",
         "TITLE_1": "Working group",
         "TITLE_N": "Working groups"
     }

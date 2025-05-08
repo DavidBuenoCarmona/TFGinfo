@@ -33,11 +33,11 @@
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
                     <td mat-cell *matCellDef="let student">
-                        <button mat-icon-button color="primary" (click)="onEdit(student)">
+                        <button mat-icon-button color="primary" *ngIf="!groupId" (click)="onEdit(student)">
                             <mat-icon>edit</mat-icon>
                         </button>
-                        <button mat-icon-button color="warn" (click)="onDelete(student)">
-                            <mat-icon>delete</mat-icon>
+                        <button mat-icon-button (click)="onDelete(student)">
+                            <mat-icon>{{ !groupId ? 'delete' : 'clear' }}</mat-icon>
                         </button>
                     </td>
                 </ng-container>

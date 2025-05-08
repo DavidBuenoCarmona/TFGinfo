@@ -2,7 +2,7 @@
     <h2 *ngIf="!creation" class="mb-3">{{ group?.name }}</h2>
     <h2 *ngIf="creation" class="mb-3">{{ 'WORKING_GROUP.NEW' | translate }}</h2>
 
-    <form class="group-form" [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+    <form class="group-form" [formGroup]="groupForm">
         <div class="form-row">
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
@@ -21,16 +21,60 @@
             <mat-checkbox formControlName="isPrivate">
                 {{ 'WORKING_GROUP.PRIVATE' | translate }}
             </mat-checkbox>
+            <div *ngIf="canEdit && !creation" class="email-field">
+                <p>{{ 'WORKING_GROUP.ADD_STUDENT_EMAIL' | translate }}</p>
+                <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>{{ 'GLOBAL.EMAIL' | translate }}</mat-label>
+                    <input matInput formControlName="newStudentEmail" />
+                    <mat-error *ngIf="groupForm.get('newStudentEmail')?.invalid">{{ 'EMAIL_FORM.EMAIL_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+                <button mat-icon-button class="add-button" ngClass="groupForm.get('newStudentEmail')?.invalid ? 'disabled' : ''" type="button" (click)="addStudentByEmail()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
         </div>
-        <professor-list *ngIf="professors.length > 0" [displayedColumns]="professorColumns" [professors]="professors"></professor-list>
-        <student-list *ngIf="students.length > 0" [displayedColumns]="studentColumns" [students]="students"></student-list>
-        <div class="actions">
-            <button *ngIf="canEdit" mat-raised-button class="action-button" [ngClass]="groupForm.invalid ? 'disabled' : ''" type="submit" [disabled]="groupForm.invalid">
-                {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
-            </button>
-            <button mat-raised-button class="action-button" type="button" (click)="onCancel()">
-                {{ 'GLOBAL.CANCEL' | translate }}
-            </button>
+        <div class="form-row">
+            <div *ngIf="canEdit && !creation && !isAdmin" class="message-field">
+                <p>{{ 'WORKING_GROUP.SEND_MESSAGE' | translate }}</p>
+                <mat-form-field appearance="fill" class="message-field">
+                    <mat-label>{{ 'GLOBAL.MESSAGE' | translate }}</mat-label>
+                    <textarea matInput formControlName="message"></textarea>
+                </mat-form-field>
+                <button mat-icon-button class="add-button" ngClass="groupForm.get('newStudentEmail')?.invalid ? 'disabled' : ''" type="button" (click)="sendMessage()">
+                    <mat-icon>send</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div *ngIf="isAdmin && creation" class="form-row">
+            <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'WORKING_GROUP.SELECT_PROFESSOR' | translate }}</mat-label>
+                <mat-select (selectionChange)="cambiarProfessor($event.value)">
+                    <mat-option *ngFor="let professor of professorList" [value]="professor.id">
+                        {{ professor.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
     </form>
+    <ng-container >
+        <professor-list *ngIf="professors.length > 0 && !creation" (onDeleteProfessor)="deleteProfessor($event)" [displayedColumns]="professorColumns" [professors]="professors" [groupId]="group!.id"></professor-list>
+        <student-list *ngIf="students.length > 0 && !creation" (onDeleteStudent)="deleteStudent($event)" [displayedColumns]="studentColumns" [students]="students" [groupId]="group!.id"></student-list>
+    </ng-container>
+    <div class="actions">
+        <button *ngIf="canEdit && (creation ? true : (userAlreadyInGroup || isAdmin))" mat-raised-button class="action-button" [ngClass]="groupForm.invalid ? 'disabled' : ''" type="submit" [disabled]="groupForm.invalid" (click)="onSubmit()">
+            {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
+        </button>
+        <button *ngIf="!userAlreadyInGroup && !isAdmin && !creation && !(group!.isPrivate)" mat-raised-button class="action-button" (click)="onJoin()">
+            {{ 'WORKING_GROUP.JOIN' | translate }}
+        </button>
+        <button *ngIf="userAlreadyInGroup && !isAdmin && !creation" mat-raised-button class="action-button" (click)="onLeave()">
+            {{ 'WORKING_GROUP.LEAVE' | translate }}
+        </button>
+        <button mat-raised-button class="action-button" type="button" (click)="onCancel()">
+            {{ 'GLOBAL.CANCEL' | translate }}
+        </button>
+        <button *ngIf="canEdit && !creation" mat-raised-button class="action-button delete-button" type="button" (click)="onDelete()">
+            {{ 'GLOBAL.DELETE' | translate }}
+        </button>
+    </div>
 </div>

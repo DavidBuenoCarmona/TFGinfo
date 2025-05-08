@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
-import { WorkingGroupBase } from "../models/group.model";
+import { WorkingGroupBase, WorkingGroupMessage, WorkingGroupProfessor } from "../models/group.model";
 import { ProfessorDTO } from "../../professor/models/professor.model";
 import { StudentDTO } from "../../admin/models/student.model";
 
@@ -27,7 +27,7 @@ export class GroupService extends BaseService {
         return this.get(`${this.url}/working-group/${id}`);
     }
 
-    createGroup(group: WorkingGroupBase): Observable<WorkingGroupBase> {
+    createGroup(group: WorkingGroupProfessor): Observable<WorkingGroupBase> {
         return this.post(`${this.url}/working-group`, group);
     }
 
@@ -53,5 +53,29 @@ export class GroupService extends BaseService {
 
     getGroupByStudent(id: number): Observable<WorkingGroupBase[]> {
         return this.get(`${this.url}/working-group/student/${id}`);
+    }
+
+    addStudentToGroup(working_group: number, user: number): Observable<any> {
+        return this.post(`${this.url}/working-group/add-student`, {working_group, user});
+    }
+    
+    addStudentToGroupByEmail(working_group: number, email: string): Observable<StudentDTO> {
+        return this.post(`${this.url}/working-group/${working_group}/add-student/${email}`, {});
+    }
+
+    removeStudentFromGroup(working_group: number, user: number): Observable<any> {
+        return this.post(`${this.url}/working-group/remove-student`, {working_group, user});
+    }
+
+    addProfessorToGroup(working_group: number, user: number): Observable<any> {
+        return this.post(`${this.url}/working-group/add-professor`, {working_group, user});
+    }
+
+    removeProfessorFromGroup(working_group: number, user: number): Observable<any> {
+        return this.post(`${this.url}/working-group/remove-professor`, {working_group, user});
+    }
+
+    sendMessage(content: WorkingGroupMessage): Observable<any> {
+        return this.post(`${this.url}/working-group/send-message`, content);
     }
 }

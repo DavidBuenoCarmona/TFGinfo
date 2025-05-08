@@ -16,4 +16,21 @@
     margin-top: 16px; /* Separación entre el formulario y los botones */
     display: flex;
     gap: 8px; /* Espaciado entre los botones */
+    position: relative; /* Para el posicionamiento absoluto del botón de carga */
+    .delete-button {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+}
+
+.email-field {
+    flex: 0 0 auto; /* Evita que el campo crezca más de lo necesario */
+    width: 300px; /* Define un ancho fijo para el campo */
+    margin-left: auto; /* Empuja el campo hacia la derecha */
+}
+
+.message-field {
+    flex: 0 0 auto; /* El campo de mensaje ocupa el espacio restante */
+    width: 96%; /* Asegura que el campo ocupe todo el ancho disponible */
 }

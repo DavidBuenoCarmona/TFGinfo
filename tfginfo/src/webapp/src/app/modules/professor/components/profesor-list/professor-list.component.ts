@@ -10,48 +10,51 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { EventEmitter } from '@angular/core';
 import { RoleId } from '../../../admin/models/role.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'professor-list',
-  standalone: true,
-  imports: [
-    TranslateModule,
-    MatTableModule,
-    MatDialogModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule
-  ],
-  templateUrl: './professor-list.component.html',
-  styleUrls: ['./professor-list.component.scss']
+    selector: 'professor-list',
+    standalone: true,
+    imports: [
+        TranslateModule,
+        MatTableModule,
+        MatDialogModule,
+        MatIconModule,
+        MatButtonModule,
+        MatCardModule,
+        CommonModule
+    ],
+    templateUrl: './professor-list.component.html',
+    styleUrls: ['./professor-list.component.scss']
 })
 export class ProfessorListComponent implements OnInit {
-  @Input() professors: ProfessorDTO[] = [];
-  @Input() displayedColumns: string[] = ['name', 'surname', 'email', 'department', 'actions'];
-  @Output() onDeleteProfessor = new EventEmitter<number>();
-  public canEdit: boolean = false;
+    @Input() professors: ProfessorDTO[] = [];
+    @Input() displayedColumns: string[] = ['name', 'surname', 'email', 'department', 'actions'];
+    @Output() onDeleteProfessor = new EventEmitter<number>();
+    @Input() groupId: number | undefined = undefined;
+    public canEdit: boolean = false;
 
-  constructor(
-    private dialog: MatDialog,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+    constructor(
+        private dialog: MatDialog,
+        private router: Router,
+        private route: ActivatedRoute
+    ) { }
 
-  ngOnInit(): void {
-    let role = Number.parseInt(localStorage.getItem('role')!);
-    this.canEdit = role === RoleId.Admin;
-  }
-  onEdit(professor: ProfessorDTO) {
-    this.router.navigate([professor.id], { relativeTo: this.route });
-  }
+    ngOnInit(): void {
+        let role = Number.parseInt(localStorage.getItem('role')!);
+        this.canEdit = role === RoleId.Admin;
+    }
+    onEdit(professor: ProfessorDTO) {
+        this.router.navigate([professor.id], { relativeTo: this.route });
+    }
 
-  onDelete(professor: ProfessorDTO) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+    onDelete(professor: ProfessorDTO) {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.onDeleteProfessor.emit(professor.id!);
-      }
-    });
-  }
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.onDeleteProfessor.emit(professor.id!);
+            }
+        });
+    }
 }
