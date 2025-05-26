@@ -6,10 +6,14 @@
         <div class="col-md-6">
             <tfg-list [tfgs]="tfgs" [displayedColumns]="displayedTFGColumns"></tfg-list>
         </div>
-
         <!-- Grupos de estudio -->
         <div class="col-md-6">
             <group-list [groups]="workingGroups" [displayedColumns]="displayedGroupColumns"></group-list>
+        </div>
+    </div>
+    <div *ngIf="isProfessor" class="row mt-4">
+        <div>
+            <tfg-request-list (procesedRequest)="removeRequest($event)" [tfgStudentRequests]="pendingTfgs"></tfg-request-list>
         </div>
     </div>
 </div>

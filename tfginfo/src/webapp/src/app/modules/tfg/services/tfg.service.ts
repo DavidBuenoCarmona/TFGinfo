@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { Injectable } from "@angular/core";
-import { TFGLineDTO, TFGLineFlatDTO, TFGRequest } from "../models/tfg.model";
+import { TFGDTO, TFGLineDTO, TFGLineFlatDTO, TFGRequest, TFGRequestDTO } from "../models/tfg.model";
 import { Filter } from "../../../core/core.model";
 
 @Injectable({
@@ -62,6 +62,18 @@ export class TfgService extends BaseService {
 
     getTfgsByProfessor(id: number): Observable<TFGLineDTO[]> {
         return this.get(`${this.url}/tfg-line/professor/${id}`);
+    }
+
+    getPendingRequestsByProfessor(id: number): Observable<TFGRequestDTO[]> {
+        return this.get(`${this.url}/tfg/professor-pending/${id}`);
+    }
+
+    acceptRequest(id: number): Observable<void> {
+        return this.post(`${this.url}/tfg/accept/${id}`, null);
+    }
+
+    rejectRequest(id: number): Observable<void> {
+        return this.post(`${this.url}/tfg/reject/${id}`, null);
     }
 
 }

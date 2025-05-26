@@ -45,3 +45,9 @@ export interface TFGRequest {
     secondaryProfessorId?: number;
     tfg: TFGFlatDTO;
 }
+
+export interface TFGRequestDTO {
+    studentName: string;
+    tfgName: string;
+    tfgId: number;
+}

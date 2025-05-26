@@ -140,7 +140,7 @@ export class TfgDetailComponent implements OnInit {
         
           dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-              console.log('Selected Tutors:', result);
+              this.router.navigate(['/tfg']);
             }
           });
     }

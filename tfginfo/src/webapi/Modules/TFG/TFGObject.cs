@@ -16,18 +16,32 @@ namespace TFGinfo.Objects
             startDate = model.startDate;
             external_tutor_name = model.external_tutor_name;
             external_tutor_email = model.external_tutor_email;
-            accepted = model.accepted;
+            accepted = model.accepted == 1;
         }
     }
 
     public class TFGDTO : TFGBase {
         public TFGLineDTO tfgLine  { get; set; }
+        public List<TFGStudentFlatDTO> students { get; set; }
+        public List<TFGProfessorFlatDTO> professors { get; set; }
 
         public TFGDTO () {}
 
         public TFGDTO (TFGModel model) : base(model) {
             if (model.tfgLineModel != null) {
                 tfgLine = new TFGLineDTO(model.tfgLineModel);
+            }
+            if (model.Students != null) {
+                students = model.Students.ConvertAll(student => new TFGStudentFlatDTO {
+                    tfgId = model.id,
+                    studentId = student.student,
+                });
+            }
+            if (model.Professors != null) {
+                professors = model.Professors.ConvertAll(professor => new TFGProfessorFlatDTO {
+                    tfgId = model.id,
+                    professorId = professor.professor
+                });
             }
         }
     }
@@ -50,5 +64,16 @@ namespace TFGinfo.Objects
     public class TFGStudentFlatDTO {
         public int tfgId { get; set; }
         public int studentId { get; set; }
+    }
+
+    public class TFGProfessorFlatDTO {
+        public int tfgId { get; set; }
+        public int professorId { get; set; }
+    }
+
+    public class TFGPendingRequestDTO {
+        public string studentName { get; set; }
+        public string tfgName { get; set; }
+        public int tfgId { get; set; }
     }
 }

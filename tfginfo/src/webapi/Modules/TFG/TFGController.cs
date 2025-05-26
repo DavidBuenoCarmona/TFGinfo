@@ -135,4 +135,60 @@ public class TFGController : BaseController
             return UnprocessableEntity(e.GetError());
         }
     }
+
+    [HttpGet("professor-pending/{id}")]
+    public IActionResult GetPendingTFGsByProfessor(int id)
+    {
+        try
+        {
+            TFGManager manager = new TFGManager(context);
+            return Ok(manager.GetPendingTFGsByProfessor(id));
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpPost("accept/{id}")]
+    public async Task<IActionResult> Accept(int id)
+    {
+        try
+        {
+            TFGManager manager = new TFGManager(context, emailService, configuration);
+            await manager.AcceptTFG(id);
+            return Ok();
+        }
+        catch (NotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpPost("reject/{id}")]
+    public async Task<IActionResult> Reject(int id)
+    {
+        try
+        {
+            TFGManager manager = new TFGManager(context, emailService, configuration);
+            await manager.RejectTFG(id);
+            return Ok();
+        }
+        catch (NotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
 }
