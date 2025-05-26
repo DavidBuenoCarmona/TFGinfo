@@ -74,6 +74,9 @@ namespace TFGinfo.Api
             CheckEmailIsNotRepeated(Professor);
 
             model.department = Professor.departmentId;
+            model.name = Professor.name;
+            model.surname = Professor.surname;
+            model.email = Professor.email;
             model.department_boss = Professor.department_boss ? 1 : 0;
             context.SaveChanges();
 

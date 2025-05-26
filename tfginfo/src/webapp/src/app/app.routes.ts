@@ -58,6 +58,14 @@ export const routes: Routes = [
                 component: ProfileDetailComponent
             },
             {
+                path: 'student',
+                component: StudentSearchComponent
+            },
+            {
+                path: 'student/:id',
+                component: ProfileDetailComponent
+            },
+            {
                 path: 'admin',
                 children: [
                     {
@@ -87,14 +95,6 @@ export const routes: Routes = [
                     {
                         path: 'career/:id',
                         component: CareerDetailComponent
-                    },
-                    {
-                        path: 'student',
-                        component: StudentSearchComponent
-                    },
-                    {
-                        path: 'student/:id',
-                        component: ProfileDetailComponent
                     },
                 ]
             }

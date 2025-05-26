@@ -14,12 +14,22 @@ import { RoleId } from '../../../../modules/admin/models/role.model';
 export class ProfileDropdownComponent implements OnInit {
     route = route;
     isAdmin: boolean = false;
+    isProfessor: boolean = false;
+    userId!: string;
+    profileRoute: string = '';
 
     constructor(public router: Router) {}
 
     ngOnInit(): void {
         let role = Number.parseInt(localStorage.getItem('role')!);
         this.isAdmin = role === RoleId.Admin;
+        this.isProfessor = role === RoleId.Professor;
+        this.userId = JSON.parse(localStorage.getItem('user')!).id || '';
+        if (this.isProfessor) {
+            this.profileRoute = route.professor.list + '/' + this.userId;
+        } else {
+            this.profileRoute = route.student.list + '/' + this.userId;
+        }
     }
     
     logout() {

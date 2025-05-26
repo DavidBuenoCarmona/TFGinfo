@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { DepartmentService } from '../../../admin/services/department.service';
 import { DepartmentDTO } from '../../../admin/models/department.model';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -53,7 +53,8 @@ export class ProfessorDetailComponent implements OnInit {
         private fb: FormBuilder,
         private departmentService: DepartmentService,
         private dialog: MatDialog,
-        private tfgService: TfgService
+        private tfgService: TfgService,
+        private location: Location
     ) { }
 
     ngOnInit(): void {
@@ -64,6 +65,19 @@ export class ProfessorDetailComponent implements OnInit {
             this.router.navigate(['/']);
         }
         this.creation = this.id === "new";
+
+        if (!this.creation) {
+            this.canEdit = this.canEdit || (this.id == JSON.parse(localStorage.getItem('user')!).id.toString() && role === RoleId.Professor);
+            this.professorService.getProfessor(+this.id!).subscribe((data) => {
+                this.professor = data;
+                this.professorForm.patchValue(data);
+                this.professorForm.get('departmentId')?.setValue(data.department?.id);
+            });
+
+            this.tfgService.getTfgsByProfessor(+this.id!).subscribe((data) => {
+                this.tfgs = data;
+            });
+        }
 
         this.professorForm = this.fb.group({
             id: [this.creation ? null : this.id],
@@ -78,18 +92,6 @@ export class ProfessorDetailComponent implements OnInit {
         }
 
         this.departmentService.getDepartments().subscribe((data) => this.departments = data);
-
-        if (!this.creation) {
-            this.professorService.getProfessor(+this.id!).subscribe((data) => {
-                this.professor = data;
-                this.professorForm.patchValue(data);
-                this.professorForm.get('departmentId')?.setValue(data.department?.id);
-            });
-
-            this.tfgService.getTfgsByProfessor(+this.id!).subscribe((data) => {
-                this.tfgs = data;
-            });
-        }
     }
 
     onSubmit(): void {
@@ -98,13 +100,13 @@ export class ProfessorDetailComponent implements OnInit {
             if (this.creation) {
                 this.professorService.createProfessor(professorData).subscribe((data) => this.openAuthCodeDialog(data.professor.email, data.auth_code));
             } else {
-                this.professorService.updateProfessor(professorData).subscribe(() => this.router.navigate(['/professor']));
+                this.professorService.updateProfessor(professorData).subscribe(() => this.location.back());
             }
         }
     }
 
     onCancel(): void {
-        this.router.navigate(['/professor']);
+        this.location.back();
     }
 
     openAuthCodeDialog(user: string, auth_code: string): void {
@@ -113,7 +115,7 @@ export class ProfessorDetailComponent implements OnInit {
         });
         
         dialogRef.afterClosed().subscribe((result) => {
-            this.router.navigate(['/professor']);
+            this.location.back();
         });
     }
 }

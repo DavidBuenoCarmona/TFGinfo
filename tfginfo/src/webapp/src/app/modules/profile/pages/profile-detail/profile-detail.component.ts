@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { StudentDTO } from '../../../admin/models/student.model';
 import { StudentService } from '../../../admin/services/student.service';
 import { CareerDTO } from '../../../admin/models/career.model';
@@ -43,7 +43,8 @@ export class ProfileDetailComponent implements OnInit {
         private studentService: StudentService,
         private careerService: CareerService,
         private fb: FormBuilder,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private location: Location
     ) { }
 
     ngOnInit(): void {
@@ -92,13 +93,13 @@ export class ProfileDetailComponent implements OnInit {
             if (this.creation) {
                 this.studentService.createStudent(profileData).subscribe((data) => this.openAuthCodeDialog(data.student.email, data.auth_code));
             } else {
-                this.studentService.updateStudent(profileData).subscribe(() => this.router.navigate(['/admin/student']));
+                this.studentService.updateStudent(profileData).subscribe(() => this.location.back());
             }
         }
     }
 
     onCancel(): void {
-        this.router.navigate(['/admin/student']);
+        this.location.back()
     }
 
     openAuthCodeDialog(user: string, auth_code: string): void {
@@ -107,7 +108,7 @@ export class ProfileDetailComponent implements OnInit {
         });
       
         dialogRef.afterClosed().subscribe((result) => {
-            this.router.navigate(['/admin/student'])
+            this.location.back()
         });
     }
 }

@@ -3,13 +3,13 @@
     <i class="fa-solid fa-user"></i>
 </a>
 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-    <li>
-        <a class="dropdown-item" [routerLink]="route.profile" routerLinkActive="active">
+    <li *ngIf="!isAdmin">
+        <a class="dropdown-item" [routerLink]="profileRoute" routerLinkActive="active">
             {{ 'PROFILE.TITLE_1' | translate }}
         </a>
     </li>
-    <li>
-        <a *ngIf="isAdmin" class="dropdown-item" (click)="changeUniversity()">
+    <li *ngIf="isAdmin">
+        <a class="dropdown-item" (click)="changeUniversity()">
             {{ 'UNIVERSITY.CHANGE' | translate }}
         </a>
     </li>

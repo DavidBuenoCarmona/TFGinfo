@@ -34,6 +34,11 @@ export const route = {
         edit: '/working-group/edit',
         list: '/working-group',
     },
+    student: {
+        create: '/student/create',
+        edit: '/student/edit',
+        list: '/student',
+    },
     tfg: {
         create: '/tfg/create',
         edit: '/tfg/edit',
