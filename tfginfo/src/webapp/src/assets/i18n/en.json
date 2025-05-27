@@ -106,6 +106,7 @@
         "SECONDARY_TUTOR": "Secondary tutor",
         "SELECT_TUTORS": "Select tutors",
         "SLOTS": "Slots",
+        "SLOTS>": "Slots >=",
         "SLOTS_REQUIRED": "Slots are required",
         "STUDENT_REQUESTS": "Student requests",
         "TITLE_1": "TFG",

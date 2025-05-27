@@ -99,6 +99,18 @@ namespace TFGinfo.Api
                 {
                     query = query.Where(tfg => tfg.departmentModel.university == int.Parse(filter.value));
                 }
+                if (filter.key == "description")
+                {
+                    query = query.Where(tfg => tfg.description.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "name")
+                {
+                    query = query.Where(tfg => tfg.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "slots")
+                {
+                    query = query.Where(tfg => tfg.slots >= int.Parse(filter.value));
+                }
                 else if (filter.key == "career")
                 {
                     query = query.Where(tfg => tfg.Careers.Any(c => c.careerModel.id == int.Parse(filter.value)));
@@ -106,6 +118,10 @@ namespace TFGinfo.Api
                 else if (filter.key == "department")
                 {
                     query = query.Where(tfg => tfg.department == int.Parse(filter.value));
+                }
+                else if (filter.key == "departmentName")
+                {
+                    query = query.Where(tfg => tfg.departmentModel.name.ToLower().Contains(filter.value.ToLower()));
                 }
                 else if (filter.key == "generic")
                 {
