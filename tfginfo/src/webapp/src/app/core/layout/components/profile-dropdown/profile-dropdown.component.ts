@@ -37,6 +37,7 @@ export class ProfileDropdownComponent implements OnInit {
     
     logout() {
         localStorage.removeItem('token');
+        localStorage.removeItem('selectedUniversity');
         this.configurationService.setUser(null);
         this.router.navigate(['/login']);
     }

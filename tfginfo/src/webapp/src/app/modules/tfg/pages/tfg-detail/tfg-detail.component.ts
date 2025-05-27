@@ -89,6 +89,9 @@ export class TfgDetailComponent implements OnInit {
         }
 
         let universityId = this.configurationService.getSelectedUniversity()!;
+        if (universityId === undefined) {
+            universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
+        }
         const departmentRequest = this.departmentService.getDepartmentsByUniversityId(universityId);
         const careerRequest = this.careerService.getCareers();
         const professorRequest = this.professorService.getProfessors();

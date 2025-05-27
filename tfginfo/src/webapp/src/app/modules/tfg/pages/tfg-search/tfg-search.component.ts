@@ -67,7 +67,7 @@ export class TfgSearchComponent implements OnInit {
                 }
                 break;
             case RoleId.Admin:
-                this.filters.push({ key: 'university', value: this.configurationService.getSelectedUniversity()!.toString() });
+                this.filters.push({ key: 'university', value: localStorage.getItem('selectedUniversity') || '0' });
                 break;
         }
         this.tfgService.searchTfgs(this.filters).subscribe(tfgs => {

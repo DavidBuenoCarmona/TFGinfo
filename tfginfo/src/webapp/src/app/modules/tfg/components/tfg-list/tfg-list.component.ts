@@ -14,50 +14,56 @@ import { CommonModule } from '@angular/common';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
-  selector: 'tfg-list',
-  standalone: true,
-  imports: [
-    TranslateModule,
-    MatTableModule,
-    MatDialogModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule,
-    CommonModule
-  ],
-  templateUrl: './tfg-list.component.html',
-  styleUrls: ['./tfg-list.component.scss']
+    selector: 'tfg-list',
+    standalone: true,
+    imports: [
+        TranslateModule,
+        MatTableModule,
+        MatDialogModule,
+        MatIconModule,
+        MatButtonModule,
+        MatCardModule,
+        CommonModule
+    ],
+    templateUrl: './tfg-list.component.html',
+    styleUrls: ['./tfg-list.component.scss']
 })
 export class TfgListComponent implements OnInit {
-  @Input() tfgs: TFGLineDTO[] = [];
-  @Input() displayedColumns: string[] = ['name', 'description', 'department', 'slots', 'actions'];
-  @Output() onDeleteTfg = new EventEmitter<number>();
-  public isAdmin: boolean = false;
+    @Input() tfgs: TFGLineDTO[] = [];
+    @Input() displayedColumns: string[] = ['name', 'description', 'department', 'slots', 'actions'];
+    @Output() onDeleteTfg = new EventEmitter<number>();
+    public isAdmin: boolean = false;
+    public universitySelected: number | undefined;
 
-  constructor(
-    private dialog: MatDialog,
-    private tfgService: TfgService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private configurationService: ConfigurationService
-  ) { }
+    constructor(
+        private dialog: MatDialog,
+        private tfgService: TfgService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private configurationService: ConfigurationService
+    ) { }
 
-  ngOnInit(): void {
-    let role = this.configurationService.getRole();
-    this.isAdmin = role === RoleId.Admin;
-  }
+    ngOnInit(): void {
+        let role = this.configurationService.getRole();
+        this.isAdmin = role === RoleId.Admin;
+        this.universitySelected = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : undefined;
+    }
 
-  onEdit(tfg: TFGLineDTO) {
-    this.router.navigate(["/tfg/" + tfg.id]);
-  }
+    onEdit(tfg: TFGLineDTO) {
+        this.router.navigate(["/tfg/" + tfg.id]);
+    }
 
-  onDelete(tfg: TFGLineDTO) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+    onDelete(tfg: TFGLineDTO) {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.onDeleteTfg.emit(tfg.id!);
-      }
-    });
-  }
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.onDeleteTfg.emit(tfg.id!);
+            }
+        });
+    }
+
+    changeUniversity() {
+        this.router.navigate(['/admin/university']);
+    }
 }

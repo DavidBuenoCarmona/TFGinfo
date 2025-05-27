@@ -60,6 +60,8 @@
         "MESSAGE": "Message",
         "NAME": "Name",
         "NAME_REQUIRED": "Name is required",
+        "NO_RESULTS": "No results found",
+        "NO_UNIVERSITY_SELECTED": "No university selected, select one to get the data",
         "PASSWORD": "Password",
         "PHONE": "Phone",
         "REQUEST": "Request",
