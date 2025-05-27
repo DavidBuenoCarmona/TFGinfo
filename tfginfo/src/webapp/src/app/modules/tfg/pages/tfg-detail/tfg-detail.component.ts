@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DepartmentService } from '../../../admin/services/department.service';
 import { DepartmentDTO } from '../../../admin/models/department.model';
@@ -57,7 +57,8 @@ export class TfgDetailComponent implements OnInit {
         private departmentService: DepartmentService,
         private careerService: CareerService,
         private professorService: ProfessorService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private location: Location,
     ) { }
 
     ngOnInit(): void {
@@ -116,19 +117,19 @@ export class TfgDetailComponent implements OnInit {
         if (this.tfgForm.valid) {
             const tfgData = this.tfgForm.value;
             if (this.creation) {
-                this.tfgService.createTfg(tfgData).subscribe((data) => this.router.navigate(['/tfg']));
+                this.tfgService.createTfg(tfgData).subscribe((data) => this.location.back());
             } else {
                 forkJoin([
                     this.tfgService.updateTfg(tfgData),
                     this.tfgService.addCareersToTfg(tfgData.id, tfgData.careers),
                     this.tfgService.addProfessorsToTfg(tfgData.id, tfgData.professors)
-                ]).subscribe(() => this.router.navigate(['/tfg']));
+                ]).subscribe(() => this.location.back());
             }
         }
     }
 
     onCancel(): void {
-        this.router.navigate(['/tfg']);
+        this.location.back();
     }
 
     onRequest() {
