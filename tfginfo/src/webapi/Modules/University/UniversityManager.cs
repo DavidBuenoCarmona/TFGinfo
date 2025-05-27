@@ -65,10 +65,33 @@ namespace TFGinfo.Api
             return new UniversityBase(model);
         }
 
+        public List<UniversityBase> SearchUniversities(List<Filter> filters)
+        {
+            IQueryable<UniversityModel> query = context.university;
+            foreach (var filter in filters)
+            {
+                if (filter.key == "name")
+                {
+                    query = query.Where(u => u.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "address")
+                {
+                    query = query.Where(u => u.address.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "generic")
+                {
+                    query = query.Where(u => u.name.ToLower().Contains(filter.value.ToLower()) || 
+                                             u.address.ToLower().Contains(filter.value.ToLower()));
+                }
+            } 
+            return query.ToList().ConvertAll(model => new UniversityBase(model)); 
+        }
+
         #region Private Methods
         private void CheckNameIsNotRepeated(UniversityBase university)
         {
-            if (context.university.Any(u => u.id != university.id && u.name.ToLower() == university.name.ToLower())) {
+            if (context.university.Any(u => u.id != university.id && u.name.ToLower() == university.name.ToLower()))
+            {
                 throw new UnprocessableException("University name already exists");
             }
         }

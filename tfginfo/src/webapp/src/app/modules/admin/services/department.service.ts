@@ -4,6 +4,7 @@ import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { Injectable } from "@angular/core";
 import { DepartmentDTO, DepartmentFlatDTO } from "../models/department.model";
+import { Filter } from "../../../core/core.model";
 
 @Injectable({
     providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
@@ -41,5 +42,9 @@ export class DepartmentService extends BaseService {
 
     updateDepartment(department: DepartmentDTO): Observable<DepartmentFlatDTO> {
         return this.put(`${this.url}/department`, department);
+    }
+
+    searchDepartments(filters: Filter[]): Observable<DepartmentDTO[]> {
+        return this.post(`${this.url}/department/search`, filters);
     }
 }

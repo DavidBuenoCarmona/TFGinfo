@@ -75,11 +75,36 @@ namespace TFGinfo.Api
             }
             return new DepartmentDTO(model);
         }
+        
+        public List<DepartmentDTO> SearchDepartments(List<Filter> filters)
+        {
+            IQueryable<DepartmentModel> query = context.department.Include(d => d.universityModel);
+
+            foreach (var filter in filters)
+            {
+                if (filter.key == "name")
+                {
+                    query = query.Where(c => c.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "university")
+                {
+                    query = query.Where(c => c.universityModel.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "generic")
+                {
+                    string searchValue = filter.value.ToLower();
+                    query = query.Where(c => c.name.ToLower().Contains(searchValue) || (c.universityModel != null && c.universityModel.name.ToLower().Contains(searchValue)));
+                }
+            }
+
+            return query.ToList().ConvertAll(model => new DepartmentDTO(model));
+        }
 
         #region Private Methods
         private void CheckNameIsNotRepeated(DepartmentFlatDTO department)
         {
-            if (context.department.Any(d => d.name.ToLower() == department.name.ToLower() && d.id != department.id)) {
+            if (context.department.Any(d => d.name.ToLower() == department.name.ToLower() && d.id != department.id))
+            {
                 throw new UnprocessableException("Department name already exists");
             }
         }

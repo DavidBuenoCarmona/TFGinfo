@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { Filter } from '../../../../core/core.model';
 
 @Component({
     selector: 'app-university-search',
@@ -16,6 +18,7 @@ import { CommonModule } from '@angular/common';
         MatFormFieldModule,
         MatInputModule,
         TranslateModule,
+        MatIconModule,
         ReactiveFormsModule,
         MatButtonModule,
         CommonModule],
@@ -27,6 +30,7 @@ export class UniversitySearchComponent implements OnInit {
     public filterForm!: FormGroup;
     public universities: UniversityBase[] = [];
     public filteredUniversities: UniversityBase[] = [];
+    public showExtraFilters = false;
 
     constructor(
         public universityService: UniversityService,
@@ -37,7 +41,9 @@ export class UniversitySearchComponent implements OnInit {
 
     ngOnInit(): void {
         this.filterForm = this.fb.group({
-            filter: [''] 
+            generic: [''],
+            name: [''],
+            address: ['']
         });
 
         this.universityService.getUniversities().subscribe(universities => {
@@ -51,11 +57,19 @@ export class UniversitySearchComponent implements OnInit {
     }
 
     onSearch(): void {
-        const filterValue = this.filterForm.get('filter')?.value.toLowerCase();
-        this.filteredUniversities = this.universities.filter(university =>
-            university.name.toLowerCase().includes(filterValue) ||
-            university.addess.toLowerCase().includes(filterValue)
-        );
+        const formValues = this.filterForm.value;
+        let filters: Filter[] = [];
+
+        Object.keys(formValues).forEach(key => {
+            const value = formValues[key];
+            if (value !== null && value !== undefined && value !== '') {
+                filters.push({ key, value });
+            }
+        });
+
+        this.universityService.searchUniversities(filters).subscribe(universities => {
+            this.filteredUniversities = universities;
+        });
     }
 
     onClearFilters(): void {
@@ -72,5 +86,13 @@ export class UniversitySearchComponent implements OnInit {
                 this.filteredUniversities = this.filteredUniversities.filter((item) => item.id !== universityId);
             }
         });
+    }
+
+        onShowExtraFilters(): void {
+        this.showExtraFilters = !this.showExtraFilters;
+        if (!this.showExtraFilters) {
+            this.filterForm.get('address')?.setValue(''); // Limpiar el campo de universidad
+            this.filterForm.get('name')?.setValue(''); // Limpiar el campo de nombre
+        }
     }
 }
