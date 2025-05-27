@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { Router, RouterOutlet } from '@angular/router';
+import { ConfigurationService } from '../../../services/configuration.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -9,10 +10,14 @@ import { Router, RouterOutlet } from '@angular/router';
   styleUrl: './main-layout.component.scss'
 })
 export class MainLayoutComponent {
-  constructor(public router: Router) { }
+  constructor(
+    public router: Router,
+    private configurationService: ConfigurationService) { }
 
   ngOnInit(): void {
-    if (!localStorage.getItem("user")) {
+    // TODO dbc: Check token
+    let authToken = localStorage.getItem('token') ?? null;
+    if (!this.configurationService.getUser()) {
       this.router.navigate(['/login']);
     }
   }

@@ -22,6 +22,7 @@ import { ProfessorSearchComponent } from '../../../professor/pages/profesor-sear
 import { ProfessorService } from '../../../professor/services/professor.service';
 import { MatDialog } from '@angular/material/dialog';
 import { StartTfgDialogComponent } from '../../components/start-tfg-dialog/start-tfg-dialog.component';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
     selector: 'tfg-detail',
@@ -59,10 +60,11 @@ export class TfgDetailComponent implements OnInit {
         private professorService: ProfessorService,
         private dialog: MatDialog,
         private location: Location,
+        private configurationService: ConfigurationService
     ) { }
 
     ngOnInit(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
+        let role = this.configurationService.getRole();
         this.isAdmin = role === RoleId.Admin;
         this.isStudent = role === RoleId.Student;
         this.id = this.route.snapshot.paramMap.get('id');
@@ -86,7 +88,7 @@ export class TfgDetailComponent implements OnInit {
             this.tfgForm.disable();
         }
 
-        let universityId = Number.parseInt(localStorage.getItem('selectedUniversity')!);
+        let universityId = this.configurationService.getSelectedUniversity()!;
         const departmentRequest = this.departmentService.getDepartmentsByUniversityId(universityId);
         const careerRequest = this.careerService.getCareers();
         const professorRequest = this.professorService.getProfessors();

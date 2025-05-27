@@ -18,6 +18,7 @@ import { TFGLineDTO } from '../../../tfg/models/tfg.model';
 import { TfgService } from '../../../tfg/services/tfg.service';
 import { TfgListComponent } from '../../../tfg/components/tfg-list/tfg-list.component';
 import { RoleId } from '../../../admin/models/role.model';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
     selector: 'professor-detail',
@@ -54,11 +55,12 @@ export class ProfessorDetailComponent implements OnInit {
         private departmentService: DepartmentService,
         private dialog: MatDialog,
         private tfgService: TfgService,
-        private location: Location
+        private location: Location,
+        private configurationService: ConfigurationService
     ) { }
 
     ngOnInit(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
+        let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin;
         this.id = this.route.snapshot.paramMap.get('id');
         if (this.id !== "new" && isNaN(Number(this.id))) {
@@ -67,7 +69,7 @@ export class ProfessorDetailComponent implements OnInit {
         this.creation = this.id === "new";
 
         if (!this.creation) {
-            this.canEdit = this.canEdit || (this.id == JSON.parse(localStorage.getItem('user')!).id.toString() && role === RoleId.Professor);
+            this.canEdit = this.canEdit || (this.id == this.configurationService.getUser().id.toString() && role === RoleId.Professor);
             this.professorService.getProfessor(+this.id!).subscribe((data) => {
                 this.professor = data;
                 this.professorForm.patchValue(data);

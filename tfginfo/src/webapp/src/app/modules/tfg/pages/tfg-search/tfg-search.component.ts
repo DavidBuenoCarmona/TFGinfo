@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { Filter } from '../../../../core/core.model';
 import { RoleId } from '../../../admin/models/role.model';
 import { MatIconModule } from '@angular/material/icon';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
     selector: 'app-tfg-search',
@@ -39,11 +40,12 @@ export class TfgSearchComponent implements OnInit {
         public tfgService: TfgService,
         private router: Router,
         private fb: FormBuilder,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private configurationService: ConfigurationService
     ) { }
 
     ngOnInit(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
+        let role = this.configurationService.getRole();
         this.isAdmin = role === RoleId.Admin;
         this.filterForm = this.fb.group({
             generic: [''],
@@ -52,20 +54,20 @@ export class TfgSearchComponent implements OnInit {
             departmentName: [''],
             slots: [''],
         });
-        const user = localStorage.getItem('user');
+        const user = this.configurationService.getUser();
         switch (role) {
             case RoleId.Student:
                 if (user) {
-                    this.filters.push({ key: 'career', value: JSON.parse(user).career.toString() });
+                    this.filters.push({ key: 'career', value: user.career.toString() });
                 }
                 break;
             case RoleId.Professor:
                 if (user) {
-                    this.filters.push({ key: 'department', value: JSON.parse(user).department.toString() });
+                    this.filters.push({ key: 'department', value: user.department.toString() });
                 }
                 break;
             case RoleId.Admin:
-                this.filters.push({ key: 'university', value: localStorage.getItem('selectedUniversity')! });
+                this.filters.push({ key: 'university', value: this.configurationService.getSelectedUniversity()!.toString() });
                 break;
         }
         this.tfgService.searchTfgs(this.filters).subscribe(tfgs => {

@@ -26,4 +26,8 @@ export class AuthService extends BaseService {
     changePassword(changePasswordRequest: UserChangePassword): Observable<boolean> {
         return this.post(`${this.url}/auth/change-password`, changePasswordRequest);
     }
+
+    checkToken(token: string): Observable<AppUserDTO> {
+        return this.post(`${this.url}/auth/check-token`, {token: token});
+    }
 }

@@ -11,8 +11,7 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
     // Obtén el token de autenticación desde localStorage
-    const user = localStorage.getItem('user');
-    const authToken = user ? JSON.parse(user).token : null;
+    const authToken = localStorage.getItem('token') ?? null;
 
     // Clona la solicitud y agrega la cabecera de autorización si el token está disponible
     const authReq = authToken

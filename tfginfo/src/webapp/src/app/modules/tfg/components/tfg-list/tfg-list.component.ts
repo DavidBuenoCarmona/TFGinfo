@@ -11,6 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { RoleId } from '../../../admin/models/role.model';
 import { CommonModule } from '@angular/common';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
   selector: 'tfg-list',
@@ -37,11 +38,12 @@ export class TfgListComponent implements OnInit {
     private dialog: MatDialog,
     private tfgService: TfgService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private configurationService: ConfigurationService
   ) { }
 
   ngOnInit(): void {
-    let role = Number.parseInt(localStorage.getItem('role')!);
+    let role = this.configurationService.getRole();
     this.isAdmin = role === RoleId.Admin;
   }
 

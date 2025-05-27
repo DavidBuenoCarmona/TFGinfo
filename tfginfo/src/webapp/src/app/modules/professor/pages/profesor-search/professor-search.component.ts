@@ -12,6 +12,7 @@ import { ProfessorListComponent } from '../../components/profesor-list/professor
 import { RoleId } from '../../../admin/models/role.model';
 import { MatIconModule } from '@angular/material/icon';
 import { Filter } from '../../../../core/core.model';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
     selector: 'app-professor-search',
@@ -38,11 +39,12 @@ export class ProfessorSearchComponent implements OnInit {
         public professorService: ProfessorService,
         private router: Router,
         private fb: FormBuilder,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private configurationService: ConfigurationService
     ) { }
 
     ngOnInit(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
+        let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin
         this.filterForm = this.fb.group({
             generic: [''],

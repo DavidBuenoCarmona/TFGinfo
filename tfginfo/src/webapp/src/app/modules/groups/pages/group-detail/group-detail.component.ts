@@ -21,6 +21,7 @@ import { ProfessorService } from '../../../professor/services/professor.service'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../core/layout/components/confirm-dialog/confirm-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
     selector: 'group-detail',
@@ -65,11 +66,12 @@ export class GroupDetailComponent implements OnInit {
         private groupService: GroupService,
         private fb: FormBuilder,
         private professorService: ProfessorService,
-        private location: Location
+        private location: Location,
+        private configurationService: ConfigurationService
     ) { }
 
     ngOnInit(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
+        let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin || role === RoleId.Professor;
         this.isAdmin = role === RoleId.Admin;
         if (this.canEdit) {
@@ -105,14 +107,11 @@ export class GroupDetailComponent implements OnInit {
             ]).subscribe(([students, professors]) => {
                 this.students = students;
                 this.professors = professors;
-                const user = localStorage.getItem('user');
-                if (user) {
-                    const userData = JSON.parse(user);
-                    if (!this.canEdit) {
-                        this.userAlreadyInGroup = this.students.some(student => student.id === userData.id);
-                    } else {
-                        this.userAlreadyInGroup = this.professors.some(professor => professor.id === userData.id);
-                    }
+                const user = this.configurationService.getUser();
+                if (!this.canEdit) {
+                    this.userAlreadyInGroup = this.students.some(student => student.id === user.id);
+                } else {
+                    this.userAlreadyInGroup = this.professors.some(professor => professor.id === user.id);
                 }
                 this.canEdit = (this.canEdit && this.userAlreadyInGroup) || this.isAdmin;
                 if (!this.canEdit) {
@@ -124,12 +123,8 @@ export class GroupDetailComponent implements OnInit {
                 this.professorList = professors;
             });
         } else if (!this.isAdmin && this.canEdit) {
-            const user = localStorage.getItem('user');
-            if (user) {
-                const userData = JSON.parse(user);
-                this.professor = userData.id;
-            }
-
+            const user = this.configurationService.getUser();
+            this.professor = user.id;
         }
     }
 
@@ -157,36 +152,30 @@ export class GroupDetailComponent implements OnInit {
     }
 
     onJoin(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
-        const user = localStorage.getItem('user');
-        if (user) {
-            const userData = JSON.parse(user);
-            if (role === RoleId.Professor) {
-                this.groupService.addProfessorToGroup(this.group!.id!, userData.id).subscribe(() => {
-                    this.router.navigate(['/working-group']);
-                });
-            } else if (role === RoleId.Student) {
-                this.groupService.addStudentToGroup(this.group!.id!, userData.id).subscribe(() => {
-                    this.router.navigate(['/working-group']);
-                });
-            }
+        let role = this.configurationService.getRole();
+        const user = this.configurationService.getUser();
+        if (role === RoleId.Professor) {
+            this.groupService.addProfessorToGroup(this.group!.id!, user.id).subscribe(() => {
+                this.router.navigate(['/working-group']);
+            });
+        } else if (role === RoleId.Student) {
+            this.groupService.addStudentToGroup(this.group!.id!, user.id).subscribe(() => {
+                this.router.navigate(['/working-group']);
+            });
         }
     }
 
     onLeave(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
-        const user = localStorage.getItem('user');
-        if (user) {
-            const userData = JSON.parse(user);
-            if (role === RoleId.Professor) {
-                this.groupService.removeProfessorFromGroup(this.group!.id!, userData.id).subscribe(() => {
-                    this.router.navigate(['/working-group']);
-                });
-            } else if (role === RoleId.Student) {
-                this.groupService.removeStudentFromGroup(this.group!.id!, userData.id).subscribe(() => {
-                    this.router.navigate(['/working-group']);
-                });
-            }
+        let role = this.configurationService.getRole();
+        const user = this.configurationService.getUser();
+        if (role === RoleId.Professor) {
+            this.groupService.removeProfessorFromGroup(this.group!.id!, user.id).subscribe(() => {
+                this.router.navigate(['/working-group']);
+            });
+        } else if (role === RoleId.Student) {
+            this.groupService.removeStudentFromGroup(this.group!.id!, user.id).subscribe(() => {
+                this.router.navigate(['/working-group']);
+            });
         }
     }
 
@@ -226,18 +215,14 @@ export class GroupDetailComponent implements OnInit {
 
     sendMessage() {
         const message = this.groupForm.get('message')?.value;
-        const user = localStorage.getItem('user');
-        if (user && message) {
-            const userData = JSON.parse(user);
-            if (message) {
-                let content: WorkingGroupMessage = {
-                    working_group: this.group!.id!,
-                    professor: userData.id,
-                    message: message
-                };
-                this.groupService.sendMessage(content).subscribe();
-            }
+        const user = this.configurationService.getUser();
+        if (message) {
+            let content: WorkingGroupMessage = {
+                working_group: this.group!.id!,
+                professor: user.id,
+                message: message
+            };
+            this.groupService.sendMessage(content).subscribe();
         }
-
     }
 }

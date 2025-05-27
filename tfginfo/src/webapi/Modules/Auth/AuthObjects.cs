@@ -1,5 +1,5 @@
 
-namespace TFGinfo.Objects  
+namespace TFGinfo.Objects
 {
     public class LoginCredentials
     {
@@ -19,5 +19,10 @@ namespace TFGinfo.Objects
         Admin = 1,
         Professor = 2,
         Student = 3,
+    }
+    
+    public class TokenObject
+    {
+        public string token { get; set; }
     }
 }

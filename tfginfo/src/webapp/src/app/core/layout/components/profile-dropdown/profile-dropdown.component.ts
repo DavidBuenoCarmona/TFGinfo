@@ -4,6 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { route } from '../../../../routes';
 import { CommonModule } from '@angular/common';
 import { RoleId } from '../../../../modules/admin/models/role.model';
+import { ConfigurationService } from '../../../services/configuration.service';
 
 @Component({
     selector: 'profile-dropdown',
@@ -18,13 +19,15 @@ export class ProfileDropdownComponent implements OnInit {
     userId!: string;
     profileRoute: string = '';
 
-    constructor(public router: Router) {}
+    constructor(
+        public router: Router,
+        private configurationService: ConfigurationService) {}
 
     ngOnInit(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
+        let role = this.configurationService.getRole();
         this.isAdmin = role === RoleId.Admin;
         this.isProfessor = role === RoleId.Professor;
-        this.userId = JSON.parse(localStorage.getItem('user')!).id || '';
+        this.userId = this.configurationService.getUser()?.id || '';
         if (this.isProfessor) {
             this.profileRoute = route.professor.list + '/' + this.userId;
         } else {
@@ -33,8 +36,8 @@ export class ProfileDropdownComponent implements OnInit {
     }
     
     logout() {
-        localStorage.removeItem('user');
-        localStorage.removeItem('role');
+        localStorage.removeItem('token');
+        this.configurationService.setUser(null);
         this.router.navigate(['/login']);
     }
 

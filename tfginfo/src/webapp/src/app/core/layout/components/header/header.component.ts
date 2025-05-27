@@ -8,6 +8,7 @@ import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { LanguageToggleComponent } from '../language-toggle/language-toggle.component';
 import { CommonModule } from '@angular/common';
 import { RoleId } from '../../../../modules/admin/models/role.model';
+import { ConfigurationService } from '../../../services/configuration.service';
 
 @Component({
     selector: 'layout-header',
@@ -27,10 +28,13 @@ export class HeaderComponent implements OnInit {
     isAdmin: boolean = false;
     route = route;
 
-    constructor(private router: Router) { }
+    constructor(
+        private router: Router,
+        private configService: ConfigurationService
+    ) { }
 
     ngOnInit(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
+        let role = this.configService.getRole();
         this.isAdmin = role === RoleId.Admin;
     }
 }

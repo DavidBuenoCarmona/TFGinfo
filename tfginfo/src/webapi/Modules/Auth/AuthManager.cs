@@ -36,16 +36,20 @@ namespace TFGinfo.Api
             }
             newUser.user = new AppUserDTO(model);
             if (newUser.user.role.id == (int)UserRole.Student) {
-                var student = context.student.FirstOrDefault(s => s.user == newUser.user.id);
-                if (student != null) {
+                var student = context.student.Include(s => s.careerModel).FirstOrDefault(s => s.user == newUser.user.id);
+                if (student != null)
+                {
                     newUser.user.career = student.career;
                     newUser.user.id = student.id;
+                    newUser.user.universityId = student.careerModel?.university ?? 0;
                 }
             } else if (newUser.user.role.id == (int)UserRole.Professor) {
-                var teacher = context.professor.FirstOrDefault(t => t.user == newUser.user.id);
-                if (teacher != null) {
+                var teacher = context.professor.Include(p => p.departmentModel).FirstOrDefault(t => t.user == newUser.user.id);
+                if (teacher != null)
+                {
                     newUser.user.department = teacher.department;
                     newUser.user.id = teacher.id;
+                    newUser.user.universityId = teacher.departmentModel?.university ?? 0;
                 }
             }
             var token = GenerateJwtToken(newUser.user);
@@ -91,6 +95,63 @@ namespace TFGinfo.Api
             context.SaveChanges();
         }
 
+        public AppUserDTO CheckToken(string token)
+        {
+            var jwtEncryptKey = _configuration["Jwt:EncryptKey"] ?? throw new InvalidOperationException("JWT Encrypt Key is not configured.");
+            string decryptedJwt = Jose.JWT.Decode(token, Encoding.UTF8.GetBytes(jwtEncryptKey));
+
+            if (string.IsNullOrEmpty(decryptedJwt) || !IsTokenValid(decryptedJwt, _configuration))
+            {
+                throw new UnprocessableException("Invalid or expired token");
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(decryptedJwt);
+            var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId");
+            var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "role");
+            var usernameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
+
+            if (userIdClaim == null || roleClaim == null || usernameClaim == null)
+            {
+                throw new UnprocessableException("Invalid token: user ID claim not found");
+            }
+
+            int userId = int.Parse(userIdClaim.Value);
+            int roleId = int.Parse(roleClaim.Value);
+            string username = usernameClaim.Value;
+            UserModel? model = context.user.Include(r => r.roleModel).FirstOrDefault(u => u.username == username);
+
+            if (model == null)
+            {
+                throw new UnprocessableException("User not found");
+            }
+
+            AppUserDTO userDto = new AppUserDTO(model);
+            userDto.role = context.role.FirstOrDefault(r => r.id == roleId) ?? throw new UnprocessableException("Role not found");
+            if (userDto.role.id == (int)UserRole.Student)
+            {
+                var student = context.student.Include(s => s.careerModel).FirstOrDefault(s => s.user == userDto.id);
+                if (student != null)
+                {
+                    userDto.career = student.career;
+                    userDto.id = student.id;
+                    userDto.universityId = student.careerModel?.university ?? 0;
+                }
+            }
+            else if (userDto.role.id == (int)UserRole.Professor)
+            {
+                var teacher = context.professor.Include(p => p.departmentModel).FirstOrDefault(t => t.user == userDto.id);
+                if (teacher != null)
+                {
+                    userDto.department = teacher.department;
+                    userDto.id = teacher.id;
+                    userDto.universityId = teacher.departmentModel?.university ?? 0;
+                }
+            }
+
+            return userDto;
+        }
+
         #region "Private methods"
 
         private string GenerateJwtToken(AppUserDTO user)
@@ -99,9 +160,11 @@ namespace TFGinfo.Api
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.username),
                 new Claim("userId", user.id.ToString() ?? throw new InvalidOperationException("User ID cannot be null")),
+                new Claim("role", user.role.id.ToString() ?? throw new InvalidOperationException("Role ID cannot be null")),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
+            var jwtEncryptKey = _configuration["Jwt:EncryptKey"] ?? throw new InvalidOperationException("JWT Encrypt Key is not configured.");
             var jwtKey = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured.");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -113,39 +176,45 @@ namespace TFGinfo.Api
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            // 1. Genera el JWT firmado como string
+            var jwtString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            // 2. Cifra el JWT usando jose-jwt (JWE)
+            var encryptedJwt = Jose.JWT.Encode(jwtString, Encoding.UTF8.GetBytes(jwtEncryptKey), Jose.JweAlgorithm.DIR, Jose.JweEncryption.A128GCM);
+
+            return encryptedJwt;
         }
 
         public static bool IsTokenValid(string token, IConfiguration configuration)
-    {
-        var jwtKey = configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured.");
-        var jwtIssuer = configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT Issuer is not configured.");
-        var jwtAudience = configuration["Jwt:Audience"] ?? throw new InvalidOperationException("JWT Audience is not configured.");
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        try
         {
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            var jwtKey = configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured.");
+            var jwtIssuer = configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT Issuer is not configured.");
+            var jwtAudience = configuration["Jwt:Audience"] ?? throw new InvalidOperationException("JWT Audience is not configured.");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            try
             {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = key,
-                ValidateIssuer = true,
-                ValidIssuer = jwtIssuer,
-                ValidateAudience = true,
-                ValidAudience = jwtAudience,
-                ValidateLifetime = true, // Verifica que el token no haya expirado
-                ClockSkew = TimeSpan.Zero // Opcional: elimina la tolerancia de tiempo por defecto (5 minutos)
-            }, out SecurityToken validatedToken);
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key,
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtIssuer,
+                    ValidateAudience = true,
+                    ValidAudience = jwtAudience,
+                    ValidateLifetime = true, // Verifica que el token no haya expirado
+                    ClockSkew = TimeSpan.Zero // Opcional: elimina la tolerancia de tiempo por defecto (5 minutos)
+                }, out SecurityToken validatedToken);
 
-            return true; // El token es válido
+                return true; // El token es válido
+            }
+            catch
+            {
+                return false; // El token no es válido
+            }
         }
-        catch
-        {
-            return false; // El token no es válido
-        }
-    }
 
         private string HashPassword(string password)
         {

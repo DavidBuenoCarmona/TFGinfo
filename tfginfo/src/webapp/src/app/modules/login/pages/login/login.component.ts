@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LogoComponent } from '../../../../core/layout/components/logo/logo.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../services/auth.service';
 import { ChangePasswordDialogComponent } from '../../components/change-password-dialog/change-password-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
+import { RoleId } from '../../../admin/models/role.model';
 
 @Component({
     selector: 'app-login',
@@ -34,6 +36,8 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private dialog: MatDialog,
         private authService: AuthService,
+        private configService: ConfigurationService,
+        private location: Location
     ) {}
 
     ngOnInit(): void {
@@ -42,6 +46,17 @@ export class LoginComponent implements OnInit {
             username: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required]]
         });
+
+        var token = localStorage.getItem('token');
+
+        if (token) {
+            this.authService.checkToken(token).subscribe(user => {
+                this.configService.setUser(user);
+                this.configService.setRole(user.role.id);
+                this.configService.setSelectedUniversity(user.universityId);
+                this.location.back();
+            });
+        }
     }
 
     onSubmit(): void {
@@ -52,9 +67,11 @@ export class LoginComponent implements OnInit {
                     data: { username: credentials.username }
                 });
             } else {
-                localStorage.setItem('user', JSON.stringify(response.user));
-                localStorage.setItem('role', response.user.role.id.toString());
-                if (response.user.role.id === 1) {
+                localStorage.setItem('token', response.user.token);
+                this.configService.setUser(response.user);
+                this.configService.setRole(response.user.role.id);
+                this.configService.setSelectedUniversity(response.user.universityId);
+                if (response.user.role.id === RoleId.Admin) {
                     this.router.navigate(['/tfg']);
                 } else {
                     this.router.navigate(['/']);

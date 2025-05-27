@@ -11,17 +11,21 @@ using TFGinfo.Objects;
 public class AuthController : BaseController
 {
     private readonly IConfiguration configuration;
-    public AuthController(ApplicationDbContext context, IConfiguration configuration) : base(context) {
+    public AuthController(ApplicationDbContext context, IConfiguration configuration) : base(context)
+    {
         this.configuration = configuration;
     }
-    
+
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginCredentials credentails)
     {
-        try {
-           AuthManager manager = new AuthManager(context, configuration);
-           return Ok(manager.Login(credentails));
-        } catch (UnprocessableException e) {
+        try
+        {
+            AuthManager manager = new AuthManager(context, configuration);
+            return Ok(manager.Login(credentails));
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -29,10 +33,13 @@ public class AuthController : BaseController
     [HttpPost("change-password")]
     public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
     {
-        try {
+        try
+        {
             AuthManager manager = new AuthManager(context, configuration);
             return Ok(manager.ChangePassword(request));
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -40,11 +47,28 @@ public class AuthController : BaseController
     [HttpPost("create-admin")]
     public IActionResult CreateAdmin([FromBody] LoginCredentials credentials)
     {
-        try {
-           AuthManager manager = new AuthManager(context, configuration);
-           manager.CreateAdmin(credentials);
-           return Ok();
-        } catch (UnprocessableException e) {
+        try
+        {
+            AuthManager manager = new AuthManager(context, configuration);
+            manager.CreateAdmin(credentials);
+            return Ok();
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpPost("check-token")]
+    public IActionResult CheckToken([FromBody] TokenObject token)
+    {
+        try
+        {
+            AuthManager manager = new AuthManager(context, configuration);
+            return Ok(manager.CheckToken(token.token));
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }

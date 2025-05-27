@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { TFGRequest } from '../../models/tfg.model';
 import { TfgService } from '../../services/tfg.service';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
     selector: 'app-start-tfg-dialog',
@@ -35,7 +36,8 @@ export class StartTfgDialogComponent {
         public dialogRef: MatDialogRef<StartTfgDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { professors: ProfessorDTO[]; tfgLineId: number },
         private fb: FormBuilder,
-        private tfgService: TfgService
+        private tfgService: TfgService,
+        private configurationService: ConfigurationService
     ) {
         this.tutorForm = this.fb.group({
             primaryTutor: ['', Validators.required], // Tutor obligatorio
@@ -75,7 +77,7 @@ export class StartTfgDialogComponent {
     // Cerrar el diálogo y devolver los datos
     onSubmit(): void {
         if (this.tutorForm.valid) {
-            const user = JSON.parse(localStorage.getItem('user')!);
+            const user = this.configurationService.getUser();
             const studentEmail = user.username;
             let tfgRequest: TFGRequest = {
                 studentEmail: studentEmail,

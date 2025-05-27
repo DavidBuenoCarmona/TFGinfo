@@ -15,6 +15,7 @@ import { Filter } from '../../../../core/core.model';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
     selector: 'app-group-search',
@@ -44,11 +45,12 @@ export class GroupSearchComponent implements OnInit {
         public groupService: GroupService,
         private router: Router,
         private fb: FormBuilder,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private configurationService: ConfigurationService
     ) { }
 
     ngOnInit(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
+        let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin || role === RoleId.Professor;
         this.filterForm = this.fb.group({
             generic: [''],

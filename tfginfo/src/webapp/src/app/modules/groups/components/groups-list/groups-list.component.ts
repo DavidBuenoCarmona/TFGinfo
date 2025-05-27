@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { GroupService } from '../../services/group-service';
 import { RoleId } from '../../../admin/models/role.model';
 import { CommonModule } from '@angular/common';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
   selector: 'group-list',
@@ -37,13 +38,14 @@ export class GroupListComponent implements OnInit {
     private dialog: MatDialog,
     private groupService: GroupService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private configurationService: ConfigurationService
   ) {
   }
 
 
   ngOnInit(): void {
-    let role = Number.parseInt(localStorage.getItem('role')!);
+    let role = this.configurationService.getRole();
     this.canEdit = role === RoleId.Admin;
   }
 

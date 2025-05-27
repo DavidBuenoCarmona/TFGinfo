@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { EventEmitter } from '@angular/core';
 import { RoleId } from '../../../admin/models/role.model';
 import { CommonModule } from '@angular/common';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
     selector: 'professor-list',
@@ -37,11 +38,12 @@ export class ProfessorListComponent implements OnInit {
     constructor(
         private dialog: MatDialog,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private configurationService: ConfigurationService
     ) { }
 
     ngOnInit(): void {
-        let role = Number.parseInt(localStorage.getItem('role')!);
+        let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin;
     }
     onEdit(professor: ProfessorDTO) {

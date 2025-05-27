@@ -8,6 +8,7 @@ import { UniversityBase } from '../../models/university.model';
 import { ConfirmDialogComponent } from '../../../../core/layout/components/confirm-dialog/confirm-dialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
   selector: 'university-list',
@@ -33,9 +34,10 @@ export class UniversityListComponent {
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private configurationService: ConfigurationService
   ) {
-    this.selectedUniversity = Number(localStorage.getItem('selectedUniversity'));
+    this.selectedUniversity = this.configurationService.getSelectedUniversity();
    }
 
   onEdit(university: UniversityBase) {
@@ -49,7 +51,7 @@ export class UniversityListComponent {
       if (result) {
         if (this.selectedUniversity === university.id) {
           this.selectedUniversity = undefined;
-          localStorage.removeItem('selectedUniversity');
+          this.configurationService.setSelectedUniversity(undefined);
         }
         
         this.onDeleteUniversity.emit(university.id!);
@@ -60,9 +62,9 @@ export class UniversityListComponent {
   selectUniversity(university: UniversityBase) {
     if (this.selectedUniversity === university.id) {
       this.selectedUniversity = undefined;
-      localStorage.removeItem('selectedUniversity');
+      this.configurationService.setSelectedUniversity(undefined);
     } else {
-      localStorage.setItem('selectedUniversity', university.id!.toString());
+      this.configurationService.setSelectedUniversity(university.id);
       this.selectedUniversity = university.id;
     }
   }

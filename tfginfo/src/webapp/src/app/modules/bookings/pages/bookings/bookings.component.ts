@@ -11,6 +11,7 @@ import { forkJoin } from 'rxjs';
 import { GroupService } from '../../../groups/services/group-service';
 import { TfgRequestListComponent } from '../../../tfg/components/tfg-request-list/tfg-request-list.component';
 import { CommonModule } from '@angular/common';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
     selector: 'app-bookings',
@@ -29,11 +30,12 @@ export class BookingsComponent implements OnInit {
     constructor(
         private tfgService: TfgService,
         private workingGroupService: GroupService,
+        private configurationService: ConfigurationService
     ){}
 
     ngOnInit(): void {
-        const user = JSON.parse(localStorage.getItem("user")!);
-        const role = JSON.parse(localStorage.getItem('role')!);
+        const user = this.configurationService.getUser();
+        const role = this.configurationService.getRole();
         this.isProfessor = role === RoleId.Professor;
         if (!this.isProfessor) {
             forkJoin([this.workingGroupService.getGroupByStudent(user.id), this.tfgService.getTfgsByStudent(user.id)]).subscribe(([groups, tfgs]) => {
@@ -50,7 +52,7 @@ export class BookingsComponent implements OnInit {
     }
 
     removeRequest(tfgId: number): void {
-        const user = JSON.parse(localStorage.getItem("user")!);
+        const user = this.configurationService.getUser();
         this.pendingTfgs = this.pendingTfgs.filter((tfg) => tfg.tfgId !== tfgId);
         this.workingGroupService.getGroupByProfessor(user.id).subscribe((groups) => {
             this.workingGroups = groups;
