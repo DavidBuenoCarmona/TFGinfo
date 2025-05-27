@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.ObjectPool;
 using TFGinfo.Common;
 using TFGinfo.Data;
 using TFGinfo.Models;
@@ -14,22 +15,64 @@ namespace TFGinfo.Api
 
         public List<StudentDTO> GetAllStudents()
         {
-            return context.student.AsNoTracking().Include(d => d.careerModel).ToList().ConvertAll(model => new StudentDTO(model));
+            return context.student.AsNoTracking().Include(d => d.careerModel).ThenInclude(c => c.universityModel).ToList().ConvertAll(model => new StudentDTO(model));
+        }
+        
+        public List<StudentDTO> SearchStudents(List<Filter> filters)
+        {
+            IQueryable<StudentModel> query = context.student.AsNoTracking().Include(d => d.careerModel).ThenInclude(c => c.universityModel);
+
+            foreach (var filter in filters)
+            {
+                if (filter.key == "name")
+                {
+                    query = query.Where(s => s.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "surname")
+                {
+                    query = query.Where(s => s.surname.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "email")
+                {
+                    query = query.Where(s => s.email.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "career")
+                {
+                    query = query.Where(s => s.careerModel.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "university")
+                {
+                    query = query.Where(s => s.careerModel.universityModel.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "generic")
+                {
+                    string searchValue = filter.value.ToLower();
+                    query = query.Where(s => s.name.ToLower().Contains(searchValue) ||
+                                             s.surname.ToLower().Contains(searchValue) ||
+                                             s.email.ToLower().Contains(searchValue) ||
+                                             s.careerModel.name.ToLower().Contains(searchValue) ||
+                                             s.careerModel.universityModel.name.ToLower().Contains(searchValue));
+                }
+            }
+
+            return query.ToList().ConvertAll(model => new StudentDTO(model));
         }
 
         public NewStudentDTO CreateStudent(StudentFlatDTO Student)
-        { 
-            
+        {
+
             CheckEmailIsNotRepeated(Student);
             CheckDniIsNotRepeated(Student);
-            
+
             UserManager userManager = new UserManager(context);
-            UserDTO user = userManager.CreateUser(new UserFlatDTO {
+            UserDTO user = userManager.CreateUser(new UserFlatDTO
+            {
                 username = Student.email,
                 roleId = (int)RoleTypes.Student
             });
 
-            StudentModel model = new StudentModel {
+            StudentModel model = new StudentModel
+            {
                 name = Student.name,
                 dni = Student.dni,
                 surname = Student.surname,

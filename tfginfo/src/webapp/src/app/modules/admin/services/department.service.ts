@@ -23,6 +23,10 @@ export class DepartmentService extends BaseService {
         return this.get(`${this.url}/department`);
     }
 
+    getDepartmentsByUniversityId(universityId: number): Observable<DepartmentDTO[]> {
+        return this.get(`${this.url}/department/university/${universityId}`);
+    }
+
     deleteDepartment(id: number): Observable<any> {
         return this.delete(`${this.url}/department/${id}`);
     }

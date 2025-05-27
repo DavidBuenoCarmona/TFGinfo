@@ -9,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { StudentService } from '../../services/student.service';
 import { StudentListComponent } from '../../components/student-list/student-list.component';
+import { Filter } from '../../../../core/core.model';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-student-search',
@@ -18,6 +20,7 @@ import { StudentListComponent } from '../../components/student-list/student-list
         TranslateModule,
         ReactiveFormsModule,
         MatButtonModule,
+        MatIconModule,
         CommonModule],
     templateUrl: './student-search.component.html',
     styleUrl: './student-search.component.scss'
@@ -27,6 +30,7 @@ export class StudentSearchComponent implements OnInit {
     public filterForm!: FormGroup;
     public students: StudentDTO[] = [];
     public filteredStudents: StudentDTO[] = [];
+    public showExtraFilters = false;
 
     constructor(
         public studentService: StudentService,
@@ -37,7 +41,12 @@ export class StudentSearchComponent implements OnInit {
 
     ngOnInit(): void {
         this.filterForm = this.fb.group({
-            filter: [''] 
+            generic: [''],
+            name: [''],
+            surname: [''],
+            email: [''],
+            career: [''],
+            university: ['']
         });
 
         this.studentService.getStudents().subscribe(students => {
@@ -51,10 +60,19 @@ export class StudentSearchComponent implements OnInit {
     }
 
     onSearch(): void {
-        const filterValue = this.filterForm.get('filter')?.value.toLowerCase();
-        this.filteredStudents = this.students.filter(student =>
-            student.name.toLowerCase().includes(filterValue)
-        );
+        const formValues = this.filterForm.value;
+        let filters: Filter[] = [];
+
+        Object.keys(formValues).forEach(key => {
+            const value = formValues[key];
+            if (value !== null && value !== undefined && value !== '') {
+                filters.push({ key, value });
+            }
+        });
+        
+        this.studentService.searchStudents(filters).subscribe(students =>{
+            this.filteredStudents = students;
+        });
     }
 
     onClearFilters(): void {
@@ -71,5 +89,16 @@ export class StudentSearchComponent implements OnInit {
                 this.filteredStudents = this.filteredStudents.filter((item) => item.id !== studentId);
             }
         });
+    }
+
+    onShowExtraFilters(): void {
+        this.showExtraFilters = !this.showExtraFilters;
+        if (!this.showExtraFilters) {
+            this.filterForm.get('university')?.setValue(''); // Limpiar el campo de universidad
+            this.filterForm.get('name')?.setValue(''); // Limpiar el campo de nombre
+            this.filterForm.get('surname')?.setValue(''); // Limpiar el campo de apellido
+            this.filterForm.get('email')?.setValue(''); // Limpiar el campo de email
+            this.filterForm.get('career')?.setValue(''); // Limpiar el campo de carrera
+        }
     }
 }

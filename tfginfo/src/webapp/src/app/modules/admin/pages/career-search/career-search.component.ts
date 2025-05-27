@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { Filter } from '../../../../core/core.model';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-career-search',
@@ -18,6 +20,7 @@ import { CommonModule } from '@angular/common';
         TranslateModule,
         ReactiveFormsModule,
         MatButtonModule,
+        MatIconModule,
         CommonModule],
     templateUrl: './career-search.component.html',
     styleUrl: './career-search.component.scss'
@@ -27,6 +30,7 @@ export class CareerSearchComponent implements OnInit {
     public filterForm!: FormGroup;
     public careers: CareerDTO[] = [];
     public filteredCareers: CareerDTO[] = [];
+    public showExtraFilters = false;
 
     constructor(
         public careerService: CareerService,
@@ -37,7 +41,9 @@ export class CareerSearchComponent implements OnInit {
 
     ngOnInit(): void {
         this.filterForm = this.fb.group({
-            filter: [''] 
+            generic: [''],
+            name: [''],
+            university: ['']
         });
 
         this.careerService.getCareers().subscribe(careers => {
@@ -51,15 +57,24 @@ export class CareerSearchComponent implements OnInit {
     }
 
     onSearch(): void {
-        const filterValue = this.filterForm.get('filter')?.value.toLowerCase();
-        this.filteredCareers = this.careers.filter(career =>
-            career.name.toLowerCase().includes(filterValue)
-        );
+        const formValues = this.filterForm.value;
+        let filters: Filter[] = [];
+
+        Object.keys(formValues).forEach(key => {
+            const value = formValues[key];
+            if (value !== null && value !== undefined && value !== '') {
+                filters.push({ key, value });
+            }
+        });
+
+        this.careerService.searchCarrers(filters).subscribe(careers =>{
+            this.filteredCareers = careers;
+        });
     }
 
     onClearFilters(): void {
-        this.filterForm.reset(); // Reiniciar el formulario
-        this.filteredCareers = [...this.careers]; // Restaurar la lista completa
+        this.filterForm.reset();
+        this.filteredCareers = [...this.careers];
     }
 
     deleteCareer(careerId: number): void {
@@ -71,5 +86,13 @@ export class CareerSearchComponent implements OnInit {
                 this.filteredCareers = this.filteredCareers.filter((item) => item.id !== careerId);
             }
         });
+    }
+
+    onShowExtraFilters(): void {
+        this.showExtraFilters = !this.showExtraFilters;
+        if (!this.showExtraFilters) {
+            this.filterForm.get('university')?.setValue(''); // Limpiar el campo de universidad
+            this.filterForm.get('name')?.setValue(''); // Limpiar el campo de nombre
+        }
     }
 }

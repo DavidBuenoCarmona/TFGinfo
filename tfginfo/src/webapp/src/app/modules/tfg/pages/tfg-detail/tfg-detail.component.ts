@@ -85,7 +85,8 @@ export class TfgDetailComponent implements OnInit {
             this.tfgForm.disable();
         }
 
-        const departmentRequest = this.departmentService.getDepartments();
+        let universityId = Number.parseInt(localStorage.getItem('selectedUniversity')!);
+        const departmentRequest = this.departmentService.getDepartmentsByUniversityId(universityId);
         const careerRequest = this.careerService.getCareers();
         const professorRequest = this.professorService.getProfessors();
 

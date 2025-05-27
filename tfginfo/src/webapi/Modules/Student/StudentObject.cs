@@ -27,13 +27,13 @@ namespace TFGinfo.Objects
     }
 
     public class StudentDTO : StudentBase {
-        public CareerBase career { get; set; }
+        public CareerDTO career { get; set; }
 
         public StudentDTO () {}
 
         public StudentDTO (StudentModel model) : base(model) {
             if (model.careerModel != null) {
-                career = new CareerBase(model.careerModel);
+                career = new CareerDTO(model.careerModel);
             }
         }
     }

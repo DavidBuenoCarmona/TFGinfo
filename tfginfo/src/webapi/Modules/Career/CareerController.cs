@@ -10,16 +10,19 @@ using TFGinfo.Objects;
 [ApiController]
 public class CareerController : BaseController
 {
-    public CareerController(ApplicationDbContext context) : base(context) {}
-    
+    public CareerController(ApplicationDbContext context) : base(context) { }
+
 
     [HttpPost]
     public IActionResult Save([FromBody] CareerFlatDTO career)
     {
-        try {
-           CareerManager manager = new CareerManager(context);
-           return Ok(manager.CreateCareer(career));
-        } catch (UnprocessableException e) {
+        try
+        {
+            CareerManager manager = new CareerManager(context);
+            return Ok(manager.CreateCareer(career));
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -34,13 +37,18 @@ public class CareerController : BaseController
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        try {
+        try
+        {
             CareerManager manager = new CareerManager(context);
             manager.DeleteCareer(id);
             return Ok();
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -48,12 +56,17 @@ public class CareerController : BaseController
     [HttpPut]
     public IActionResult Update([FromBody] CareerFlatDTO career)
     {
-        try {
+        try
+        {
             CareerManager manager = new CareerManager(context);
             return Ok(manager.UpdateCareer(career));
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -71,5 +84,12 @@ public class CareerController : BaseController
     {
         CareerManager manager = new CareerManager(context);
         return Ok(manager.GetCareersByUniversity(universityId));
+    }
+    
+    [HttpPost("search")]
+    public IActionResult Search([FromBody] List<Filter> filters)
+    {
+        CareerManager manager = new CareerManager(context);
+        return Ok(manager.SearchCareers(filters));
     }
 }

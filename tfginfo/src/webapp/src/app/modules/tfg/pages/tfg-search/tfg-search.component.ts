@@ -54,7 +54,7 @@ export class TfgSearchComponent implements OnInit {
                 break;
             case RoleId.Professor:
                 if (user) {
-                    this.filters.push({ key: 'professor', value: JSON.parse(user).department.toString() });
+                    this.filters.push({ key: 'department', value: JSON.parse(user).department.toString() });
                 }
                 break;
             case RoleId.Admin:

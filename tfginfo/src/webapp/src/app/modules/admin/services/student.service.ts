@@ -4,6 +4,7 @@ import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { Injectable } from "@angular/core";
 import { NewStudentDTO, StudentDTO, StudentFlatDTO } from "../models/student.model";
+import { Filter } from "../../../core/core.model";
 
 @Injectable({
     providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
@@ -19,6 +20,10 @@ export class StudentService extends BaseService {
 
     getStudents(): Observable<StudentDTO[]> {
         return this.get(`${this.url}/student`);
+    }
+
+    searchStudents(filters: Filter[]): Observable<StudentDTO[]> {
+        return this.post(`${this.url}/student/search`, filters);
     }
 
     deleteStudent(id: number): Observable<any> {

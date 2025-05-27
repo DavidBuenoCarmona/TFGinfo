@@ -31,6 +31,13 @@ public class StudentController : BaseController
         return Ok(manager.GetAllStudents());
     }
 
+    [HttpPost("search")]
+    public IActionResult Search([FromBody] List<Filter> filters)
+    {
+        StudentManager manager = new StudentManager(context);
+        return Ok(manager.SearchStudents(filters));
+    }
+
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {

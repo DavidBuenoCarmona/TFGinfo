@@ -1,3 +1,5 @@
+import { CareerDTO } from "./career.model";
+
 export interface StudentBase {
     id?: number;
     name: string;
@@ -10,7 +12,7 @@ export interface StudentBase {
 }
 
 export interface StudentDTO extends StudentBase {
-    career: CareerBase;
+    career: CareerDTO;
 }
 
 export interface NewStudentDTO {

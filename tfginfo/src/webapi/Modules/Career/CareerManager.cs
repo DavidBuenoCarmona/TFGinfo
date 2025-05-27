@@ -75,12 +75,37 @@ namespace TFGinfo.Api
         {
             return context.career.Where(Career => Career.university == universityId).Include(d => d.universityModel).ToList().ConvertAll(model => new CareerDTO(model));
         }
+        
+        public List<CareerDTO> SearchCareers(List<Filter> filters)
+        {
+            IQueryable<CareerModel> query = context.career.Include(d => d.universityModel);
+
+            foreach (var filter in filters)
+            {
+                if (filter.key == "name")
+                {
+                    query = query.Where(c => c.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "university")
+                {
+                    query = query.Where(c => c.universityModel.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "generic")
+                {
+                    string searchValue = filter.value.ToLower();
+                    query = query.Where(c => c.name.ToLower().Contains(searchValue) || (c.universityModel != null && c.universityModel.name.ToLower().Contains(searchValue)));
+                }
+            }
+
+            return query.ToList().ConvertAll(model => new CareerDTO(model));
+        }
 
         #region Private Methods
         private void CheckNameIsNotRepeated(CareerFlatDTO career)
         {
-            if (context.career.Any(c => c.id != career.id && c.name.ToLower() == career.name.ToLower())) {
-                throw new UnprocessableException("Career name already exists");
+            if (context.career.Any(c => c.id != career.id && c.name.ToLower() == career.name.ToLower() && c.university == career.universityId))
+            {
+                throw new UnprocessableException("Career name already exists in this university.");
             }
         }
         #endregion

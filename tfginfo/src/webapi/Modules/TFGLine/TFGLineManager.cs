@@ -106,7 +106,9 @@ namespace TFGinfo.Api
                 else if (filter.key == "department")
                 {
                     query = query.Where(tfg => tfg.department == int.Parse(filter.value));
-                } else if (filter.key == "generic") {
+                }
+                else if (filter.key == "generic")
+                {
                     query = query.Where(tfg => tfg.name.ToLower().Contains(filter.value.ToLower()) || tfg.description.ToLower().Contains(filter.value.ToLower()) || tfg.departmentModel.name.ToLower().Contains(filter.value.ToLower()));
                 }
             }
