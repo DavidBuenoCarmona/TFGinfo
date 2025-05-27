@@ -4,6 +4,7 @@ import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { Injectable } from "@angular/core";
 import { NewProfessorDTO, ProfessorDTO, ProfessorFlatDTO } from "../models/professor.model";
+import { Filter } from "../../../core/core.model";
 
 @Injectable({
     providedIn: 'root'
@@ -35,5 +36,9 @@ export class ProfessorService extends BaseService {
 
     updateProfessor(professor: ProfessorFlatDTO): Observable<ProfessorDTO> {
         return this.put(`${this.url}/professor`, professor);
+    }
+
+    searchProfessors(filters: Filter[]): Observable<ProfessorDTO[]> {
+        return this.post(`${this.url}/professor/search`, filters);
     }
 }

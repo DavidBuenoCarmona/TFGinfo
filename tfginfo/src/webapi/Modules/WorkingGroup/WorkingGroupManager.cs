@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Utilities;
 using TFGinfo.Common;
 using TFGinfo.Data;
 using TFGinfo.Models;
@@ -12,7 +13,8 @@ namespace TFGinfo.Api
     public class WorkingGroupManager : BaseManager
     {
         public EmailService? emailService { get; set; }
-        public WorkingGroupManager(ApplicationDbContext context, EmailService? emailService = null) : base(context) {
+        public WorkingGroupManager(ApplicationDbContext context, EmailService? emailService = null) : base(context)
+        {
             this.emailService = emailService;
         }
 
@@ -22,9 +24,10 @@ namespace TFGinfo.Api
         }
 
         public WorkingGroupBase CreateWorkingGroup(WorkingGroupBase WorkingGroup, List<int>? professors = null, List<int>? students = null, List<int>? TFGs = null)
-        { 
+        {
 
-            WorkingGroupModel model = new WorkingGroupModel {
+            WorkingGroupModel model = new WorkingGroupModel
+            {
                 name = WorkingGroup.name,
                 description = WorkingGroup.description,
                 isPrivate = WorkingGroup.isPrivate ? 1 : 0
@@ -33,9 +36,12 @@ namespace TFGinfo.Api
             context.SaveChanges();
 
             model.Professors = new List<WorkingGroupProfessorModel>();
-            if (professors != null) {
-                foreach (int professorId in professors) {
-                    WorkingGroupProfessorModel workingGroupProfessor = new WorkingGroupProfessorModel {
+            if (professors != null)
+            {
+                foreach (int professorId in professors)
+                {
+                    WorkingGroupProfessorModel workingGroupProfessor = new WorkingGroupProfessorModel
+                    {
                         working_group = model.id,
                         professor = professorId
                     };
@@ -43,9 +49,12 @@ namespace TFGinfo.Api
                 }
             }
             model.Students = new List<WorkingGroupStudentModel>();
-            if (students != null) {
-                foreach (int studentId in students) {
-                    WorkingGroupStudentModel workingGroupStudent = new WorkingGroupStudentModel {
+            if (students != null)
+            {
+                foreach (int studentId in students)
+                {
+                    WorkingGroupStudentModel workingGroupStudent = new WorkingGroupStudentModel
+                    {
                         working_group = model.id,
                         student = studentId
                     };
@@ -53,9 +62,12 @@ namespace TFGinfo.Api
                 }
             }
             model.TFGs = new List<WorkingGroupTFGModel>();
-            if (TFGs != null) {
-                foreach (int TFGId in TFGs) {
-                    WorkingGroupTFGModel workingGroupTFG = new WorkingGroupTFGModel {
+            if (TFGs != null)
+            {
+                foreach (int TFGId in TFGs)
+                {
+                    WorkingGroupTFGModel workingGroupTFG = new WorkingGroupTFGModel
+                    {
                         working_group = model.id,
                         tfg = TFGId
                     };
@@ -71,10 +83,12 @@ namespace TFGinfo.Api
         public void AddStudentToWorkingGroup(int id, int studentId)
         {
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
-            WorkingGroupStudentModel workingGroupStudent = new WorkingGroupStudentModel {
+            WorkingGroupStudentModel workingGroupStudent = new WorkingGroupStudentModel
+            {
                 working_group = model.id,
                 student = studentId
             };
@@ -85,18 +99,22 @@ namespace TFGinfo.Api
         public StudentDTO AddStudentToWorkingGroupByEmail(int id, string email)
         {
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException("Working group not found");
             }
             StudentModel? student = context.student.FirstOrDefault(Student => Student.email == email);
-            if (student == null) {
+            if (student == null)
+            {
                 throw new NotFoundException("Student not found");
             }
             WorkingGroupStudentModel? existingWorkingGroupStudent = context.working_group_student.FirstOrDefault(WorkingGroup => WorkingGroup.working_group == model.id && WorkingGroup.student == student.id);
-            if (existingWorkingGroupStudent != null) {
+            if (existingWorkingGroupStudent != null)
+            {
                 throw new UnprocessableException("Student already in working group");
             }
-            WorkingGroupStudentModel workingGroupStudent = new WorkingGroupStudentModel {
+            WorkingGroupStudentModel workingGroupStudent = new WorkingGroupStudentModel
+            {
                 working_group = model.id,
                 student = student.id
             };
@@ -108,11 +126,13 @@ namespace TFGinfo.Api
         public void RemoveStudentFromWorkingGroup(int id, int studentId)
         {
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             WorkingGroupStudentModel? workingGroupStudent = context.working_group_student.FirstOrDefault(WorkingGroup => WorkingGroup.working_group == model.id && WorkingGroup.student == studentId);
-            if (workingGroupStudent == null) {
+            if (workingGroupStudent == null)
+            {
                 throw new NotFoundException();
             }
             context.working_group_student.Remove(workingGroupStudent);
@@ -122,14 +142,17 @@ namespace TFGinfo.Api
         public void AddProfessorToWorkingGroup(int id, int professorId)
         {
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException("Working group not found");
             }
             ProfessorModel? professor = context.professor.FirstOrDefault(Professor => Professor.id == professorId);
-            if (professor == null) {
+            if (professor == null)
+            {
                 throw new NotFoundException("Professor not found");
             }
-            WorkingGroupProfessorModel workingGroupProfessor = new WorkingGroupProfessorModel {
+            WorkingGroupProfessorModel workingGroupProfessor = new WorkingGroupProfessorModel
+            {
                 working_group = model.id,
                 professor = professorId
             };
@@ -140,15 +163,18 @@ namespace TFGinfo.Api
         public void RemoveProfessorFromWorkingGroup(int id, int professorId)
         {
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             List<WorkingGroupProfessorModel> professors = context.working_group_professor.Where(WorkingGroup => WorkingGroup.working_group == model.id).ToList();
             WorkingGroupProfessorModel? workingGroupProfessor = professors.FirstOrDefault(WorkingGroup => WorkingGroup.professor == professorId);
-            if (workingGroupProfessor == null) {
+            if (workingGroupProfessor == null)
+            {
                 throw new NotFoundException();
             }
-            if (professors.Count <= 1) {
+            if (professors.Count <= 1)
+            {
                 throw new UnprocessableException("Cannot remove last professor from working group");
             }
             context.working_group_professor.Remove(workingGroupProfessor);
@@ -158,19 +184,23 @@ namespace TFGinfo.Api
         public void DeleteWorkingGroup(int id)
         {
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             List<WorkingGroupStudentModel> students = context.working_group_student.Where(WorkingGroup => WorkingGroup.working_group == id).ToList();
-            foreach (WorkingGroupStudentModel student in students) {
+            foreach (WorkingGroupStudentModel student in students)
+            {
                 context.working_group_student.Remove(student);
             }
             List<WorkingGroupProfessorModel> professors = context.working_group_professor.Where(WorkingGroup => WorkingGroup.working_group == id).ToList();
-            foreach (WorkingGroupProfessorModel professor in professors) {
+            foreach (WorkingGroupProfessorModel professor in professors)
+            {
                 context.working_group_professor.Remove(professor);
             }
             List<WorkingGroupTFGModel> TFGs = context.working_group_tfg.Where(WorkingGroup => WorkingGroup.working_group == id).ToList();
-            foreach (WorkingGroupTFGModel TFG in TFGs) {
+            foreach (WorkingGroupTFGModel TFG in TFGs)
+            {
                 context.working_group_tfg.Remove(TFG);
             }
             context.working_group.Remove(model);
@@ -180,7 +210,8 @@ namespace TFGinfo.Api
         public WorkingGroupBase UpdateWorkingGroup(WorkingGroupBase WorkingGroup)
         {
             WorkingGroupModel? model = context.working_group.FirstOrDefault(d => d.id == WorkingGroup.id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             model.description = WorkingGroup.description;
@@ -194,7 +225,8 @@ namespace TFGinfo.Api
         public WorkingGroupBase GetWorkingGroup(int id)
         {
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             return new WorkingGroupBase(model);
@@ -233,28 +265,64 @@ namespace TFGinfo.Api
         public async Task SendMessage(int id, int professorId, string message)
         {
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException("Working group not found");
             }
             ProfessorModel? professor = context.professor.FirstOrDefault(Professor => Professor.id == professorId);
-            if (professor == null) {
+            if (professor == null)
+            {
                 throw new NotFoundException("Professor not found");
             }
-            if (emailService == null) {
+            if (emailService == null)
+            {
                 throw new NotFoundException("Email service not found");
             }
             string subject = $"Notificación del grupo {model.name}";
             string body = $"El profesor {professor.name} {professor.surname} ({professor.email}) ha enviado el siguiente mensaje al grupo de trabajo {model.name}:\n\n{message}\n\n";
 
             List<StudentModel> student = context.working_group_student.Where(WorkingGroup => WorkingGroup.working_group == id).Select(p => p.studentModel).ToList();
-            foreach (StudentModel studentModel in student) {
+            foreach (StudentModel studentModel in student)
+            {
                 await emailService.SendEmailAsync(studentModel.email, subject, body);
             }
 
             List<ProfessorModel> professors = context.working_group_professor.Where(WorkingGroup => WorkingGroup.working_group == id && WorkingGroup.professorModel.id != professorId).Select(p => p.professorModel).ToList();
-            foreach (ProfessorModel professorModel in professors) {
+            foreach (ProfessorModel professorModel in professors)
+            {
                 await emailService.SendEmailAsync(professorModel.email, subject, body);
             }
+        }
+        
+        public List<WorkingGroupBase> SearchWorkingGroups(List<Filter> filters)
+        {
+            IQueryable<WorkingGroupModel> query = context.working_group.Include(wg => wg.Professors).ThenInclude(wg => wg.professorModel).ThenInclude(p => p.departmentModel).AsQueryable();
+
+            foreach (var filter in filters)
+            {
+                if (filter.key == "name")
+                {
+                    query = query.Where(wg => wg.name.Contains(filter.value));
+                }
+                else if (filter.key == "description")
+                {
+                    query = query.Where(wg => wg.description.Contains(filter.value));
+                }
+                else if (filter.key == "isPrivate" && filter.value != "-1")
+                {
+                    query = query.Where(wg => wg.isPrivate == int.Parse(filter.value));
+                }
+                else if (filter.key == "university")
+                {
+                    query = query.Where(wg => wg.Professors.First().professorModel.departmentModel.university == int.Parse(filter.value));
+                }
+                else if (filter.key == "generic")
+                {
+                    query = query.Where(wg => wg.name.Contains(filter.value) || wg.description.Contains(filter.value));
+                }
+            }
+
+            return query.ToList().ConvertAll(model => new WorkingGroupBase(model));
         }
 
 

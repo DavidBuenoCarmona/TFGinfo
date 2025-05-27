@@ -1,23 +1,55 @@
 <div class="basic-page">
     <h2 class="mb-4">{{ 'WORKING_GROUP.TITLE_N' | translate }}</h2>
-    <div class="form-row">
-        <form [formGroup]="filterForm" (ngSubmit)="onSearch()" class="form-row">
-            <mat-form-field appearance="fill" class="form-field small-field">
-                <mat-label>{{ 'GLOBAL.SEARCH' | translate }}</mat-label>
-                <input matInput formControlName="filter" />
-            </mat-form-field>
-    
-            <button mat-raised-button class="action-button" type="submit">
-                {{ 'GLOBAL.SEARCH' | translate }}
-            </button>
-    
-            <button mat-raised-button class="action-button" type="button" (click)="onClearFilters()">
-                {{ 'GLOBAL.CLEAR_FILTERS' | translate }}
-            </button>
+    <div class="container-fluid">
+        <form [formGroup]="filterForm" (ngSubmit)="onSearch()">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3 mb-2">
+                    <mat-form-field appearance="fill" class="form-field w-100">
+                        <mat-label>{{ 'GLOBAL.SEARCH' | translate }}</mat-label>
+                        <input matInput formControlName="generic" />
+                    </mat-form-field>
+                </div>
+                <ng-container *ngIf="showExtraFilters">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2">
+                        <mat-form-field appearance="fill" class="form-field w-100">
+                            <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
+                            <input matInput formControlName="name" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 mb-2">
+                        <mat-form-field appearance="fill" class="form-field w-100">
+                            <mat-label>{{ 'GLOBAL.DESCRIPTION' | translate }}</mat-label>
+                            <input matInput formControlName="description" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 mb-2">
+                        <mat-form-field appearance="fill" class="form-field w-100">
+                            <mat-label>{{ 'WORKING_GROUP.PRIVACY' | translate }}</mat-label>
+                            <mat-select formControlName="isPrivate">
+                                <mat-option [value]="-1">{{ 'GLOBAL.BOTH_OPTIONS' | translate }}</mat-option>
+                                <mat-option [value]="1">{{ 'WORKING_GROUP.IS_PRIVATE' | translate }}</mat-option>
+                                <mat-option [value]="0">{{ 'WORKING_GROUP.IS_PUBLIC' | translate }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+                <div class="col-12 col-sm-6 col-md-3 mb-2">
+                    <button mat-raised-button class="action-button" type="submit">
+                        {{ 'GLOBAL.SEARCH' | translate }}
+                    </button>
+                    <button mat-raised-button class="action-button" type="button" (click)="onClearFilters()">
+                        {{ 'GLOBAL.CLEAR_FILTERS' | translate }}
+                    </button>
+                    <button mat-icon-button (click)="onShowExtraFilters()">
+                        <mat-icon>filter_list</mat-icon>
+                    </button>
+                </div>
+            </div>
         </form>
-        <button *ngIf="canEdit" mat-raised-button class="action-button create-button" type="button" (click)="onCreate()">
-            {{ 'GLOBAL.CREATE' | translate }}
-        </button>
-    </div>
+        <div class="mb-2 d-flex align-items-end justify-content-end">
+            <button *ngIf="canEdit" mat-raised-button class="action-button create-button" type="button" (click)="onCreate()">
+                {{ 'GLOBAL.CREATE' | translate }}
+            </button>
+        </div>
     <group-list (onDeleteGroup)="deleteGroup($event)" [groups]="filteredGroups"></group-list>
 </div>

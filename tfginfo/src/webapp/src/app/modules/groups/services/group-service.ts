@@ -6,6 +6,7 @@ import { AppConfigService } from "../../../core/services/app-config.service";
 import { WorkingGroupBase, WorkingGroupMessage, WorkingGroupProfessor } from "../models/group.model";
 import { ProfessorDTO } from "../../professor/models/professor.model";
 import { StudentDTO } from "../../admin/models/student.model";
+import { Filter } from "../../../core/core.model";
 
 @Injectable({
     providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
@@ -77,5 +78,9 @@ export class GroupService extends BaseService {
 
     sendMessage(content: WorkingGroupMessage): Observable<any> {
         return this.post(`${this.url}/working-group/send-message`, content);
+    }
+
+    searchGroups(filters: Filter[]): Observable<WorkingGroupBase[]> {
+        return this.post(`${this.url}/working-group/search`, filters);
     }
 }

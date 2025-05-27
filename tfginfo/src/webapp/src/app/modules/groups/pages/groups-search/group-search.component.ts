@@ -10,6 +10,11 @@ import { WorkingGroupBase } from '../../models/group.model';
 import { GroupService } from '../../services/group-service';
 import { GroupListComponent } from '../../components/groups-list/groups-list.component';
 import { RoleId } from '../../../admin/models/role.model';
+import { MatIconModule } from '@angular/material/icon';
+import { Filter } from '../../../../core/core.model';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
     selector: 'app-group-search',
@@ -19,6 +24,10 @@ import { RoleId } from '../../../admin/models/role.model';
         TranslateModule,
         ReactiveFormsModule,
         MatButtonModule,
+        MatIconModule,
+        MatCheckboxModule,
+        MatOptionModule,
+        MatSelectModule,
         CommonModule],
     templateUrl: './group-search.component.html',
     styleUrl: './group-search.component.scss'
@@ -29,6 +38,7 @@ export class GroupSearchComponent implements OnInit {
     public groups: WorkingGroupBase[] = [];
     public filteredGroups: WorkingGroupBase[] = [];
     public canEdit: boolean = false;
+    public showExtraFilters: boolean = false;
 
     constructor(
         public groupService: GroupService,
@@ -41,7 +51,10 @@ export class GroupSearchComponent implements OnInit {
         let role = Number.parseInt(localStorage.getItem('role')!);
         this.canEdit = role === RoleId.Admin || role === RoleId.Professor;
         this.filterForm = this.fb.group({
-            filter: [''] 
+            generic: [''],
+            name: [''],
+            description: [''],
+            isPrivate: [-1],
         });
 
         this.groupService.getGroups().subscribe(groups => {
@@ -56,10 +69,19 @@ export class GroupSearchComponent implements OnInit {
     }
 
     onSearch(): void {
-        const filterValue = this.filterForm.get('filter')?.value.toLowerCase();
-        this.filteredGroups = this.groups.filter(group =>
-            group.name.toLowerCase().includes(filterValue)
-        );
+        const formValues = this.filterForm.value;
+        let filters: Filter[] = [];
+
+        Object.keys(formValues).forEach(key => {
+            const value = formValues[key].toString();
+            if (value !== null && value !== undefined && value !== '') {
+                filters.push({ key, value });
+            }
+        });
+
+        this.groupService.searchGroups(filters).subscribe(groups => {
+            this.filteredGroups = groups;
+        });
     }
 
     onClearFilters(): void {
@@ -74,4 +96,12 @@ export class GroupSearchComponent implements OnInit {
         });
     }
 
+    onShowExtraFilters(): void {
+        this.showExtraFilters = !this.showExtraFilters;
+        if (!this.showExtraFilters) {
+            this.filterForm.get('isPrivate')?.setValue(-1); // Reset isPrivate filter when hiding extra filters
+            this.filterForm.get('description')?.setValue(''); // Reset description filter when hiding extra filters
+            this.filterForm.get('name')?.setValue(''); // Reset name filter when hiding extra filters
+        }
+    }
 }

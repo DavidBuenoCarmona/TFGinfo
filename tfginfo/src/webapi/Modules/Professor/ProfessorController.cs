@@ -10,16 +10,19 @@ using TFGinfo.Objects;
 [ApiController]
 public class ProfessorController : BaseController
 {
-    public ProfessorController(ApplicationDbContext context) : base(context) {}
-    
+    public ProfessorController(ApplicationDbContext context) : base(context) { }
+
 
     [HttpPost]
     public IActionResult Save([FromBody] ProfessorFlatDTO Professor)
     {
-        try {
-           ProfessorManager manager = new ProfessorManager(context);
-           return Ok(manager.CreateProfessor(Professor));
-        } catch (UnprocessableException e) {
+        try
+        {
+            ProfessorManager manager = new ProfessorManager(context);
+            return Ok(manager.CreateProfessor(Professor));
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -34,13 +37,18 @@ public class ProfessorController : BaseController
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        try {
+        try
+        {
             ProfessorManager manager = new ProfessorManager(context);
             manager.DeleteProfessor(id);
             return Ok();
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -48,19 +56,25 @@ public class ProfessorController : BaseController
     [HttpPut]
     public IActionResult Update([FromBody] ProfessorFlatDTO Professor)
     {
-        try {
+        try
+        {
             ProfessorManager manager = new ProfessorManager(context);
             return Ok(manager.UpdateProfessor(Professor));
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
 
 
     [HttpGet("department/{departmentId}")]
-    public IActionResult GetAllByDepartment(int departmentId) {
+    public IActionResult GetAllByDepartment(int departmentId)
+    {
         ProfessorManager manager = new ProfessorManager(context);
         return Ok(manager.GetAllByDepartment(departmentId));
     }
@@ -68,12 +82,31 @@ public class ProfessorController : BaseController
     [HttpGet("{id}")]
     public IActionResult GetProfessorById(int id)
     {
-        try {
+        try
+        {
             ProfessorManager manager = new ProfessorManager(context);
             return Ok(manager.GetProfessorById(id));
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+    
+    [HttpPost("search")]
+    public IActionResult Search([FromBody] List<Filter> filters)
+    {
+        try
+        {
+            ProfessorManager manager = new ProfessorManager(context);
+            return Ok(manager.SearchProfessors(filters));
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }

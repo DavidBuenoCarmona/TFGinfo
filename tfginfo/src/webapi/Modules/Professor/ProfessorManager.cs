@@ -96,11 +96,51 @@ namespace TFGinfo.Api
             }
             return new ProfessorDTO(model);
         }
+        
+        public List<ProfessorDTO> SearchProfessors(List<Filter> filters)
+        {
+            IQueryable<ProfessorModel> query = context.professor.AsNoTracking().Include(d => d.departmentModel);
+
+            foreach (var filter in filters)
+            {
+                if (filter.key == "name")
+                {
+                    query = query.Where(p => p.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "surname")
+                {
+                    query = query.Where(p => p.surname.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "email")
+                {
+                    query = query.Where(p => p.email.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "department")
+                {
+                    query = query.Where(p => p.departmentModel.name.ToLower().Contains(filter.value.ToLower()));
+                }
+                else if (filter.key == "university")
+                {
+                    query = query.Where(p => p.departmentModel.university == int.Parse(filter.value));
+                }
+                else if (filter.key == "generic")
+                {
+                    string lowerValue = filter.value.ToLower();
+                    query = query.Where(p => p.name.ToLower().Contains(lowerValue) ||
+                                             p.surname.ToLower().Contains(lowerValue) ||
+                                             p.email.ToLower().Contains(lowerValue) ||
+                                             p.departmentModel.name.ToLower().Contains(lowerValue));
+                }
+            }
+
+            return query.ToList().ConvertAll(model => new ProfessorDTO(model));
+        }
 
         #region Private Methods
         private void CheckEmailIsNotRepeated(ProfessorFlatDTO professor)
         {
-            if (context.professor.Any(p => p.id != professor.id && p.email.ToLower() == professor.email.ToLower())) {
+            if (context.professor.Any(p => p.id != professor.id && p.email.ToLower() == professor.email.ToLower()))
+            {
                 throw new UnprocessableException("Professor email already exists");
             }
         }
