@@ -34,6 +34,7 @@ export class ProfessorListComponent implements OnInit {
     @Output() onDeleteProfessor = new EventEmitter<number>();
     @Input() groupId: number | undefined = undefined;
     public canEdit: boolean = false;
+    public universitySelected: number | undefined;
 
     constructor(
         private dialog: MatDialog,
@@ -45,6 +46,7 @@ export class ProfessorListComponent implements OnInit {
     ngOnInit(): void {
         let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin;
+        this.universitySelected = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : undefined;
     }
     onEdit(professor: ProfessorDTO) {
         this.router.navigate([professor.id], { relativeTo: this.route });
@@ -58,5 +60,9 @@ export class ProfessorListComponent implements OnInit {
                 this.onDeleteProfessor.emit(professor.id!);
             }
         });
+    }
+
+    changeUniversity() {
+        this.router.navigate(['/admin/university']);
     }
 }

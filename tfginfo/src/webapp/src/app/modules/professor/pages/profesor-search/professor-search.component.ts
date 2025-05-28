@@ -34,6 +34,7 @@ export class ProfessorSearchComponent implements OnInit {
     public filteredProfessors: ProfessorDTO[] = [];
     public canEdit: boolean = false;
     public showExtraFilters: boolean = false;
+    public filters: Filter[] = [];
 
     constructor(
         public professorService: ProfessorService,
@@ -54,9 +55,15 @@ export class ProfessorSearchComponent implements OnInit {
             department: [''],
         });
 
-        this.professorService.getProfessors().subscribe(professors => {
+        var selectedUniversity = this.configurationService.getSelectedUniversity()?.toString();
+        if (!selectedUniversity || selectedUniversity === '0') {
+            selectedUniversity = localStorage.getItem('selectedUniversity') || '0';
+        }
+        this.filters.push({ key: 'university', value: selectedUniversity });
+
+        this.professorService.searchProfessors(this.filters).subscribe(professors => {
             this.professors = professors;
-            this.filteredProfessors = [...this.professors];
+            this.filteredProfessors = [...this.professors]; // Inicializar con todos los profesores
         });
     }
     
@@ -83,6 +90,16 @@ export class ProfessorSearchComponent implements OnInit {
     onClearFilters(): void {
         this.filterForm.reset(); // Reiniciar el formulario
         this.filteredProfessors = [...this.professors]; // Restaurar la lista completa
+
+        
+        const formValues = this.filterForm.value;
+        Object.keys(formValues).forEach(key => {
+            this.filters = this.filters.filter(filter => filter.key !== key);
+        });
+
+        this.professorService.searchProfessors(this.filters).subscribe(professors => {
+            this.filteredProfessors = professors;
+        });
     }
 
     deleteProfessor(id: number): void {

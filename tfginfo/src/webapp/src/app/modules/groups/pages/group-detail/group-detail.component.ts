@@ -109,9 +109,9 @@ export class GroupDetailComponent implements OnInit {
                 this.professors = professors;
                 const user = this.configurationService.getUser();
                 if (!this.canEdit) {
-                    this.userAlreadyInGroup = this.students.some(student => student.id === user.id);
+                    this.userAlreadyInGroup = this.students.some(student => student.id === user!.id);
                 } else {
-                    this.userAlreadyInGroup = this.professors.some(professor => professor.id === user.id);
+                    this.userAlreadyInGroup = this.professors.some(professor => professor.id === user!.id);
                 }
                 this.canEdit = (this.canEdit && this.userAlreadyInGroup) || this.isAdmin;
                 if (!this.canEdit) {
@@ -124,7 +124,7 @@ export class GroupDetailComponent implements OnInit {
             });
         } else if (!this.isAdmin && this.canEdit) {
             const user = this.configurationService.getUser();
-            this.professor = user.id;
+            this.professor = user!.id;
         }
     }
 
@@ -155,11 +155,11 @@ export class GroupDetailComponent implements OnInit {
         let role = this.configurationService.getRole();
         const user = this.configurationService.getUser();
         if (role === RoleId.Professor) {
-            this.groupService.addProfessorToGroup(this.group!.id!, user.id).subscribe(() => {
+            this.groupService.addProfessorToGroup(this.group!.id!, user!.id).subscribe(() => {
                 this.router.navigate(['/working-group']);
             });
         } else if (role === RoleId.Student) {
-            this.groupService.addStudentToGroup(this.group!.id!, user.id).subscribe(() => {
+            this.groupService.addStudentToGroup(this.group!.id!, user!.id).subscribe(() => {
                 this.router.navigate(['/working-group']);
             });
         }
@@ -169,11 +169,11 @@ export class GroupDetailComponent implements OnInit {
         let role = this.configurationService.getRole();
         const user = this.configurationService.getUser();
         if (role === RoleId.Professor) {
-            this.groupService.removeProfessorFromGroup(this.group!.id!, user.id).subscribe(() => {
+            this.groupService.removeProfessorFromGroup(this.group!.id!, user!.id).subscribe(() => {
                 this.router.navigate(['/working-group']);
             });
         } else if (role === RoleId.Student) {
-            this.groupService.removeStudentFromGroup(this.group!.id!, user.id).subscribe(() => {
+            this.groupService.removeStudentFromGroup(this.group!.id!, user!.id).subscribe(() => {
                 this.router.navigate(['/working-group']);
             });
         }
@@ -219,7 +219,7 @@ export class GroupDetailComponent implements OnInit {
         if (message) {
             let content: WorkingGroupMessage = {
                 working_group: this.group!.id!,
-                professor: user.id,
+                professor: user!.id,
                 message: message
             };
             this.groupService.sendMessage(content).subscribe();

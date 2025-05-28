@@ -1,18 +1,19 @@
 import { Injectable } from "@angular/core";
+import { AppUserDTO } from "../../modules/admin/models/user.model";
 
 @Injectable({
     providedIn: "root"
 })
 export class ConfigurationService {
-    private user: any = undefined;
+    private user: AppUserDTO | undefined = undefined;
     private role: number | undefined = undefined;
     private selectedUniversity: number | undefined = undefined;
 
-    setUser(user: any): void {
+    setUser(user: AppUserDTO | undefined): void {
         this.user = user;
     }
 
-    getUser(): any {
+    getUser(): AppUserDTO | undefined {
         return this.user;
     }
 

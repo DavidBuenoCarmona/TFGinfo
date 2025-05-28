@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from '../../../../core/layout/components/confi
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'university-list',
@@ -19,7 +20,8 @@ import { ConfigurationService } from '../../../../core/services/configuration.se
         MatDialogModule,
         MatIconModule,
         MatButtonModule,
-        MatCardModule
+        MatCardModule,
+        CommonModule,
     ],
     templateUrl: './university-list.component.html',
     styleUrls: ['./university-list.component.scss']

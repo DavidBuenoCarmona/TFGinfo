@@ -58,12 +58,12 @@ export class TfgSearchComponent implements OnInit {
         switch (role) {
             case RoleId.Student:
                 if (user) {
-                    this.filters.push({ key: 'career', value: user.career.toString() });
+                    this.filters.push({ key: 'career', value: user.career!.toString() });
                 }
                 break;
             case RoleId.Professor:
                 if (user) {
-                    this.filters.push({ key: 'department', value: user.department.toString() });
+                    this.filters.push({ key: 'department', value: user.department!.toString() });
                 }
                 break;
             case RoleId.Admin:

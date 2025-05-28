@@ -24,6 +24,8 @@ export interface AppUserDTO {
     username: string;
     token: string;
     universityId: number;
+    department?: number;
+    career?: number;
     role: RoleBase;
 }
 

@@ -40,6 +40,9 @@ export class GroupSearchComponent implements OnInit {
     public filteredGroups: WorkingGroupBase[] = [];
     public canEdit: boolean = false;
     public showExtraFilters: boolean = false;
+    public isAdmin: boolean = false;
+    public isProfessor: boolean = false;
+    public filters: Filter[] = [];
 
     constructor(
         public groupService: GroupService,
@@ -52,6 +55,8 @@ export class GroupSearchComponent implements OnInit {
     ngOnInit(): void {
         let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin || role === RoleId.Professor;
+        this.isAdmin = role === RoleId.Admin;
+        this.isProfessor = role === RoleId.Professor;
         this.filterForm = this.fb.group({
             generic: [''],
             name: [''],
@@ -59,7 +64,15 @@ export class GroupSearchComponent implements OnInit {
             isPrivate: [-1],
         });
 
-        this.groupService.getGroups().subscribe(groups => {
+        if (this.isAdmin) {
+            this.filters.push({ key: 'university', value: localStorage.getItem('selectedUniversity') || '0' });
+        } else if (this.isProfessor) {
+            this.filters.push({ key: 'department', value: this.configurationService.getUser()!.department!.toString() || '0' });
+        } else {
+            this.filters.push({ key: 'university', value: this.configurationService.getUser()!.universityId.toString() || '0' });
+        }
+
+        this.groupService.searchGroups(this.filters).subscribe(groups => {
             this.groups = groups;
             this.filteredGroups = [...this.groups];
         });
@@ -72,16 +85,15 @@ export class GroupSearchComponent implements OnInit {
 
     onSearch(): void {
         const formValues = this.filterForm.value;
-        let filters: Filter[] = [];
 
         Object.keys(formValues).forEach(key => {
             const value = formValues[key].toString();
             if (value !== null && value !== undefined && value !== '') {
-                filters.push({ key, value });
+                this.filters.push({ key, value });
             }
         });
 
-        this.groupService.searchGroups(filters).subscribe(groups => {
+        this.groupService.searchGroups(this.filters).subscribe(groups => {
             this.filteredGroups = groups;
         });
     }
@@ -89,6 +101,15 @@ export class GroupSearchComponent implements OnInit {
     onClearFilters(): void {
         this.filterForm.reset(); // Reiniciar el formulario
         this.filteredGroups = [...this.groups]; // Restaurar la lista completa
+
+        const formValues = this.filterForm.value;
+        Object.keys(formValues).forEach(key => {
+            this.filters = this.filters.filter(filter => filter.key !== key);
+        });
+
+        this.groupService.searchGroups(this.filters).subscribe(groups => {
+            this.filteredGroups = groups;
+        });
     }
 
     deleteGroup(groupId: number): void {

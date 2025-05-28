@@ -38,12 +38,12 @@ export class BookingsComponent implements OnInit {
         const role = this.configurationService.getRole();
         this.isProfessor = role === RoleId.Professor;
         if (!this.isProfessor) {
-            forkJoin([this.workingGroupService.getGroupByStudent(user.id), this.tfgService.getTfgsByStudent(user.id)]).subscribe(([groups, tfgs]) => {
+            forkJoin([this.workingGroupService.getGroupByStudent(user!.id), this.tfgService.getTfgsByStudent(user!.id)]).subscribe(([groups, tfgs]) => {
                 this.workingGroups = groups;
                 this.tfgs = tfgs;
             });
         } else {
-            forkJoin([this.workingGroupService.getGroupByProfessor(user.id), this.tfgService.getTfgsByProfessor(user.id), this.tfgService.getPendingRequestsByProfessor(user.id)]).subscribe(([groups, tfgs, pendingTfgs]) => {
+            forkJoin([this.workingGroupService.getGroupByProfessor(user!.id), this.tfgService.getTfgsByProfessor(user!.id), this.tfgService.getPendingRequestsByProfessor(user!.id)]).subscribe(([groups, tfgs, pendingTfgs]) => {
                 this.workingGroups = groups;
                 this.tfgs = tfgs;
                 this.pendingTfgs = pendingTfgs;
@@ -54,7 +54,7 @@ export class BookingsComponent implements OnInit {
     removeRequest(tfgId: number): void {
         const user = this.configurationService.getUser();
         this.pendingTfgs = this.pendingTfgs.filter((tfg) => tfg.tfgId !== tfgId);
-        this.workingGroupService.getGroupByProfessor(user.id).subscribe((groups) => {
+        this.workingGroupService.getGroupByProfessor(user!.id).subscribe((groups) => {
             this.workingGroups = groups;
         });
     }

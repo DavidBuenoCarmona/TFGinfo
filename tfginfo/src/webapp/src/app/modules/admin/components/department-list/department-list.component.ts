@@ -8,6 +8,7 @@ import { DepartmentDTO } from '../../models/department.model';
 import { ConfirmDialogComponent } from '../../../../core/layout/components/confirm-dialog/confirm-dialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'department-list',
@@ -18,7 +19,8 @@ import { MatCardModule } from '@angular/material/card';
     MatDialogModule,
     MatIconModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    CommonModule,
   ],
   templateUrl: './department-list.component.html',
   styleUrls: ['./department-list.component.scss']

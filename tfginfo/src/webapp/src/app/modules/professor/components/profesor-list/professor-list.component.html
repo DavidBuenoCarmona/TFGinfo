@@ -4,48 +4,58 @@
             <mat-card-title class="mb-2">{{ 'PROFESSOR.TITLE_N' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <table mat-table [dataSource]="professors" class="mat-table">
-                <!-- Nombre Column -->
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
-                    <td mat-cell *matCellDef="let professor">{{ professor.name }}</td>
-                </ng-container>
+            <ng-container *ngIf="professors && professors.length > 0; else noResults">
+                <table mat-table [dataSource]="professors" class="mat-table">
+                    <!-- Nombre Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
+                        <td mat-cell *matCellDef="let professor">{{ professor.name }}</td>
+                    </ng-container>
 
-                <!-- Apellido Column -->
-                <ng-container matColumnDef="surname">
-                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.SURNAME' | translate }}</th>
-                    <td mat-cell *matCellDef="let professor">{{ professor.surname }}</td>
-                </ng-container>
+                    <!-- Apellido Column -->
+                    <ng-container matColumnDef="surname">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.SURNAME' | translate }}</th>
+                        <td mat-cell *matCellDef="let professor">{{ professor.surname }}</td>
+                    </ng-container>
 
-                <!-- Email Column -->
-                <ng-container matColumnDef="email">
-                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.EMAIL' | translate }}</th>
-                    <td mat-cell *matCellDef="let professor">{{ professor.email }}</td>
-                </ng-container>
+                    <!-- Email Column -->
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.EMAIL' | translate }}</th>
+                        <td mat-cell *matCellDef="let professor">{{ professor.email }}</td>
+                    </ng-container>
 
-                <!-- Departamento Column -->
-                <ng-container matColumnDef="department">
-                    <th mat-header-cell *matHeaderCellDef>{{ 'DEPARTMENT.TITLE_1' | translate }}</th>
-                    <td mat-cell *matCellDef="let professor">{{ professor.department?.name }}</td>
-                </ng-container>
+                    <!-- Departamento Column -->
+                    <ng-container matColumnDef="department">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'DEPARTMENT.TITLE_1' | translate }}</th>
+                        <td mat-cell *matCellDef="let professor">{{ professor.department?.name }}</td>
+                    </ng-container>
 
-                <!-- Acciones Column -->
-                <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
-                    <td mat-cell *matCellDef="let professor">
-                        <button mat-icon-button color="primary" *ngIf="!groupId" (click)="onEdit(professor)">
-                            <mat-icon>{{ canEdit ? 'edit' : 'remove_red_eye'}}</mat-icon>
-                        </button>
-                        <button *ngIf="canEdit" mat-icon-button color="warn" (click)="onDelete(professor)">
-                            <mat-icon>{{ !groupId ? 'delete' : 'clear' }}</mat-icon>
-                        </button>
-                    </td>
-                </ng-container>
+                    <!-- Acciones Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
+                        <td mat-cell *matCellDef="let professor">
+                            <button mat-icon-button color="primary" *ngIf="!groupId" (click)="onEdit(professor)">
+                                <mat-icon>{{ canEdit ? 'edit' : 'remove_red_eye'}}</mat-icon>
+                            </button>
+                            <button *ngIf="canEdit" mat-icon-button color="warn" (click)="onDelete(professor)">
+                                <mat-icon>{{ !groupId ? 'delete' : 'clear' }}</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
 
-                <!-- Header and Row Definitions -->
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
+                    <!-- Header and Row Definitions -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table> 
+            </ng-container>
+            <ng-template #noResults>
+                <div class="text-center py-4">
+                    {{ (!universitySelected ? 'GLOBAL.NO_UNIVERSITY_SELECTED' : 'GLOBAL.NO_RESULTS') | translate }}
+                    <a *ngIf="!universitySelected" class="cursor-pointer" (click)="changeUniversity()">
+                        {{ 'UNIVERSITY.CHANGE' | translate }}
+                    </a>
+                </div>
+            </ng-template>
         </mat-card-content>
     </mat-card>
 </div>

@@ -69,7 +69,7 @@ export class ProfessorDetailComponent implements OnInit {
         this.creation = this.id === "new";
 
         if (!this.creation) {
-            this.canEdit = this.canEdit || (this.id == this.configurationService.getUser().id.toString() && role === RoleId.Professor);
+            this.canEdit = this.canEdit || (this.id == this.configurationService.getUser()!.id.toString() && role === RoleId.Professor);
             this.professorService.getProfessor(+this.id!).subscribe((data) => {
                 this.professor = data;
                 this.professorForm.patchValue(data);

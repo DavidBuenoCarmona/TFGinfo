@@ -14,52 +14,58 @@ import { CommonModule } from '@angular/common';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
 
 @Component({
-  selector: 'group-list',
-  standalone: true,
-  imports: [
-    TranslateModule,
-    MatTableModule,
-    MatDialogModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule,
-    CommonModule
-  ],
-  templateUrl: './groups-list.component.html',
-  styleUrls: ['./groups-list.component.scss']
+    selector: 'group-list',
+    standalone: true,
+    imports: [
+        TranslateModule,
+        MatTableModule,
+        MatDialogModule,
+        MatIconModule,
+        MatButtonModule,
+        MatCardModule,
+        CommonModule
+    ],
+    templateUrl: './groups-list.component.html',
+    styleUrls: ['./groups-list.component.scss']
 })
 export class GroupListComponent implements OnInit {
-  @Input() groups: WorkingGroupBase[] = [];
-  @Input() displayedColumns: string[] = ['name', 'description', 'isPrivate', 'actions'];
-  @Output() onDeleteGroup = new EventEmitter<number>();
-  public canEdit: boolean = false;
+    @Input() groups: WorkingGroupBase[] = [];
+    @Input() displayedColumns: string[] = ['name', 'description', 'isPrivate', 'actions'];
+    @Output() onDeleteGroup = new EventEmitter<number>();
+    public canEdit: boolean = false;
+    public universitySelected: number | undefined;
 
-  constructor(
-    private dialog: MatDialog,
-    private groupService: GroupService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private configurationService: ConfigurationService
-  ) {
-  }
+    constructor(
+        private dialog: MatDialog,
+        private groupService: GroupService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private configurationService: ConfigurationService
+    ) {
+    }
 
 
-  ngOnInit(): void {
-    let role = this.configurationService.getRole();
-    this.canEdit = role === RoleId.Admin;
-  }
+    ngOnInit(): void {
+        let role = this.configurationService.getRole();
+        this.canEdit = role === RoleId.Admin;
+        this.universitySelected = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : undefined;
+    }
 
-  onEdit(group: WorkingGroupBase) {
-    this.router.navigate(["/working-group/" + group.id]);
-  }
+    onEdit(group: WorkingGroupBase) {
+        this.router.navigate(["/working-group/" + group.id]);
+    }
 
-  onDelete(group: WorkingGroupBase) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+    onDelete(group: WorkingGroupBase) {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.onDeleteGroup.emit(group.id);
-      }
-    });
-  }
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.onDeleteGroup.emit(group.id);
+            }
+        });
+    }
+
+    changeUniversity() {
+        this.router.navigate(['/admin/university']);
+    }
 }

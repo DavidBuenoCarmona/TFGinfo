@@ -27,7 +27,7 @@ export class ProfileDropdownComponent implements OnInit {
         let role = this.configurationService.getRole();
         this.isAdmin = role === RoleId.Admin;
         this.isProfessor = role === RoleId.Professor;
-        this.userId = this.configurationService.getUser()?.id || '';
+        this.userId = this.configurationService.getUser()?.id.toString() || '';
         if (this.isProfessor) {
             this.profileRoute = route.professor.list + '/' + this.userId;
         } else {
@@ -38,7 +38,7 @@ export class ProfileDropdownComponent implements OnInit {
     logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('selectedUniversity');
-        this.configurationService.setUser(null);
+        this.configurationService.setUser(undefined);
         this.router.navigate(['/login']);
     }
 

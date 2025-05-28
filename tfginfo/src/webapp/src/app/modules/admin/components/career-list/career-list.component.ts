@@ -8,6 +8,7 @@ import { CareerDTO } from '../../models/career.model';
 import { ConfirmDialogComponent } from '../../../../core/layout/components/confirm-dialog/confirm-dialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'career-list',
@@ -18,7 +19,8 @@ import { MatCardModule } from '@angular/material/card';
     MatDialogModule,
     MatIconModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    CommonModule,
   ],
   templateUrl: './career-list.component.html',
   styleUrls: ['./career-list.component.scss']

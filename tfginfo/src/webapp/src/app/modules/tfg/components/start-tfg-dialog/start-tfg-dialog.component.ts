@@ -78,7 +78,7 @@ export class StartTfgDialogComponent {
     onSubmit(): void {
         if (this.tutorForm.valid) {
             const user = this.configurationService.getUser();
-            const studentEmail = user.username;
+            const studentEmail = user!.username;
             let tfgRequest: TFGRequest = {
                 studentEmail: studentEmail,
                 secondaryProfessorId: this.tutorForm.value.secondaryTutor != "" ? this.tutorForm.value.secondaryTutor : null,
