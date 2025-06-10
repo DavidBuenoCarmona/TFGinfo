@@ -38,6 +38,21 @@
         "VIEW": "Ver departamento",
         "VIEW_LIST": "Ver lista de departamentos"
     },
+    "ERROR": {
+        "CARRER_REQUIRED": "La carrera es requerida",
+        "DEPARTMENT_REQUIRED": "El departamento es requerido",
+        "DNI_REQUIRED": "El DNI es requerido",
+        "EMAIL_REQUIRED": "El correo electrónico es requerido",
+        "GENERIC": "Algo salió mal",
+        "LOCATION_REQUIRED": "La ubicación es requerida",
+        "NAME_REQUIRED": "El nombre es requerido",
+        "PASSWORD_REQUIRED": "La contraseña es requerida",
+        "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
+        "PRIMARY_TUTOR_REQUIRED": "El tutor principal es requerido",
+        "SURNAME_REQUIRED": "Los apellidos son requeridos",
+        "TFG_SLOT_REQUIRED": "La plaza del TFG es requerida",
+        "UNIVERSITY_NOT_SELECTED": "No se ha seleccionado ninguna universidad"
+    },
     "GLOBAL": {
         "ACCEPT": "Aceptar",
         "ACTIONS": "Acciones",
@@ -59,7 +74,6 @@
         "LOGOUT": "Cerrar sesión",
         "MESSAGE": "Mensaje",
         "NAME": "Nombre",
-        "NAME_REQUIRED": "El nombre es requerido",
         "NO_RESULTS": "No se han encontrado resultados",
         "NO_UNIVERSITY_SELECTED": "No se ha seleccionado ninguna universidad, seleccione una para obtener los datos",
         "PASSWORD": "Contraseña",

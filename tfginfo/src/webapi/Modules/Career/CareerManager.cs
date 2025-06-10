@@ -90,6 +90,10 @@ namespace TFGinfo.Api
                 {
                     query = query.Where(c => c.universityModel.name.ToLower().Contains(filter.value.ToLower()));
                 }
+                else if (filter.key == "universityId")
+                {
+                    query = query.Where(c => c.universityModel.id == int.Parse(filter.value));
+                }
                 else if (filter.key == "generic")
                 {
                     string searchValue = filter.value.ToLower();

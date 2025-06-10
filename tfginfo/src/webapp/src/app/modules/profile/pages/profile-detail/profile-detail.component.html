@@ -7,13 +7,13 @@
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
                 <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
-                <mat-error *ngIf="profileForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="profileForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.SURNAME' | translate }}</mat-label>
                 <input matInput formControlName="surname" placeholder="{{ 'GLOBAL.SURNAME' | translate }}" />
-                <mat-error *ngIf="profileForm.get('surname')?.invalid">{{ 'GLOBAL.SURNAME_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="profileForm.get('surname')?.invalid">{{ 'ERROR.SURNAME_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
         </div>
 
@@ -21,13 +21,13 @@
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.EMAIL' | translate }}</mat-label>
                 <input matInput type="email" formControlName="email" placeholder="{{ 'GLOBAL.EMAIL' | translate }}" />
-                <mat-error *ngIf="profileForm.get('email')?.invalid">{{ 'GLOBAL.EMAIL_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="profileForm.get('email')?.invalid">{{ 'ERROR.EMAIL_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.DNI' | translate }}</mat-label>
                 <input matInput formControlName="dni" placeholder="{{ 'GLOBAL.DNI' | translate }}" />
-                <mat-error *ngIf="profileForm.get('dni')?.invalid">{{ 'GLOBAL.DNI_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="profileForm.get('dni')?.invalid">{{ 'ERROR.DNI_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
         </div>
 
@@ -39,7 +39,7 @@
                         {{ career.name }}
                     </mat-option>
                 </mat-select>
-                <mat-error *ngIf="profileForm.get('career')?.invalid">{{ 'GLOBAL.CAREER_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="profileForm.get('career')?.invalid">{{ 'ERROR.CAREER_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">

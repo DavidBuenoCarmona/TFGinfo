@@ -7,13 +7,13 @@
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
                 <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
-                <mat-error *ngIf="universityForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="universityForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.ADDRESS' | translate }}</mat-label>
                 <input matInput formControlName="address" placeholder="{{ 'GLOBAL.ADDRESS' | translate }}" />
-                <mat-error *ngIf="universityForm.get('address')?.invalid">{{ 'UNIVERSITY.LOCATION_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="universityForm.get('address')?.invalid">{{ 'ERROR.LOCATION_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
         </div>
 

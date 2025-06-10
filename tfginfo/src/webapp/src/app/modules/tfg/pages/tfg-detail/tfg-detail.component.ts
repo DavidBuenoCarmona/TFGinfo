@@ -14,15 +14,15 @@ import { DepartmentService } from '../../../admin/services/department.service';
 import { DepartmentDTO } from '../../../admin/models/department.model';
 import { CareerService } from '../../../admin/services/career.service';
 import { CareerDTO } from '../../../admin/models/career.model';
-import { fork } from 'child_process';
 import { forkJoin } from 'rxjs';
 import { RoleId } from '../../../admin/models/role.model';
 import { ProfessorDTO } from '../../../professor/models/professor.model';
-import { ProfessorSearchComponent } from '../../../professor/pages/profesor-search/professor-search.component';
 import { ProfessorService } from '../../../professor/services/professor.service';
 import { MatDialog } from '@angular/material/dialog';
 import { StartTfgDialogComponent } from '../../components/start-tfg-dialog/start-tfg-dialog.component';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
+import { SnackBarService } from '../../../../core/services/snackbar.service';
+import { Filter } from '../../../../core/core.model';
 
 @Component({
     selector: 'tfg-detail',
@@ -60,7 +60,8 @@ export class TfgDetailComponent implements OnInit {
         private professorService: ProfessorService,
         private dialog: MatDialog,
         private location: Location,
-        private configurationService: ConfigurationService
+        private configurationService: ConfigurationService,
+        private snackbarService: SnackBarService
     ) { }
 
     ngOnInit(): void {
@@ -89,33 +90,40 @@ export class TfgDetailComponent implements OnInit {
         }
 
         let universityId = this.configurationService.getSelectedUniversity()!;
-        if (universityId === undefined) {
+        if (!universityId) {
             universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
         }
-        const departmentRequest = this.departmentService.getDepartmentsByUniversityId(universityId);
-        const careerRequest = this.careerService.getCareers();
-        const professorRequest = this.professorService.getProfessors();
 
-        if (!this.creation) {
-            const tfgRequest = this.tfgService.getTfg(+this.id!);
+        if (!universityId) {
+            this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
 
-            forkJoin([departmentRequest, careerRequest, tfgRequest, professorRequest]).subscribe(([departments, careers, tfg, professors]) => {
-                this.departments = departments;
-                this.careers = careers;
-                this.tfg = tfg;
-                this.professors = professors;
-                this.tfgForm.patchValue(tfg);
-                this.tfgForm.get('departmentId')?.setValue(tfg.department?.id);
-                this.tfgForm.get('careers')?.setValue(tfg.careers?.map((career) => career.id));
-                this.tfgForm.get('professors')?.setValue(tfg.professors?.map((professor) => professor.id));
-            });
         } else {
-            forkJoin([departmentRequest, careerRequest]).subscribe(([departments, careers]) => {
-                this.departments = departments;
-                this.careers = careers;
-            });
-        }
+            let universityFilter: Filter[] = [];
+            universityFilter.push({key: 'universityId', value: universityId.toString()});
+            const departmentRequest = this.departmentService.searchDepartments(universityFilter);
+            const careerRequest = this.careerService.searchCarrers(universityFilter);
+            const professorRequest = this.professorService.searchProfessors(universityFilter);
 
+            if (!this.creation) {
+                const tfgRequest = this.tfgService.getTfg(+this.id!);
+
+                forkJoin([departmentRequest, careerRequest, tfgRequest, professorRequest]).subscribe(([departments, careers, tfg, professors]) => {
+                    this.departments = departments;
+                    this.careers = careers;
+                    this.tfg = tfg;
+                    this.professors = professors;
+                    this.tfgForm.patchValue(tfg);
+                    this.tfgForm.get('departmentId')?.setValue(tfg.department?.id);
+                    this.tfgForm.get('careers')?.setValue(tfg.careers?.map((career) => career.id));
+                    this.tfgForm.get('professors')?.setValue(tfg.professors?.map((professor) => professor.id));
+                });
+            } else {
+                forkJoin([departmentRequest, careerRequest]).subscribe(([departments, careers]) => {
+                    this.departments = departments;
+                    this.careers = careers;
+                });
+            }
+        }  
     }
 
     onSubmit(): void {

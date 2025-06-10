@@ -19,6 +19,8 @@ import { TfgService } from '../../../tfg/services/tfg.service';
 import { TfgListComponent } from '../../../tfg/components/tfg-list/tfg-list.component';
 import { RoleId } from '../../../admin/models/role.model';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
+import { Filter } from '../../../../core/core.model';
+import { SnackBarService } from '../../../../core/services/snackbar.service';
 
 @Component({
     selector: 'professor-detail',
@@ -56,7 +58,8 @@ export class ProfessorDetailComponent implements OnInit {
         private dialog: MatDialog,
         private tfgService: TfgService,
         private location: Location,
-        private configurationService: ConfigurationService
+        private configurationService: ConfigurationService,
+        private snackbarService: SnackBarService
     ) { }
 
     ngOnInit(): void {
@@ -69,7 +72,6 @@ export class ProfessorDetailComponent implements OnInit {
         this.creation = this.id === "new";
 
         if (!this.creation) {
-            this.canEdit = this.canEdit || (this.id == this.configurationService.getUser()!.id.toString() && role === RoleId.Professor);
             this.professorService.getProfessor(+this.id!).subscribe((data) => {
                 this.professor = data;
                 this.professorForm.patchValue(data);
@@ -93,7 +95,20 @@ export class ProfessorDetailComponent implements OnInit {
             this.professorForm.disable();
         }
 
-        this.departmentService.getDepartments().subscribe((data) => this.departments = data);
+         let universityId = this.configurationService.getSelectedUniversity()!;
+            if (!universityId) {
+                universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
+            }
+
+            if (!universityId) {
+                this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
+            } else {
+                let universityFilter: Filter[] = [];
+                universityFilter.push({key: 'universityId', value: universityId.toString()});
+
+                this.departmentService.searchDepartments(universityFilter).subscribe((data) => this.departments = data);
+            }
+
     }
 
     onSubmit(): void {

@@ -6,10 +6,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TFGRequestDTO } from '../../models/tfg.model';
 import { MatButtonModule } from '@angular/material/button';
 import { TfgService } from '../../services/tfg.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'tfg-request-list',
-  imports: [MatCardModule, TranslateModule, MatTableModule, MatIconModule, MatButtonModule],
+  imports: [MatCardModule, TranslateModule, MatTableModule, MatIconModule, MatButtonModule, CommonModule],
   templateUrl: './tfg-request-list.component.html',
   styleUrl: './tfg-request-list.component.scss'
 })

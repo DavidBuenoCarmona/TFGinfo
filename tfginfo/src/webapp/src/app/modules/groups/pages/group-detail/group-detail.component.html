@@ -7,13 +7,13 @@
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
                 <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
-                <mat-error *ngIf="groupForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="groupForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.DESCRIPTION' | translate }}</mat-label>
                 <textarea matInput formControlName="description" placeholder="{{ 'GLOBAL.DESCRIPTION' | translate }}"></textarea>
-                <mat-error *ngIf="groupForm.get('description')?.invalid">{{ 'GLOBAL.DESCRIPTION_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="groupForm.get('description')?.invalid">{{ 'ERROR.DESCRIPTION_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
         </div>
 
@@ -26,7 +26,7 @@
                 <mat-form-field appearance="fill" class="form-field">
                     <mat-label>{{ 'GLOBAL.EMAIL' | translate }}</mat-label>
                     <input matInput formControlName="newStudentEmail" />
-                    <mat-error *ngIf="groupForm.get('newStudentEmail')?.invalid">{{ 'EMAIL_FORM.EMAIL_REQUIRED' | translate }}</mat-error>
+                    <mat-error *ngIf="groupForm.get('newStudentEmail')?.invalid">{{ 'ERROR.EMAIL_REQUIRED' | translate }}</mat-error>
                 </mat-form-field>
                 <button mat-icon-button class="add-button" ngClass="groupForm.get('newStudentEmail')?.invalid ? 'disabled' : ''" type="button" (click)="addStudentByEmail()">
                     <mat-icon>add</mat-icon>

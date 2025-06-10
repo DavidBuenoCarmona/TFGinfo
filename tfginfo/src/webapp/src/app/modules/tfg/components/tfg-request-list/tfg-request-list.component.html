@@ -4,36 +4,43 @@
             <mat-card-title class="mb-2">{{ 'TFG.STUDENT_REQUESTS' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <table mat-table [dataSource]="tfgStudentRequests" class="mat-table">
-                <!-- TFG Nombre Column -->
-                <ng-container matColumnDef="tfgName">
-                    <th mat-header-cell *matHeaderCellDef>{{ 'TFG.TITLE_1' | translate }}</th>
-                    <td mat-cell *matCellDef="let request">{{ request.tfgName }}</td>
-                </ng-container>
+            <ng-container *ngIf="tfgStudentRequests && tfgStudentRequests.length > 0; else noResults">
+                <table mat-table [dataSource]="tfgStudentRequests" class="mat-table">
+                    <!-- TFG Nombre Column -->
+                    <ng-container matColumnDef="tfgName">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'TFG.TITLE_1' | translate }}</th>
+                        <td mat-cell *matCellDef="let request">{{ request.tfgName }}</td>
+                    </ng-container>
 
-                <!-- Alumno Nombre Column -->
-                <ng-container matColumnDef="studentName">
-                    <th mat-header-cell *matHeaderCellDef>{{ 'STUDENT.TITLE_1' | translate }}</th>
-                    <td mat-cell *matCellDef="let request">{{ request.studentName }}</td>
-                </ng-container>
+                    <!-- Alumno Nombre Column -->
+                    <ng-container matColumnDef="studentName">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'STUDENT.TITLE_1' | translate }}</th>
+                        <td mat-cell *matCellDef="let request">{{ request.studentName }}</td>
+                    </ng-container>
 
-                <!-- Acciones Column -->
-                <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
-                    <td mat-cell *matCellDef="let request">
-                        <button mat-icon-button (click)="onAccept(request)">
-                            <mat-icon>check</mat-icon>
-                        </button>
-                        <button mat-icon-button (click)="onReject(request)">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </td>
-                </ng-container>
+                    <!-- Acciones Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
+                        <td mat-cell *matCellDef="let request">
+                            <button mat-icon-button (click)="onAccept(request)">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="onReject(request)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
 
-                <!-- Header and Row Definitions -->
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
+                    <!-- Header and Row Definitions -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </ng-container>
+            <ng-template #noResults>
+                <div class="text-center py-4">
+                    {{ ('GLOBAL.NO_RESULTS') | translate }}
+                </div>
+            </ng-template>
         </mat-card-content>
     </mat-card>
 </div>

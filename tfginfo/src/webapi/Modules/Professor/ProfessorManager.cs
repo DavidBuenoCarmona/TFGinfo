@@ -123,6 +123,10 @@ namespace TFGinfo.Api
                 {
                     query = query.Where(p => p.departmentModel.university == int.Parse(filter.value));
                 }
+                else if (filter.key == "universityId")
+                {
+                    query = query.Where(p => p.departmentModel.universityModel.id == int.Parse(filter.value));
+                }
                 else if (filter.key == "generic")
                 {
                     string lowerValue = filter.value.ToLower();

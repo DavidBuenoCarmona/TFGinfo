@@ -7,7 +7,7 @@
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
                 <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
-                <mat-error *ngIf="tfgForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="tfgForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
@@ -17,13 +17,13 @@
                         {{ department.name }}
                     </mat-option>
                 </mat-select>
-                <mat-error *ngIf="tfgForm.get('department')?.invalid">{{ 'GLOBAL.DEPARTMENT_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="tfgForm.get('department')?.invalid">{{ 'ERROR.DEPARTMENT_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'TFG.SLOTS' | translate }}</mat-label>
                 <input matInput type="number" formControlName="slots" placeholder="{{ 'TFG.SLOTS' | translate }}" />
-                <mat-error *ngIf="tfgForm.get('slots')?.invalid">{{ 'TFG.SLOTS_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="tfgForm.get('slots')?.invalid">{{ 'ERROR.TFG_SLOTS_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
         </div>
 
@@ -37,7 +37,7 @@
             <mat-form-field appearance="fill" class="full-width">
                 <mat-label>{{ 'GLOBAL.DESCRIPTION' | translate }}</mat-label>
                 <textarea matInput formControlName="description" placeholder="{{ 'GLOBAL.DESCRIPTION' | translate }}"></textarea>
-                <mat-error *ngIf="tfgForm.get('description')?.invalid">{{ 'GLOBAL.DESCRIPTION_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="tfgForm.get('description')?.invalid">{{ 'ERROR.DESCRIPTION_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
         </div>
 

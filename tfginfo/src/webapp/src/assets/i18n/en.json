@@ -38,6 +38,21 @@
         "VIEW": "View department",
         "VIEW_LIST": "View department list"
     },
+    "ERROR": {
+        "CARRER_REQUIRED": "Career is required",
+        "DEPARTMENT_REQUIRED": "Department is required",
+        "DNI_REQUIRED": "DNI is required",
+        "EMAIL_REQUIRED": "Email is required",
+        "GENERIC": "Something went wrong",
+        "LOCATION_REQUIRED": "Location is required",
+        "NAME_REQUIRED": "Name is required",
+        "PASSWORD_REQUIRED": "Password is required",
+        "PASSWORD_MISMATCH": "Passwords do not match",
+        "PRIMARY_TUTOR_REQUIRED": "Primary tutor is required",
+        "SURNAME_REQUIRED": "Surname is required",
+        "TFG_SLOT_REQUIRED": "TFG slot is required",
+        "UNIVERSITY_NOT_SELECTED": "No university selected"
+    },
     "GLOBAL": {
         "ACCEPT": "Accept",
         "ACTIONS": "Actions",

@@ -316,6 +316,22 @@ namespace TFGinfo.Api
                 {
                     query = query.Where(wg => wg.Professors.First().professorModel.departmentModel.university == int.Parse(filter.value));
                 }
+                else if (filter.key == "department")
+                {
+                    query = query.Where(wg => wg.Professors.First().professorModel.department == int.Parse(filter.value));
+                }
+                else if (filter.key == "professor")
+                {
+                    query = query.Where(wg => wg.Professors.Any(p => p.professor == int.Parse(filter.value)));
+                }
+                else if (filter.key == "student")
+                {
+                    query = query.Where(wg => wg.Students.Any(s => s.student == int.Parse(filter.value)));
+                }
+                else if (filter.key == "tfg")
+                {
+                    query = query.Where(wg => wg.TFGs.Any(t => t.tfg == int.Parse(filter.value)));
+                }
                 else if (filter.key == "generic")
                 {
                     query = query.Where(wg => wg.name.Contains(filter.value) || wg.description.Contains(filter.value));

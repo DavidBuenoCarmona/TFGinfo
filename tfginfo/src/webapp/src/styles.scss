@@ -34,6 +34,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --color-black: #000000;
     --color-light-blue: #4da8da; /* Azul Claro */
 
+    --color-error: #ff4d4d; /* Rojo Claro */
+    --color-error-light: #ff9999; /* Rojo Claro Intermedio */
+    --color-error-dark: #b30000; /* Rojo Oscuro */
+
     /* 🎨 Tonos Intermedios */
     --color-gray-dark: #1c1c1c;
     --color-gray-medium: #525252;
@@ -70,9 +74,28 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --btn-secondary-hover: var(--color-gray-dark);
 }
 
+.snackbar-error {
+    .mat-mdc-snackbar-surface {
+        background: var(--color-error) !important;
+        color: #fff !important;
+    }
+}
+
 body.dark-mode {
     background-color: var(--color-gray-medium);
     color: var(--text-light);
+
+
+    .snackbar-error {
+        .mat-mdc-snackbar-surface {
+            background: var(--color-error-dark) !important;
+            color: #fff !important;
+        }
+    }
+
+    .mat-mdc-form-field-error {
+        color: var(--color-error-light) !important;
+    }
 
     /* Estilos globales para Angular Material */
     mat-card {

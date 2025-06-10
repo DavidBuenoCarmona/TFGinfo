@@ -48,7 +48,10 @@ export class GroupListComponent implements OnInit {
     ngOnInit(): void {
         let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin;
-        this.universitySelected = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : undefined;
+        this.universitySelected = this.configurationService.getSelectedUniversity();
+        if (!this.universitySelected) {
+            this.universitySelected = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : undefined;
+        }    
     }
 
     onEdit(group: WorkingGroupBase) {

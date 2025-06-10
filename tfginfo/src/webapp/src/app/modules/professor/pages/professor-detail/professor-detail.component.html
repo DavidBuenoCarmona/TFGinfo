@@ -7,19 +7,19 @@
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
                 <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
-                <mat-error *ngIf="professorForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="professorForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.SURNAME' | translate }}</mat-label>
                 <input matInput formControlName="surname" placeholder="{{ 'GLOBAL.SURNAME' | translate }}" />
-                <mat-error *ngIf="professorForm.get('surname')?.invalid">{{ 'GLOBAL.SURNAME_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="professorForm.get('surname')?.invalid">{{ 'ERROR.SURNAME_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'GLOBAL.EMAIL' | translate }}</mat-label>
                 <input matInput type="email" formControlName="email" placeholder="{{ 'GLOBAL.EMAIL' | translate }}" />
-                <mat-error *ngIf="professorForm.get('email')?.invalid">{{ 'GLOBAL.EMAIL_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="professorForm.get('email')?.invalid">{{ 'ERROR.EMAIL_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
         </div>
 
@@ -31,7 +31,7 @@
                         {{ department.name }}
                     </mat-option>
                 </mat-select>
-                <mat-error *ngIf="professorForm.get('departmentId')?.invalid">{{ 'GLOBAL.DEPARTMENT_REQUIRED' | translate }}</mat-error>
+                <mat-error *ngIf="professorForm.get('departmentId')?.invalid">{{ 'ERROR.DEPARTMENT_REQUIRED' | translate }}</mat-error>
             </mat-form-field>
         </div>
 

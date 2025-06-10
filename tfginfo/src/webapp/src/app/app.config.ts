@@ -7,6 +7,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { AuthInterceptor } from './core/services/interceptor';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
   new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
       provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(withEventReplay()), 
       provideHttpClient(withInterceptorsFromDi()),
+      importProvidersFrom(MatSnackBarModule),
       importProvidersFrom([TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,

@@ -22,6 +22,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../core/layout/components/confirm-dialog/confirm-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
+import { SnackBarService } from '../../../../core/services/snackbar.service';
+import { Filter } from '../../../../core/core.model';
 
 @Component({
     selector: 'group-detail',
@@ -67,7 +69,8 @@ export class GroupDetailComponent implements OnInit {
         private fb: FormBuilder,
         private professorService: ProfessorService,
         private location: Location,
-        private configurationService: ConfigurationService
+        private configurationService: ConfigurationService,
+        private snackbarService: SnackBarService
     ) { }
 
     ngOnInit(): void {
@@ -119,9 +122,22 @@ export class GroupDetailComponent implements OnInit {
                 }
             });
         } else if (this.isAdmin) {
-            this.professorService.getProfessors().subscribe((professors) => {
-                this.professorList = professors;
-            });
+            let universityId = this.configurationService.getSelectedUniversity()!;
+            if (!universityId) {
+                universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
+            }
+
+            if (!universityId) {
+                this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
+            } else {
+                let universityFilter: Filter[] = [];
+                universityFilter.push({key: 'university', value: universityId.toString()});
+
+                this.professorService.searchProfessors(universityFilter).subscribe((professors) => {
+                    this.professorList = professors;
+                });
+            }
+
         } else if (!this.isAdmin && this.canEdit) {
             const user = this.configurationService.getUser();
             this.professor = user!.id;
