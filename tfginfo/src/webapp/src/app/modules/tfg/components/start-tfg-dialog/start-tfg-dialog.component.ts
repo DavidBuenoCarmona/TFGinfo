@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TFGRequest } from '../../models/tfg.model';
 import { TfgService } from '../../services/tfg.service';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-start-tfg-dialog',
@@ -22,7 +23,8 @@ import { ConfigurationService } from '../../../../core/services/configuration.se
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
-        MatButtonModule
+        MatButtonModule,
+        MatIconModule
     ],
     templateUrl: './start-tfg-dialog.component.html',
     styleUrls: ['./start-tfg-dialog.component.scss']
@@ -99,5 +101,18 @@ export class StartTfgDialogComponent {
     // Cancelar y cerrar el diálogo
     onCancel(): void {
         this.dialogRef.close();
+    }
+
+    removeSecondaryTutor(): void {
+        this.showExternalTutorFields = false;
+        this.tutorForm.get('secondaryTutor')?.setValue('');
+        this.tutorForm.get('secondaryTutor')?.clearValidators();
+        this.tutorForm.get('secondaryTutor')?.updateValueAndValidity();
+        this.tutorForm.get('externalTutorName')?.setValue('');
+        this.tutorForm.get('externalTutorEmail')?.setValue('');
+        this.tutorForm.get('externalTutorName')?.clearValidators();
+        this.tutorForm.get('externalTutorEmail')?.clearValidators();
+        this.tutorForm.get('externalTutorName')?.updateValueAndValidity();
+        this.tutorForm.get('externalTutorEmail')?.updateValueAndValidity();
     }
 }

@@ -84,20 +84,20 @@ export class TfgDetailComponent implements OnInit {
             careers: [[]],
             professors: [[]],
         });
-
+        let universityId = this.configurationService.getSelectedUniversity()!;
         if (!this.isAdmin) {
             this.tfgForm.disable();
-        }
-
-        let universityId = this.configurationService.getSelectedUniversity()!;
-        if (!universityId) {
-            universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
-        }
-
-        if (!universityId) {
-            this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
-
         } else {
+            if (!universityId) {
+                universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
+                if (!universityId) {
+                    this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
+                    this.router.navigate(['/tfg']);
+                }
+            }
+        }
+
+        if (universityId) {
             let universityFilter: Filter[] = [];
             universityFilter.push({key: 'universityId', value: universityId.toString()});
             const departmentRequest = this.departmentService.searchDepartments(universityFilter);

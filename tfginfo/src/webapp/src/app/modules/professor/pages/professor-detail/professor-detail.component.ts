@@ -71,6 +71,35 @@ export class ProfessorDetailComponent implements OnInit {
         }
         this.creation = this.id === "new";
 
+        this.professorForm = this.fb.group({
+            id: [this.creation ? null : this.id],
+            name: ['', Validators.required],
+            surname: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            departmentId: ['', Validators.required],
+            department_boss: [false]
+        });
+        let universityId = this.configurationService.getSelectedUniversity()!;
+        if (!this.canEdit) {
+            this.professorForm.disable();
+        } else {
+            if (!universityId) {
+                universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
+                if (!universityId) {
+                    this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
+                    this.router.navigate(['/professor']);
+                }
+            }
+        }
+
+        if (universityId) {
+            let universityFilter: Filter[] = [];
+            universityFilter.push({key: 'universityId', value: universityId.toString()});
+
+            this.departmentService.searchDepartments(universityFilter).subscribe((data) => this.departments = data);
+        }
+
+        
         if (!this.creation) {
             this.professorService.getProfessor(+this.id!).subscribe((data) => {
                 this.professor = data;
@@ -82,32 +111,6 @@ export class ProfessorDetailComponent implements OnInit {
                 this.tfgs = data;
             });
         }
-
-        this.professorForm = this.fb.group({
-            id: [this.creation ? null : this.id],
-            name: ['', Validators.required],
-            surname: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
-            departmentId: ['', Validators.required],
-            department_boss: [false]
-        });
-        if (!this.canEdit) {
-            this.professorForm.disable();
-        }
-
-         let universityId = this.configurationService.getSelectedUniversity()!;
-            if (!universityId) {
-                universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
-            }
-
-            if (!universityId) {
-                this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
-            } else {
-                let universityFilter: Filter[] = [];
-                universityFilter.push({key: 'universityId', value: universityId.toString()});
-
-                this.departmentService.searchDepartments(universityFilter).subscribe((data) => this.departments = data);
-            }
 
     }
 

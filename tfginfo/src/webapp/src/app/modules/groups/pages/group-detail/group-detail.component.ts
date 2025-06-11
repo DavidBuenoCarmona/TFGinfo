@@ -129,6 +129,7 @@ export class GroupDetailComponent implements OnInit {
 
             if (!universityId) {
                 this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
+                this.router.navigate(['/working-group']);
             } else {
                 let universityFilter: Filter[] = [];
                 universityFilter.push({key: 'university', value: universityId.toString()});
