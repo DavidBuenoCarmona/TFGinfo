@@ -10,19 +10,23 @@ namespace TFGinfo.Api
 {
     public class ProfessorManager : BaseManager
     {
-        public ProfessorManager(ApplicationDbContext context) : base(context) {}
+        private readonly EmailService? emailService;
+        public ProfessorManager(ApplicationDbContext context, EmailService? emailService = null) : base(context)
+        {
+            this.emailService = emailService;
+         }
 
         public List<ProfessorDTO> GetAllProfessors()
         {
             return context.professor.AsNoTracking().Include(d => d.departmentModel).ToList().ConvertAll(model => new ProfessorDTO(model));
         }
 
-        public NewProfessorDTO CreateProfessor(ProfessorFlatDTO Professor)
+        public async Task<NewProfessorDTO> CreateProfessor(ProfessorFlatDTO Professor)
         { 
             CheckEmailIsNotRepeated(Professor);
 
-            UserManager userManager = new UserManager(context);
-            UserDTO user = userManager.CreateUser(new UserFlatDTO {
+            UserManager userManager = new UserManager(context, emailService);
+            UserDTO user = await userManager.CreateUser(new UserFlatDTO {
                 username = Professor.email,
                 roleId = (int)RoleTypes.Professor
             });

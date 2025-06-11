@@ -35,7 +35,6 @@ export class LogoComponent implements AfterViewInit {
             } else {
                 this.logoRoute = route.booking;
             }
-            console.log('this.logoRoute :>> ', this.logoRoute);
         }, 100);
     }
 

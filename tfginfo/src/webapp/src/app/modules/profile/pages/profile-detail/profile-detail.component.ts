@@ -13,6 +13,11 @@ import { CareerDTO } from '../../../admin/models/career.model';
 import { CareerService } from '../../../admin/services/career.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AuthCodeDialogComponent } from '../../../../core/layout/components/auth-code-dialog/auth-code-dialog.component';
+import { UniversityService } from '../../../admin/services/university.service';
+import { UniversityBase } from '../../../admin/models/university.model';
+import { Filter } from '../../../../core/core.model';
+import { ConfigurationService } from '../../../../core/services/configuration.service';
+import { RoleId } from '../../../admin/models/role.model';
 
 @Component({
     selector: 'profile-detail',
@@ -36,6 +41,8 @@ export class ProfileDetailComponent implements OnInit {
     creation: boolean = false;
     careers: CareerDTO[] = [];
     profileForm!: FormGroup;
+    universities: UniversityBase[] = [];
+    isProfileUser: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -44,7 +51,9 @@ export class ProfileDetailComponent implements OnInit {
         private careerService: CareerService,
         private fb: FormBuilder,
         private dialog: MatDialog,
-        private location: Location
+        private location: Location,
+        private universityService: UniversityService,
+        private configurationService: ConfigurationService
     ) { }
 
     ngOnInit(): void {
@@ -53,6 +62,7 @@ export class ProfileDetailComponent implements OnInit {
             this.router.navigate(['/']);
         }
         this.creation = this.id === "new";
+        this.isProfileUser = this.configurationService.getRole() == RoleId.Student && this.id == this.configurationService.getUser()?.id.toString();
 
         this.profileForm = this.fb.group({
             id: [this.creation ? null : this.id],
@@ -60,20 +70,49 @@ export class ProfileDetailComponent implements OnInit {
             surname: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             dni: ['', Validators.required],
+            universityId: [''],
             careerId: ['', Validators.required],
             birthdate: [],
             phone: [''],
             address: ['']
         });
 
-        this.careerService.getCareers().subscribe((data) => {
-            this.careers = data;
+        this.universityService.getUniversities().subscribe((universities) => {
+            this.universities = universities;
+        });
+
+        
+        if (this.isProfileUser) {
+            this.profileForm.disable();
+            this.profileForm.get('phone')?.enable();
+            this.profileForm.get('address')?.enable();
+            this.profileForm.get('birthdate')?.enable();
+        }
+
+        this.profileForm.get("universityId")?.addValidators(Validators.required);
+        this.profileForm.get("careerId")?.disable();
+
+        this.profileForm.get('universityId')?.valueChanges.subscribe((universityId) => {
+            if (universityId) {
+                let filters: Filter[] = [{ key: 'universityId', value: universityId.toString() }];
+                this.careerService.searchCarrers(filters).subscribe((careers) => {
+                    this.careers = careers;
+                    if (!this.isProfileUser) {
+                        this.profileForm.get('careerId')?.enable();
+                    }
+                    this.profileForm.get('careerId')?.setValue(null); // Reset career selection
+                    if (this.profile?.career) {
+                        this.profileForm.get('careerId')?.setValue(this.profile.career.id);
+                    }
+                });
+            }
         });
 
         if (!this.creation) {
             this.studentService.getStudent(+this.id!).subscribe((data) => {
                 this.profile = data;
                 this.profileForm.patchValue(data);
+                this.profileForm.get('universityId')?.setValue(data.career.university.id);
                 this.profileForm.get('careerId')?.setValue(data.career.id);
                 if (data.birthdate) {
                   const utcDate = new Date(data.birthdate);
@@ -93,7 +132,11 @@ export class ProfileDetailComponent implements OnInit {
             if (this.creation) {
                 this.studentService.createStudent(profileData).subscribe((data) => this.openAuthCodeDialog(data.student.email, data.auth_code));
             } else {
-                this.studentService.updateStudent(profileData).subscribe(() => this.location.back());
+                if (this.isProfileUser) {
+                    this.studentService.updateStudentOptionalData(profileData, Number.parseInt(this.id!)).subscribe(() => {this.location.back();});
+                } else {
+                    this.studentService.updateStudent(profileData).subscribe(() => this.location.back());
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.ObjectPool;
@@ -11,7 +12,10 @@ namespace TFGinfo.Api
 {
     public class StudentManager : BaseManager
     {
-        public StudentManager(ApplicationDbContext context) : base(context) {}
+        private readonly EmailService? emailService;
+        public StudentManager(ApplicationDbContext context, EmailService? emailService = null) : base(context) {
+            this.emailService = emailService;
+        }
 
         public List<StudentDTO> GetAllStudents()
         {
@@ -58,14 +62,14 @@ namespace TFGinfo.Api
             return query.ToList().ConvertAll(model => new StudentDTO(model));
         }
 
-        public NewStudentDTO CreateStudent(StudentFlatDTO Student)
+        public async Task<NewStudentDTO> CreateStudent(StudentFlatDTO Student)
         {
 
             CheckEmailIsNotRepeated(Student);
             CheckDniIsNotRepeated(Student);
 
-            UserManager userManager = new UserManager(context);
-            UserDTO user = userManager.CreateUser(new UserFlatDTO
+            UserManager userManager = new UserManager(context, emailService!);
+            UserDTO user = await userManager.CreateUser(new UserFlatDTO
             {
                 username = Student.email,
                 roleId = (int)RoleTypes.Student
@@ -128,6 +132,21 @@ namespace TFGinfo.Api
             return new StudentDTO(model);
         }
 
+        public StudentDTO UpdateOptionalData(int id, StudentOptionalDataDTO optionalData)
+        {
+            StudentModel? model = context.student.Include(d => d.careerModel).FirstOrDefault(Student => Student.id == id);
+            if (model == null) {
+                throw new NotFoundException();
+            }
+
+            model.phone = optionalData.phone;
+            model.address = optionalData.address;
+            model.birthdate = optionalData.birthdate;
+            context.SaveChanges();
+
+            return new StudentDTO(model);
+        }
+
         public List<StudentDTO> GetAllByCareer(int careerId)
         {
             return context.student.AsNoTracking().Where(Student => Student.career == careerId).Include(d => d.careerModel).ToList().ConvertAll(model => new StudentDTO(model));
@@ -135,7 +154,7 @@ namespace TFGinfo.Api
 
         public StudentDTO GetById(int id)
         {
-            StudentModel? model = context.student.Include(d => d.careerModel).FirstOrDefault(Student => Student.id == id);
+            StudentModel? model = context.student.Include(d => d.careerModel).ThenInclude(c => c.universityModel).FirstOrDefault(Student => Student.id == id);
             if (model == null) {
                 throw new NotFoundException();
             }

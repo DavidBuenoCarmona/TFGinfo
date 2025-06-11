@@ -33,6 +33,16 @@
 
         <div class="form-row">
             <mat-form-field appearance="fill" class="form-field">
+                <mat-label>{{ 'UNIVERSITY.TITLE_1' | translate }}</mat-label>
+                <mat-select formControlName="universityId">
+                    <mat-option *ngFor="let university of universities" [value]="university.id">
+                        {{ university.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="profileForm.get('career')?.invalid">{{ 'ERROR.CAREER_REQUIRED' | translate }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="form-field">
                 <mat-label>{{ 'CAREER.TITLE_1' | translate }}</mat-label>
                 <mat-select formControlName="careerId">
                     <mat-option *ngFor="let career of careers" [value]="career.id">

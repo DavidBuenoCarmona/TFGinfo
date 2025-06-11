@@ -24,6 +24,12 @@ export interface StudentFlatDTO extends StudentBase {
     careerId: number;
 }
 
+export interface StudentOptionalData {
+    phone?: string;
+    address?: string;
+    birthdate?: Date;
+}
+
 export interface CareerBase {
     id: number;
     name: string;

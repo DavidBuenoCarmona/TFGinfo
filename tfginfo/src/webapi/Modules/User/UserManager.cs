@@ -11,21 +11,30 @@ namespace TFGinfo.Api
 {
     public class UserManager : BaseManager
     {
-        public UserManager(ApplicationDbContext context) : base(context) {}
+        private readonly EmailService? emailService;
+        public UserManager(ApplicationDbContext context, EmailService? emailService = null) : base(context)
+        {
+            this.emailService = emailService;
+        }
 
-        public UserDTO CreateUser(UserFlatDTO User)
+        public async Task<UserDTO> CreateUser(UserFlatDTO User)
         { 
             CheckNameIsNotRepeated(User);
-
+            string authCode = GenerateTemporaryPassword();
             UserModel model = new UserModel {
                 username = User.username,
                 role = User.roleId,
-                auth_code = GenerateTemporaryPassword(),
+                auth_code = authCode,
             };
             context.user.Add(model);
             context.SaveChanges();
 
-            return new(model);
+            // Send email with auth code
+            var body = $"Se te ha creado un usuario para TFGinfo.\n\n" +
+                $"Se ha generado una contraseña temporal {authCode} para el usuario {User.username}.\n\n";
+            await emailService.SendEmailAsync(User.username, "Nuevo usuario para TFGinfo", body);
+
+            return new UserDTO(model);
         }
 
         public void DeleteUser(int id)

@@ -10,16 +10,21 @@ using TFGinfo.Objects;
 [ApiController]
 public class ProfessorController : BaseController
 {
-    public ProfessorController(ApplicationDbContext context) : base(context) { }
+    private readonly EmailService emailService;
+    public ProfessorController(ApplicationDbContext context, EmailService emailService) : base(context)
+    {
+        this.emailService = emailService;
+     }
 
 
     [HttpPost]
-    public IActionResult Save([FromBody] ProfessorFlatDTO Professor)
+    public async Task<IActionResult> Save([FromBody] ProfessorFlatDTO Professor)
     {
         try
         {
-            ProfessorManager manager = new ProfessorManager(context);
-            return Ok(manager.CreateProfessor(Professor));
+            ProfessorManager manager = new ProfessorManager(context, emailService);
+            var result = await manager.CreateProfessor(Professor);
+            return Ok(result);
         }
         catch (UnprocessableException e)
         {

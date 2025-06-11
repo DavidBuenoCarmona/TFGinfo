@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { Injectable } from "@angular/core";
-import { NewStudentDTO, StudentDTO, StudentFlatDTO } from "../models/student.model";
+import { NewStudentDTO, StudentDTO, StudentFlatDTO, StudentOptionalData } from "../models/student.model";
 import { Filter } from "../../../core/core.model";
 
 @Injectable({
@@ -40,5 +40,9 @@ export class StudentService extends BaseService {
 
     updateStudent(student: StudentFlatDTO): Observable<StudentDTO> {
         return this.put(`${this.url}/student`, student);
+    }
+
+    updateStudentOptionalData(studentOptionalData: StudentOptionalData, id: number): Observable<StudentDTO> {
+        return this.put(`${this.url}/student/${id}/optional-data`, studentOptionalData);
     }
 }

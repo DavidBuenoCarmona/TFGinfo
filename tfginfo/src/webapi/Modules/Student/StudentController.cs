@@ -10,15 +10,20 @@ using TFGinfo.Objects;
 [ApiController]
 public class StudentController : BaseController
 {
-    public StudentController(ApplicationDbContext context) : base(context) {}
+    public readonly EmailService emailService;
+    public StudentController(ApplicationDbContext context, EmailService emailService) : base(context)
+    {
+        this.emailService = emailService;
+    }
     
 
     [HttpPost]
-    public IActionResult Save([FromBody] StudentFlatDTO Student)
+    public async Task<IActionResult> Save([FromBody] StudentFlatDTO Student)
     {
         try {
-           StudentManager manager = new StudentManager(context);
-           return Ok(manager.CreateStudent(Student));
+            StudentManager manager = new StudentManager(context, emailService);
+            var result = await manager.CreateStudent(Student);
+            return Ok(result);
         } catch (UnprocessableException e) {
             return UnprocessableEntity(e.GetError());
         }
@@ -58,6 +63,19 @@ public class StudentController : BaseController
         try {
             StudentManager manager = new StudentManager(context);
             return Ok(manager.UpdateStudent(Student));
+        } catch (NotFoundException) {
+            return NotFound();
+        } catch (UnprocessableException e) {
+            return UnprocessableEntity(e.GetError());
+        }
+    }
+
+    [HttpPut("{id}/optional-data")]
+    public IActionResult UpdateOptionalData(int id, [FromBody] StudentOptionalDataDTO optionalData)
+    {
+        try {
+            StudentManager manager = new StudentManager(context);
+            return Ok(manager.UpdateOptionalData(id, optionalData));
         } catch (NotFoundException) {
             return NotFound();
         } catch (UnprocessableException e) {
