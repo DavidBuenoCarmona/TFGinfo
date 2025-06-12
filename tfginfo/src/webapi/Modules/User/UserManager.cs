@@ -36,11 +36,37 @@ namespace TFGinfo.Api
 
             return new UserDTO(model);
         }
+        
+        public void ChangeEmail(int id, string newEmail)
+        {
+            UserModel? model = context.user.FirstOrDefault(u => u.id == id);
+            if (model == null)
+            {
+                throw new NotFoundException();
+            }
+            if (context.user.Any(u => u.id != id && u.username.ToLower() == newEmail.ToLower()))
+            {
+                throw new UnprocessableException("User name already exists");
+            }
+            model.username = newEmail;
+            context.SaveChanges();
+        }
+
+        public UserDTO GetUser(int id)
+        {
+            UserModel? model = context.user.AsNoTracking().FirstOrDefault(u => u.id == id);
+            if (model == null)
+            {
+                throw new NotFoundException();
+            }
+            return new UserDTO(model);
+        }
 
         public void DeleteUser(int id)
         {
             UserModel? model = context.user.FirstOrDefault(User => User.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             context.user.Remove(model);

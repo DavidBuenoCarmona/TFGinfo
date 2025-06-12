@@ -124,10 +124,22 @@ namespace TFGinfo.Api
             CheckEmailIsNotRepeated(Student);
             CheckDniIsNotRepeated(Student);
 
+            model.name = Student.name;
+            model.dni = Student.dni;
+            model.surname = Student.surname;
+            model.email = Student.email;
             model.phone = Student.phone;
             model.address = Student.address;
             model.birthdate = Student.birthdate;
             context.SaveChanges();
+
+            UserManager userManager = new UserManager(context);
+            UserDTO user = userManager.GetUser(model.user);
+            if (user.username != Student.email)
+            {
+                user.username = Student.email;
+                userManager.ChangeEmail(user.id.Value, user.username);
+            }
 
             return new StudentDTO(model);
         }

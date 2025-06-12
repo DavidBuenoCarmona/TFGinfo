@@ -239,7 +239,10 @@ export class GroupDetailComponent implements OnInit {
                 professor: user!.id,
                 message: message
             };
-            this.groupService.sendMessage(content).subscribe();
+            this.groupService.sendMessage(content).subscribe(() => {
+                this.snackbarService.show('WORKING_GROUP.MESSAGE_SENT');
+                this.groupForm.get('message')?.setValue('');
+            });
         }
     }
 }

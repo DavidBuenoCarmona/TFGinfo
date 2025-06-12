@@ -7,6 +7,7 @@ import { TFGRequestDTO } from '../../models/tfg.model';
 import { MatButtonModule } from '@angular/material/button';
 import { TfgService } from '../../services/tfg.service';
 import { CommonModule } from '@angular/common';
+import { SnackBarService } from '../../../../core/services/snackbar.service';
 
 @Component({
   selector: 'tfg-request-list',
@@ -21,17 +22,20 @@ export class TfgRequestListComponent {
 
     constructor(
         private tfgService: TfgService,
+        private snackBarService: SnackBarService
     ) {
     }
 
     onAccept(request: TFGRequestDTO): void {
         this.tfgService.acceptRequest(request.tfgId).subscribe(() => {
+            this.snackBarService.show("TFG.REQUEST_ACCEPTED")
             this.procesedRequest.emit(request.tfgId);
         });
     }
 
     onReject(request: TFGRequestDTO): void {
         this.tfgService.rejectRequest(request.tfgId).subscribe(() => {
+            this.snackBarService.show("TFG.REQUEST_REJECTED")
             this.procesedRequest.emit(request.tfgId);
         });
     }

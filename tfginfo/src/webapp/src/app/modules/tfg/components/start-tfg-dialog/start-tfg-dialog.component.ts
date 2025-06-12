@@ -33,6 +33,7 @@ export class StartTfgDialogComponent {
     tutorForm: FormGroup;
     showExternalTutorFields = false;
     filteredProfessors: ProfessorDTO[] = [];
+    disableSubmitButton = false;
 
     constructor(
         public dialogRef: MatDialogRef<StartTfgDialogComponent>,
@@ -79,6 +80,7 @@ export class StartTfgDialogComponent {
     // Cerrar el diálogo y devolver los datos
     onSubmit(): void {
         if (this.tutorForm.valid) {
+            this.disableSubmitButton = true;
             const user = this.configurationService.getUser();
             const studentEmail = user!.username;
             let tfgRequest: TFGRequest = {
@@ -94,7 +96,9 @@ export class StartTfgDialogComponent {
             }
             this.tfgService.requestTfg(tfgRequest).subscribe(() => {
                 this.dialogRef.close(this.tutorForm.value);
-            }   );
+            }, (error) => {
+                this.disableSubmitButton = false;
+            });
         }
     }
 

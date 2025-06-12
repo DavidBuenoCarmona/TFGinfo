@@ -84,6 +84,14 @@ namespace TFGinfo.Api
             model.department_boss = Professor.department_boss ? 1 : 0;
             context.SaveChanges();
 
+            UserManager userManager = new UserManager(context);
+            UserDTO user = userManager.GetUser(model.user);
+            if (user.username != Professor.email)
+            {
+                user.username = Professor.email;
+                userManager.ChangeEmail(user.id.Value, user.username);
+            }
+
             return new ProfessorDTO(model);
         }
 
