@@ -5,6 +5,7 @@ import { route } from '../../../../routes';
 import { CommonModule } from '@angular/common';
 import { RoleId } from '../../../../modules/admin/models/role.model';
 import { ConfigurationService } from '../../../services/configuration.service';
+import { UniversitySelectionService } from '../../../services/localstorage.service';
 
 @Component({
     selector: 'profile-dropdown',
@@ -21,7 +22,8 @@ export class ProfileDropdownComponent implements OnInit {
 
     constructor(
         public router: Router,
-        private configurationService: ConfigurationService) {}
+        private configurationService: ConfigurationService,
+        private universitySelectionService: UniversitySelectionService) {}
 
     ngOnInit(): void {
         let role = this.configurationService.getRole();
@@ -38,6 +40,7 @@ export class ProfileDropdownComponent implements OnInit {
     logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('selectedUniversity');
+        this.universitySelectionService.setUniversityId(null);
         this.configurationService.setUser(undefined);
         this.router.navigate(['/login']);
     }

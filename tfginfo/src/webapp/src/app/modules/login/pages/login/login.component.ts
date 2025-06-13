@@ -12,6 +12,7 @@ import { ChangePasswordDialogComponent } from '../../components/change-password-
 import { MatDialog } from '@angular/material/dialog';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
 import { RoleId } from '../../../admin/models/role.model';
+import { UniversitySelectionService } from '../../../../core/services/localstorage.service';
 
 @Component({
     selector: 'app-login',
@@ -37,7 +38,8 @@ export class LoginComponent implements OnInit {
         private dialog: MatDialog,
         private authService: AuthService,
         private configService: ConfigurationService,
-        private location: Location
+        private location: Location,
+        private universitySelectionService: UniversitySelectionService
     ) {}
 
     ngOnInit(): void {
@@ -72,6 +74,7 @@ export class LoginComponent implements OnInit {
                 this.configService.setRole(response.user.role.id);
                 this.configService.setSelectedUniversity(response.user.universityId);
                 if (response.user.role.id === RoleId.Admin) {
+                    this.universitySelectionService.setUniversityId(null);
                     this.router.navigate(['/tfg']);
                 } else {
                     this.router.navigate(['/']);

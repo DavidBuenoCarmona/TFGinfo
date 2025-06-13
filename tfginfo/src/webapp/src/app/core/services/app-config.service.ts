@@ -10,7 +10,7 @@ export class AppConfigService {
     private readonly http = inject(HttpClient);
 
     constructor() {
-        this.loadAppConfig();
+
     }
 
     async loadAppConfig() {

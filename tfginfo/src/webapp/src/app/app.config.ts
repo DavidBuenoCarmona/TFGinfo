@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection, APP_INITIALIZER, provideAppInitializer, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { routes } from './app.routes';
@@ -8,6 +8,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { AuthInterceptor } from './core/services/interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AppConfigService } from './core/services/app-config.service';
 
 const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
   new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -28,6 +29,10 @@ export const appConfig: ApplicationConfig = {
         provide: HTTP_INTERCEPTORS,
         useClass: AuthInterceptor,
         multi: true
-      }
-  ]
+      },
+      provideAppInitializer(() => {
+        const appConfigService = inject(AppConfigService);
+        return appConfigService.loadAppConfig();
+      })
+      ]
 };

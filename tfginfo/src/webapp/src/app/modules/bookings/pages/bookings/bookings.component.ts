@@ -12,6 +12,7 @@ import { GroupService } from '../../../groups/services/group-service';
 import { TfgRequestListComponent } from '../../../tfg/components/tfg-request-list/tfg-request-list.component';
 import { CommonModule } from '@angular/common';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-bookings',
@@ -30,12 +31,17 @@ export class BookingsComponent implements OnInit {
     constructor(
         private tfgService: TfgService,
         private workingGroupService: GroupService,
-        private configurationService: ConfigurationService
+        private configurationService: ConfigurationService,
+        private router: Router
     ){}
 
     ngOnInit(): void {
         const user = this.configurationService.getUser();
         const role = this.configurationService.getRole();
+        if (role === RoleId.Admin) {
+            this.router.navigate(['/tfg']);
+            return;
+        }
         this.isProfessor = role === RoleId.Professor;
         if (!this.isProfessor) {
             forkJoin([this.workingGroupService.getGroupByStudent(user!.id), this.tfgService.getTfgsByStudent(user!.id)]).subscribe(([groups, tfgs]) => {

@@ -95,6 +95,7 @@
         "TITLE_N": "Profesores"
     },
     "PROFILE": {
+        "NEW": "Nuevo alumno",
         "TITLE_1": "Mi Perfil"
     },
     "STUDENT": {
@@ -161,6 +162,7 @@
         "MESSAGE_SENT": "Mensaje enviado con éxito",	
         "PRIVACY": "Privacidad",
         "PRIVATE": "¿Grupo privado?",
+        "SELECT_PROFESSOR": "Seleccionar profesor creador del grupo",
         "SEND_MESSAGE": "Enviar mensaje",
         "TITLE_1": "Grupo de estudio",
         "TITLE_N": "Grupos de estudio"

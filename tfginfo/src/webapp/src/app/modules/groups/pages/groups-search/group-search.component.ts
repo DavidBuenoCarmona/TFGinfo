@@ -63,7 +63,6 @@ export class GroupSearchComponent implements OnInit {
             description: [''],
             isPrivate: [-1],
         });
-
         if (this.isAdmin) {
             this.filters.push({ key: 'university', value: localStorage.getItem('selectedUniversity') || '0' });
         } else if (this.isProfessor) {

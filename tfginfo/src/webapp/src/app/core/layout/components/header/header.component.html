@@ -58,17 +58,24 @@
       </ul>
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <div>
+          <div class="nav-link">
+            <span (click)="selectUniversity()" *ngIf="selectedUniversityName">{{ selectedUniversityName }}</span>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link">
             <language-toggle></language-toggle>
           </div>
         </li>
         <li class="nav-item">
-          <div>
+          <div class="nav-link">
             <theme-toggle></theme-toggle>
           </div>
         </li>
         <li class="nav-item">
-          <profile-dropdown></profile-dropdown>
+          <div class="nav-link">
+            <profile-dropdown></profile-dropdown>
+          </div>
         </li>
       </ul>
     </div>

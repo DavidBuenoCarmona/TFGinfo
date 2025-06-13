@@ -96,6 +96,7 @@
         "TITLE_N": "Professors"
     },
     "PROFILE": {
+        "NEW": "New student profile",
         "TITLE_1": "My Profile"
     },
     "STUDENT": {
@@ -162,6 +163,7 @@
         "MESSAGE_SENT": "Message sent successfully",
         "PRIVACY": "Privacy",
         "PRIVATE": "Private group?",
+        "SELECT_PROFESSOR": "Select the porfessor owner of the group",
         "SEND_MESSAGE": "Send message",
         "TITLE_1": "Working group",
         "TITLE_N": "Working groups"

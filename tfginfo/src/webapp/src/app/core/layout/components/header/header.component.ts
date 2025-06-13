@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { LogoComponent } from '../logo/logo.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router, RouterModule } from '@angular/router';
@@ -9,6 +9,8 @@ import { LanguageToggleComponent } from '../language-toggle/language-toggle.comp
 import { CommonModule } from '@angular/common';
 import { RoleId } from '../../../../modules/admin/models/role.model';
 import { ConfigurationService } from '../../../services/configuration.service';
+import { UniversityService } from '../../../../modules/admin/services/university.service';
+import { UniversitySelectionService } from '../../../services/localstorage.service';
 
 @Component({
     selector: 'layout-header',
@@ -24,17 +26,38 @@ import { ConfigurationService } from '../../../services/configuration.service';
     styleUrl: './header.component.scss'
 })
 
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, AfterViewInit {
     isAdmin: boolean = false;
     route = route;
+    selectedUniversityName: string = '';
 
     constructor(
         private router: Router,
-        private configService: ConfigurationService
+        private configService: ConfigurationService,
+        private universityService: UniversityService,
+        private universitySelectionService: UniversitySelectionService
     ) { }
 
     ngOnInit(): void {
         let role = this.configService.getRole();
         this.isAdmin = role === RoleId.Admin;
+
+    }
+
+    selectUniversity() {
+        this.router.navigate(["/admin/university"]);
+    }
+
+    ngAfterViewInit(): void {
+        if (localStorage.getItem('selectedUniversity')) {
+            this.universityService.getUniversity(Number(localStorage.getItem('selectedUniversity'))).subscribe(u => this.selectedUniversityName = u.name);
+        }
+        this.universitySelectionService.universityId$.subscribe(id => {
+            if (id) {
+                this.universityService.getUniversity(id).subscribe(u => this.selectedUniversityName = u.name);
+            } else {
+                this.selectedUniversityName = '';
+            }
+        });
     }
 }

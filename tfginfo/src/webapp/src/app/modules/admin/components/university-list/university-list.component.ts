@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
 import { CommonModule } from '@angular/common';
+import { UniversitySelectionService } from '../../../../core/services/localstorage.service';
 
 @Component({
     selector: 'university-list',
@@ -37,7 +38,8 @@ export class UniversityListComponent {
         private dialog: MatDialog,
         private router: Router,
         private route: ActivatedRoute,
-        private configurationService: ConfigurationService
+        private configurationService: ConfigurationService,
+        private universitySelectionService: UniversitySelectionService
     ) {
         if (localStorage.getItem('selectedUniversity')) {
             this.selectedUniversity = parseInt(localStorage.getItem('selectedUniversity')!);
@@ -67,9 +69,9 @@ export class UniversityListComponent {
     selectUniversity(university: UniversityBase) {
         if (this.selectedUniversity === university.id) {
             this.selectedUniversity = undefined;
-            localStorage.removeItem('selectedUniversity');
+            this.universitySelectionService.setUniversityId(null);
         } else {
-            localStorage.setItem('selectedUniversity', university.id!.toString());
+            this.universitySelectionService.setUniversityId(university.id!);
             this.selectedUniversity = university.id;
         }
     }
