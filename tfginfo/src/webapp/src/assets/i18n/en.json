@@ -46,6 +46,7 @@
         "GENERIC": "Something went wrong",
         "LOCATION_REQUIRED": "Location is required",
         "NAME_REQUIRED": "Name is required",
+        "NOT_AUTHENTICATED": "You are not authenticated",
         "PASSWORD_REQUIRED": "Password is required",
         "PASSWORD_MISMATCH": "Passwords do not match",
         "PRIMARY_TUTOR_REQUIRED": "Primary tutor is required",

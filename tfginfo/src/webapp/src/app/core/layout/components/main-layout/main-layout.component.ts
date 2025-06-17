@@ -15,10 +15,7 @@ export class MainLayoutComponent {
     private configurationService: ConfigurationService) { }
 
   ngOnInit(): void {
-    // TODO dbc: Check token
-    if (!this.configurationService.getUser()) {
-      this.router.navigate(['/login']);
-    }
+    
   }
 
 }

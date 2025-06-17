@@ -46,6 +46,7 @@
         "GENERIC": "Algo salió mal",
         "LOCATION_REQUIRED": "La ubicación es requerida",
         "NAME_REQUIRED": "El nombre es requerido",
+        "NOT_AUTHENTICATED": "No estás autenticado",
         "PASSWORD_REQUIRED": "La contraseña es requerida",
         "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
         "PRIMARY_TUTOR_REQUIRED": "El tutor principal es requerido",

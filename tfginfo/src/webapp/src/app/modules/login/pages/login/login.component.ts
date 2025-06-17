@@ -48,17 +48,6 @@ export class LoginComponent implements OnInit {
             username: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required]]
         });
-
-        var token = localStorage.getItem('token');
-
-        if (token) {
-            this.authService.checkToken(token).subscribe(user => {
-                this.configService.setUser(user);
-                this.configService.setRole(user.role.id);
-                this.configService.setSelectedUniversity(user.universityId);
-                this.location.back();
-            });
-        }
     }
 
     onSubmit(): void {

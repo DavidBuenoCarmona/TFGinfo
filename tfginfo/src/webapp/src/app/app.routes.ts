@@ -21,12 +21,14 @@ import { RoleId } from './modules/admin/models/role.model';
 import { RoleGuard } from './core/services/RoleGuard';
 import path from 'path';
 import { NotFoundComponent } from './core/layout/pages/not-found/not-found.component';
+import { AuthGuard } from './core/services/authGuard';
 
 
 export const routes: Routes = [
     {
         path: '',
         component: MainLayoutComponent,
+        canActivate: [AuthGuard],
         children: [
             {
                 path: '',
@@ -77,7 +79,7 @@ export const routes: Routes = [
             },
             {
                 path: 'admin',
-                canActivate: [RoleGuard],
+                canActivate: [RoleGuard, AuthGuard],
                 data: { roles: [RoleId.Admin] },
                 children: [
                     {
