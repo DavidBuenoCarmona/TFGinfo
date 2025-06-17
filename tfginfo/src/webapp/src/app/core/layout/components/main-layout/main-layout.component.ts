@@ -16,7 +16,6 @@ export class MainLayoutComponent {
 
   ngOnInit(): void {
     // TODO dbc: Check token
-    let authToken = localStorage.getItem('token') ?? null;
     if (!this.configurationService.getUser()) {
       this.router.navigate(['/login']);
     }

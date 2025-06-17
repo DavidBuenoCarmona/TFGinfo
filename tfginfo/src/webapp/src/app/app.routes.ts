@@ -17,6 +17,10 @@ import { DepartmentDetailComponent } from './modules/admin/pages/department-deta
 import { CareerSearchComponent } from './modules/admin/pages/career-search/career-search.component';
 import { CareerDetailComponent } from './modules/admin/pages/career-detail/career-detail.component';
 import { AuthLayoutComponent } from './modules/login/pages/auth-layout/auth-layout.component';
+import { RoleId } from './modules/admin/models/role.model';
+import { RoleGuard } from './core/services/RoleGuard';
+import path from 'path';
+import { NotFoundComponent } from './core/layout/pages/not-found/not-found.component';
 
 
 export const routes: Routes = [
@@ -26,7 +30,9 @@ export const routes: Routes = [
         children: [
             {
                 path: '',
-                component: BookingsComponent
+                component: BookingsComponent,
+                canActivate: [RoleGuard],
+                data: { roles: [RoleId.Student, RoleId.Professor] }
             },
             {
                 path: 'tfg',
@@ -59,14 +65,20 @@ export const routes: Routes = [
             },
             {
                 path: 'student',
-                component: StudentSearchComponent
+                component: StudentSearchComponent,
+                canActivate: [RoleGuard],
+                data: { roles: [RoleId.Admin] }
             },
             {
                 path: 'student/:id',
-                component: ProfileDetailComponent
+                component: ProfileDetailComponent,
+                canActivate: [RoleGuard],
+                data: { roles: [RoleId.Admin, RoleId.Student] }
             },
             {
                 path: 'admin',
+                canActivate: [RoleGuard],
+                data: { roles: [RoleId.Admin] },
                 children: [
                     {
                         path: 'department',
@@ -108,12 +120,17 @@ export const routes: Routes = [
                 path: 'login',
                 component: LoginComponent,
                 children: []
-            }
+            },
+            {
+                path: 'not-found',
+                component: NotFoundComponent,
+                children: []
+            },
         ]
     },
     {
         path: '**',
-        redirectTo: '/login',
+        redirectTo: '/not-found',
         pathMatch: 'full'
     }
 ];

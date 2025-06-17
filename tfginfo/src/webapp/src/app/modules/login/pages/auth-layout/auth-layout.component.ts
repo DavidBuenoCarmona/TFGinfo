@@ -17,6 +17,8 @@ export class AuthLayoutComponent implements OnInit {
     localStorage.getItem('theme') === 'dark' ? document.body.classList.add('dark-mode') : document.body.classList.remove('dark-mode');
     if (this.configurationService.getUser()) {
       this.router.navigate(['/']);
+    } else {
+      this.router.navigate(['/login']);
     }
   }
 
