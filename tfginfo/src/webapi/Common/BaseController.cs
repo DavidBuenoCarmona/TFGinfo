@@ -9,9 +9,11 @@ namespace TFGinfo.Api
     public class BaseController : ControllerBase
     {
         protected readonly ApplicationDbContext context;
-        public BaseController(ApplicationDbContext context)
+        protected readonly IConfiguration configuration;
+        public BaseController(ApplicationDbContext context, IConfiguration configuration)
         {
             this.context = context;
+            this.configuration = configuration;
         }
     }
 }

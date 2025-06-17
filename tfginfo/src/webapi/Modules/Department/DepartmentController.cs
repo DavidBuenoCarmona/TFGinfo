@@ -10,7 +10,7 @@ using TFGinfo.Objects;
 [ApiController]
 public class DepartmentController : BaseController
 {
-    public DepartmentController(ApplicationDbContext context) : base(context) { }
+    public DepartmentController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
 
     [HttpPost]
@@ -18,6 +18,15 @@ public class DepartmentController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             DepartmentManager manager = new DepartmentManager(context);
             return Ok(manager.CreateDepartment(department));
         }
@@ -25,13 +34,37 @@ public class DepartmentController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        DepartmentManager manager = new DepartmentManager(context);
-        return Ok(manager.GetAllDepartments());
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
+            DepartmentManager manager = new DepartmentManager(context);
+            return Ok(manager.GetAllDepartments());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
     }
 
     [HttpDelete("{id}")]
@@ -39,6 +72,15 @@ public class DepartmentController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             DepartmentManager manager = new DepartmentManager(context);
             manager.DeleteDepartment(id);
             return Ok();
@@ -51,6 +93,10 @@ public class DepartmentController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPut]
@@ -58,6 +104,15 @@ public class DepartmentController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             DepartmentManager manager = new DepartmentManager(context);
             return Ok(manager.UpdateDepartment(department));
         }
@@ -69,6 +124,10 @@ public class DepartmentController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet("{id}")]
@@ -76,6 +135,15 @@ public class DepartmentController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             DepartmentManager manager = new DepartmentManager(context);
             return Ok(manager.GetDepartment(id));
         }
@@ -83,20 +151,70 @@ public class DepartmentController : BaseController
         {
             return NotFound();
         }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
 
     [HttpGet("university/{universityId}")]
     public IActionResult GetAllByUniversity(int universityId)
     {
-        DepartmentManager manager = new DepartmentManager(context);
-        return Ok(manager.GetDepartmentsByUniversity(universityId));
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+            DepartmentManager manager = new DepartmentManager(context);
+            return Ok(manager.GetDepartmentsByUniversity(universityId));
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPost("search")]
     public IActionResult Search([FromBody] List<Filter> filters)
     {
-        DepartmentManager manager = new DepartmentManager(context);
-        return Ok(manager.SearchDepartments(filters));
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+            DepartmentManager manager = new DepartmentManager(context);
+            return Ok(manager.SearchDepartments(filters));
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 }

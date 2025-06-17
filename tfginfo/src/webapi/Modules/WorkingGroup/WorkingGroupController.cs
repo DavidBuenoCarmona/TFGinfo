@@ -12,7 +12,7 @@ using TFGinfo.Objects;
 public class WorkingGroupController : BaseController
 {
     private readonly EmailService emailService;
-    public WorkingGroupController(ApplicationDbContext context, EmailService emailService) : base(context)
+    public WorkingGroupController(ApplicationDbContext context, EmailService emailService, IConfiguration configuration) : base(context, configuration)
     {
         this.emailService = emailService;
     }
@@ -23,6 +23,15 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.CreateWorkingGroup(WorkingGroup.working_group, [WorkingGroup.professor]));
         }
@@ -30,13 +39,37 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        WorkingGroupManager manager = new WorkingGroupManager(context);
-        return Ok(manager.GetAllWorkingGroups());
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, []);
+
+            WorkingGroupManager manager = new WorkingGroupManager(context);
+            return Ok(manager.GetAllWorkingGroups());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
     }
 
     [HttpDelete("{id}")]
@@ -44,6 +77,15 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             manager.DeleteWorkingGroup(id);
             return Ok();
@@ -56,6 +98,10 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPut]
@@ -63,6 +109,15 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.UpdateWorkingGroup(WorkingGroup));
         }
@@ -74,6 +129,10 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet("{id}")]
@@ -81,6 +140,15 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, []);
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.GetWorkingGroup(id));
         }
@@ -92,6 +160,10 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet("{id}/professor")]
@@ -99,6 +171,15 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, []);
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.GetProfessorsByWorkingGroup(id));
         }
@@ -110,6 +191,10 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet("{id}/student/")]
@@ -117,6 +202,15 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, []);
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.GetStudentsByWorkingGroup(id));
         }
@@ -128,6 +222,10 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet("{id}/tfg")]
@@ -135,6 +233,15 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, []);
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.GetTFGsByWorkingGroup(id));
         }
@@ -146,6 +253,10 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet("professor/{id}")]
@@ -153,6 +264,20 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+            // Validate the professor's ID
+            if (user.role.id != (int)RoleTypes.Admin && user.id != id)
+            {
+                return Unauthorized("You are not authorized to access this resource.");
+            }
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.GetWorkingGroupsByProfessor(id));
         }
@@ -164,12 +289,30 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
     [HttpGet("student/{id}")]
     public IActionResult GetWorkingGroupByStudent(int id)
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Student });
+            // Validate the professor's ID
+            if (user.role.id != (int)RoleTypes.Admin && user.id != id)
+            {
+                return Unauthorized("You are not authorized to access this resource.");
+            }
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.GetWorkingGroupsByStudent(id));
         }
@@ -181,6 +324,10 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPost("add-student")]
@@ -188,6 +335,18 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Student });
+            if (user.role.id != (int)RoleTypes.Admin && user.id != workingGroupStudent.user)
+            {
+                return Unauthorized("You are not authorized to add students to this working group.");
+            }
             WorkingGroupManager manager = new WorkingGroupManager(context);
             manager.AddStudentToWorkingGroup(workingGroupStudent.working_group, workingGroupStudent.user);
             return Ok();
@@ -200,6 +359,10 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPost("{id}/add-student/{email}")]
@@ -207,6 +370,15 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.AddStudentToWorkingGroupByEmail(id, email));
         }
@@ -218,6 +390,10 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPost("remove-student")]
@@ -225,6 +401,15 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             manager.RemoveStudentFromWorkingGroup(workingGroupStudent.working_group, workingGroupStudent.user);
             return Ok();
@@ -237,12 +422,30 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
     [HttpPost("add-professor")]
     public IActionResult AddProfessor([FromBody] WorkingGroupUser workingGroupProfessor)
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+            // Validate the professor's ID
+            if (user.role.id != (int)RoleTypes.Admin && user.id != workingGroupProfessor.user)
+            {
+                return Unauthorized("You are not authorized to add professors to this working group.");
+            }
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             manager.AddProfessorToWorkingGroup(workingGroupProfessor.working_group, workingGroupProfessor.user);
             return Ok();
@@ -255,12 +458,29 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
     [HttpPost("remove-professor")]
     public IActionResult RemoveProfessor([FromBody] WorkingGroupUser workingGroupProfessor)
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+            // Validate the professor's ID
+            if (user.role.id != (int)RoleTypes.Admin && user.id != workingGroupProfessor.user)
+            {
+                return Unauthorized("You are not authorized to remove professors from this working group.");
+            }
             WorkingGroupManager manager = new WorkingGroupManager(context);
             manager.RemoveProfessorFromWorkingGroup(workingGroupProfessor.working_group, workingGroupProfessor.user);
             return Ok();
@@ -280,6 +500,20 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+            // Validate the professor's ID
+            if (user.role.id != (int)RoleTypes.Admin && user.id != message.professor)
+            {
+                return Unauthorized("You are not authorized to send messages for this working group.");
+            }
+
             WorkingGroupManager manager = new WorkingGroupManager(context, emailService);
             await manager.SendMessage(message.working_group, message.professor, message.message);
             return Ok();
@@ -292,6 +526,10 @@ public class WorkingGroupController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPost("search")]
@@ -299,12 +537,25 @@ public class WorkingGroupController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, []);
+
             WorkingGroupManager manager = new WorkingGroupManager(context);
             return Ok(manager.SearchWorkingGroups(filters));
         }
         catch (UnprocessableException e)
         {
             return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
     }
 }

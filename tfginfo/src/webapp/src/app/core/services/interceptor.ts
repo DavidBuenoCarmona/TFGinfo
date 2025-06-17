@@ -3,10 +3,11 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { catchError, Observable, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarService } from './snackbar.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-    constructor(private snackBarService: SnackBarService) { }
+    constructor(private snackBarService: SnackBarService, private router: Router) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // Excluir solicitudes a /assets o cualquier otra ruta pública
@@ -30,6 +31,10 @@ export class AuthInterceptor implements HttpInterceptor {
             catchError((error: HttpErrorResponse) => {
                 let message = error.error?.message || error.statusText || 'ERROR.GENERIC';
                 this.snackBarService.error(message);
+                if (error.status === 401) {
+                    // Manejo específico para errores 401 (no autorizado)
+                    this.router.navigate(['/login']);
+                }
                 return throwError(() => error);
             })
         );;

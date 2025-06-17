@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TFGinfo.Api;
@@ -12,10 +13,8 @@ using TFGinfo.Objects;
 public class TFGController : BaseController
 {   
     private readonly EmailService emailService;
-    private readonly IConfiguration configuration;
-    public TFGController(ApplicationDbContext context, EmailService emailService, IConfiguration configuration) : base(context) {
+    public TFGController(ApplicationDbContext context, EmailService emailService, IConfiguration configuration) : base(context, configuration) {
         this.emailService = emailService;
-        this.configuration = configuration;
      }
 
 
@@ -24,6 +23,15 @@ public class TFGController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             TFGManager manager = new TFGManager(context);
             return Ok(manager.CreateTFG(TFG));
         }
@@ -31,13 +39,38 @@ public class TFGController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        TFGManager manager = new TFGManager(context);
-        return Ok(manager.GetAllTFGs());
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, []);
+
+            TFGManager manager = new TFGManager(context);
+            return Ok(manager.GetAllTFGs());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+        
     }
 
     [HttpPost("search")]
@@ -45,12 +78,24 @@ public class TFGController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, []);
             TFGManager manager = new TFGManager(context);
             return Ok(manager.SearchTFGs(filters));
         }
         catch (UnprocessableException e)
         {
             return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
     }
 
@@ -59,6 +104,15 @@ public class TFGController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             TFGManager manager = new TFGManager(context);
             manager.DeleteTFG(id);
             return Ok();
@@ -71,6 +125,10 @@ public class TFGController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPut]
@@ -78,6 +136,15 @@ public class TFGController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             TFGManager manager = new TFGManager(context);
             return Ok(manager.UpdateTFG(TFG));
         }
@@ -89,14 +156,10 @@ public class TFGController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
-    }
-
-
-    [HttpGet("tfgLine/{tfgLineId}")]
-    public IActionResult GetTFGsByTFGLine(int tfgLineId)
-    {
-        TFGManager manager = new TFGManager(context);
-        return Ok(manager.GetTFGsByTFGLine(tfgLineId));
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet("{id}")]
@@ -104,6 +167,15 @@ public class TFGController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, []);
+
             TFGManager manager = new TFGManager(context);
             return Ok(manager.GetTFGById(id));
         }
@@ -115,13 +187,30 @@ public class TFGController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPost("request")]
-    public async Task<IActionResult> Request([FromBody] TFGRequest request)
+    public async Task<IActionResult> RequestTFG([FromBody] TFGRequest request)
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Student });
+            if (user.username != request.studentEmail)
+            {
+                return Unauthorized("You are not authorized to request this TFG.");
+            }
+
             TFGManager manager = new TFGManager(context, emailService, configuration);
             await manager.RequestTFG(request);
             return Ok();
@@ -134,6 +223,10 @@ public class TFGController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet("professor-pending/{id}")]
@@ -141,6 +234,19 @@ public class TFGController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+            if (user.id != id && user.role.id != (int)RoleTypes.Admin)
+            {
+                return Unauthorized("You are not authorized to view pending TFGs for this professor.");
+            }
+
             TFGManager manager = new TFGManager(context);
             return Ok(manager.GetPendingTFGsByProfessor(id));
         }
@@ -152,6 +258,10 @@ public class TFGController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPost("accept/{id}")]
@@ -159,6 +269,15 @@ public class TFGController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+
             TFGManager manager = new TFGManager(context, emailService, configuration);
             await manager.AcceptTFG(id);
             return Ok();
@@ -171,6 +290,10 @@ public class TFGController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPost("reject/{id}")]
@@ -178,6 +301,15 @@ public class TFGController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+
             TFGManager manager = new TFGManager(context, emailService, configuration);
             await manager.RejectTFG(id);
             return Ok();

@@ -14,10 +14,11 @@ using TFGinfo.Objects;
 namespace TFGinfo.Api
 {
     public class AuthManager : BaseManager
-    
+
     {
         private readonly IConfiguration _configuration;
-        public AuthManager(ApplicationDbContext context, IConfiguration configuration) : base(context) {
+        public AuthManager(ApplicationDbContext context, IConfiguration configuration) : base(context)
+        {
             _configuration = configuration;
         }
 
@@ -26,16 +27,21 @@ namespace TFGinfo.Api
             NewUserDTO newUser = new NewUserDTO();
             newUser.firstLogin = false;
             UserModel? model = context.user.Include(r => r.roleModel).FirstOrDefault(user => user.username == credentials.Username);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new UnprocessableException("Invalid username or password");
             }
-            if (model.password == null && model.auth_code == credentials.Password) {
+            if (model.password == null && model.auth_code == credentials.Password)
+            {
                 newUser.firstLogin = true;
-            } else if (model.password != HashPassword(credentials.Password)) {
+            }
+            else if (model.password != HashPassword(credentials.Password))
+            {
                 throw new UnprocessableException("Invalid username or password");
             }
             newUser.user = new AppUserDTO(model);
-            if (newUser.user.role.id == (int)UserRole.Student) {
+            if (newUser.user.role.id == (int)UserRole.Student)
+            {
                 var student = context.student.Include(s => s.careerModel).FirstOrDefault(s => s.user == newUser.user.id);
                 if (student != null)
                 {
@@ -43,7 +49,9 @@ namespace TFGinfo.Api
                     newUser.user.id = student.id;
                     newUser.user.universityId = student.careerModel?.university ?? 0;
                 }
-            } else if (newUser.user.role.id == (int)UserRole.Professor) {
+            }
+            else if (newUser.user.role.id == (int)UserRole.Professor)
+            {
                 var teacher = context.professor.Include(p => p.departmentModel).FirstOrDefault(t => t.user == newUser.user.id);
                 if (teacher != null)
                 {
@@ -61,18 +69,23 @@ namespace TFGinfo.Api
         {
 
             UserModel? model = context.user.FirstOrDefault(user => user.username == request.username);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new UnprocessableException("Invalid username or password");
             }
-            if (model.password == null && model.auth_code != null) {
-                if (model.auth_code != request.OldPassword) {
+            if (model.password == null && model.auth_code != null)
+            {
+                if (model.auth_code != request.OldPassword)
+                {
                     throw new UnprocessableException("Invalid username or password");
                 }
                 model.password = HashPassword(request.NewPassword);
                 model.auth_code = null;
                 context.SaveChanges();
                 return true;
-            } else if (model.password != HashPassword(request.OldPassword)) {
+            }
+            else if (model.password != HashPassword(request.OldPassword))
+            {
                 throw new UnprocessableException("Invalid username or password");
             }
             model.password = HashPassword(request.NewPassword);
@@ -82,11 +95,13 @@ namespace TFGinfo.Api
 
         public void CreateAdmin(LoginCredentials credentials)
         {
-            if (context.user.Any(u => u.username.ToLower() == credentials.Username.ToLower())) {
+            if (context.user.Any(u => u.username.ToLower() == credentials.Username.ToLower()))
+            {
                 throw new UnprocessableException("User name already exists");
             }
 
-            UserModel model = new UserModel {
+            UserModel model = new UserModel
+            {
                 username = credentials.Username,
                 role = 1,
                 password = HashPassword(credentials.Password),
@@ -150,6 +165,29 @@ namespace TFGinfo.Api
             }
 
             return userDto;
+        }
+
+        public AppUserDTO ValidateRoles(string token, List<int> roles)
+        {
+            AppUserDTO user = null;
+            try
+            {
+                user = CheckToken(token);
+            }
+            catch (Exception)
+            {
+                throw new UnauthorizedAccessException("Invalid token");
+            }
+
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("Invalid token");
+            }
+            if (roles.Any() && !roles.Contains(user.role.id))
+            {
+                throw new UnauthorizedAccessException("User does not have the required role to access this resource.");
+            }
+            return user;
         }
 
         #region "Private methods"
@@ -225,9 +263,9 @@ namespace TFGinfo.Api
                 return Convert.ToBase64String(hash); // Devuelve el hash en formato Base64
             }
         }
-    
-            #endregion
-    
+
+        #endregion
+
 
     }
 }

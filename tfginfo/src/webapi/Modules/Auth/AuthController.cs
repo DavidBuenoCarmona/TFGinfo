@@ -10,11 +10,7 @@ using TFGinfo.Objects;
 [ApiController]
 public class AuthController : BaseController
 {
-    private readonly IConfiguration configuration;
-    public AuthController(ApplicationDbContext context, IConfiguration configuration) : base(context)
-    {
-        this.configuration = configuration;
-    }
+    public AuthController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration){}
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginCredentials credentails)

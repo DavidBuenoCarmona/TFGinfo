@@ -10,7 +10,7 @@ using TFGinfo.Objects;
 [ApiController]
 public class UniversityController : BaseController
 {
-    public UniversityController(ApplicationDbContext context) : base(context) { }
+    public UniversityController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
 
     [HttpPost]
@@ -18,6 +18,15 @@ public class UniversityController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             UniversityManager universityManager = new UniversityManager(context);
             return Ok(universityManager.CreateUniversity(university));
         }
@@ -25,13 +34,37 @@ public class UniversityController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        UniversityManager universityManager = new UniversityManager(context);
-        return Ok(universityManager.GetAllUniversities());
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
+            UniversityManager universityManager = new UniversityManager(context);
+            return Ok(universityManager.GetAllUniversities());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
     }
 
     [HttpDelete("{id}")]
@@ -39,6 +72,15 @@ public class UniversityController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             UniversityManager universityManager = new UniversityManager(context);
             universityManager.DeleteUniversity(id);
             return Ok();
@@ -51,6 +93,10 @@ public class UniversityController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPut]
@@ -58,6 +104,15 @@ public class UniversityController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             UniversityManager universityManager = new UniversityManager(context);
             return Ok(universityManager.UpdateUniversity(university));
         }
@@ -69,6 +124,10 @@ public class UniversityController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet("{id}")]
@@ -76,6 +135,15 @@ public class UniversityController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             UniversityManager universityManager = new UniversityManager(context);
             return Ok(universityManager.GetUniversity(id));
         }
@@ -87,6 +155,10 @@ public class UniversityController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPost("search")]
@@ -94,12 +166,25 @@ public class UniversityController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             UniversityManager universityManager = new UniversityManager(context);
             return Ok(universityManager.SearchUniversities(filters));
         }
         catch (UnprocessableException e)
         {
             return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
     }
 }

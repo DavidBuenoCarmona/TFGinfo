@@ -24,10 +24,6 @@ export class CareerService extends BaseService {
         return this.get(`${this.url}/career`);
     }
 
-    getCareersByUniversityId(universityId: number): Observable<CareerDTO[]> {
-        return this.get(`${this.url}/career/university/${universityId}`);
-    }
-
     deleteCareer(id: number): Observable<any> {
         return this.delete(`${this.url}/career/${id}`);
     }

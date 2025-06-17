@@ -10,7 +10,7 @@ using TFGinfo.Objects;
 [ApiController]
 public class CareerController : BaseController
 {
-    public CareerController(ApplicationDbContext context) : base(context) { }
+    public CareerController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
 
     [HttpPost]
@@ -18,6 +18,15 @@ public class CareerController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             CareerManager manager = new CareerManager(context);
             return Ok(manager.CreateCareer(career));
         }
@@ -25,13 +34,38 @@ public class CareerController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        CareerManager manager = new CareerManager(context);
-        return Ok(manager.GetAllCareers());
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
+            CareerManager manager = new CareerManager(context);
+            return Ok(manager.GetAllCareers());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+
     }
 
     [HttpDelete("{id}")]
@@ -39,6 +73,15 @@ public class CareerController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             CareerManager manager = new CareerManager(context);
             manager.DeleteCareer(id);
             return Ok();
@@ -51,6 +94,10 @@ public class CareerController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPut]
@@ -58,6 +105,15 @@ public class CareerController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             CareerManager manager = new CareerManager(context);
             return Ok(manager.UpdateCareer(career));
         }
@@ -69,27 +125,68 @@ public class CareerController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        CareerManager manager = new CareerManager(context);
-        return Ok(manager.GetCareerById(id));
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+            CareerManager manager = new CareerManager(context);
+            return Ok(manager.GetCareerById(id));
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        
     }
 
-
-    [HttpGet("university/{universityId}")]
-    public IActionResult GetAllByUniversity(int universityId)
-    {
-        CareerManager manager = new CareerManager(context);
-        return Ok(manager.GetCareersByUniversity(universityId));
-    }
-    
     [HttpPost("search")]
     public IActionResult Search([FromBody] List<Filter> filters)
     {
-        CareerManager manager = new CareerManager(context);
-        return Ok(manager.SearchCareers(filters));
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
+            CareerManager manager = new CareerManager(context);
+            return Ok(manager.SearchCareers(filters));
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+       
     }
 }

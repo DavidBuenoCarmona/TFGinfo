@@ -11,38 +11,107 @@ using TFGinfo.Objects;
 [ApiController]
 public class TFGLineController : BaseController
 {
-    public TFGLineController(ApplicationDbContext context) : base(context) {}
-    
+    public TFGLineController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration){}
+
 
     [HttpPost]
     public IActionResult Save([FromBody] TFGLineFlatDTO TFGLine)
     {
-        try {
-           TFGLineManager manager = new TFGLineManager(context);
-           return Ok(manager.CreateTFGLine(TFGLine));
-        } catch (UnprocessableException e) {
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
+            TFGLineManager manager = new TFGLineManager(context);
+            return Ok(manager.CreateTFGLine(TFGLine));
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            // Log the exception (not shown here for brevity)
+            return StatusCode(500, "An unexpected error occurred: " + e.Message);
         }
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        TFGLineManager manager = new TFGLineManager(context);
-        return Ok(manager.GetAllTFGLines());
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, []);
+
+            TFGLineManager manager = new TFGLineManager(context);
+            return Ok(manager.GetAllTFGLines());
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            // Log the exception (not shown here for brevity)
+            return StatusCode(500, "An unexpected error occurred: " + e.Message);
+        }
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        try {
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             TFGLineManager manager = new TFGLineManager(context);
             manager.DeleteTFGLine(id);
             return Ok();
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            // Log the exception (not shown here for brevity)
+            return StatusCode(500, "An unexpected error occurred: " + e.Message);
         }
     }
 
@@ -51,6 +120,15 @@ public class TFGLineController : BaseController
     {
         try
         {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, []);
+
             TFGLineManager manager = new TFGLineManager(context);
             return Ok(manager.SearchTFGLines(filters));
         }
@@ -58,66 +136,160 @@ public class TFGLineController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            // Log the exception (not shown here for brevity)
+            return StatusCode(500, "An unexpected error occurred: " + e.Message);
+        }
     }
 
     [HttpPut]
     public IActionResult Update([FromBody] TFGLineFlatDTO TFGLine)
     {
-        try {
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             TFGLineManager manager = new TFGLineManager(context);
             return Ok(manager.UpdateTFGLine(TFGLine));
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            // Log the exception (not shown here for brevity)
+            return StatusCode(500, "An unexpected error occurred: " + e.Message);
         }
     }
 
     [HttpPost("add-career/{id}")]
     public IActionResult AddCareer(int id, [FromBody] List<int> careers)
     {
-        try {
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             TFGLineManager manager = new TFGLineManager(context);
             manager.AddCareers(id, careers);
             return Ok();
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            // Log the exception (not shown here for brevity)
+            return StatusCode(500, "An unexpected error occurred: " + e.Message);
         }
     }
 
     [HttpPost("add-professor/{id}")]
     public IActionResult AddProfessor(int id, [FromBody] List<int> professors)
     {
-        try {
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
             TFGLineManager manager = new TFGLineManager(context);
             manager.AddProfessors(id, professors);
             return Ok();
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
-    }
-
-    [HttpGet("department/{departmentId}")]
-    public IActionResult GetAllByDepartment(int departmentId)
-    {
-        TFGLineManager manager = new TFGLineManager(context);
-        return Ok(manager.GetTFGLinesByDepartment(departmentId));
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            // Log the exception (not shown here for brevity)
+            return StatusCode(500, "An unexpected error occurred: " + e.Message);
+        }
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        try {
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, []);
+
             TFGLineManager manager = new TFGLineManager(context);
             return Ok(manager.GetTFGLine(id));
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            // Log the exception (not shown here for brevity)
+            return StatusCode(500, "An unexpected error occurred: " + e.Message);
         }
     }
 
@@ -125,6 +297,19 @@ public class TFGLineController : BaseController
     public IActionResult GetByStudentId(int id)
     {
         try {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Student });
+            if (user.role.id != (int)RoleTypes.Admin && user.id != id)
+            {
+                return Unauthorized("You do not have permission to access this resource.");
+            }
+
             TFGLineManager manager = new TFGLineManager(context);
             return Ok(manager.GetByStudentId(id));
         } catch (NotFoundException) {
@@ -138,6 +323,19 @@ public class TFGLineController : BaseController
     public IActionResult GetByProfessorId(int id)
     {
         try {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+            if (user.role.id != (int)RoleTypes.Admin && user.id != id)
+            {
+                return Unauthorized("You do not have permission to access this resource.");
+            }
+
             TFGLineManager manager = new TFGLineManager(context);
             return Ok(manager.GetByProfessorId(id));
         } catch (NotFoundException) {
