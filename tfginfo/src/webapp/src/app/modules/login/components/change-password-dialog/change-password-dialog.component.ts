@@ -37,7 +37,9 @@ export class ChangePasswordDialogComponent {
       OldPassword: ['', Validators.required],
       NewPassword: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
-    }, { validators: this.passwordsMatchValidator.bind(this) });
+    }
+    // , { validators: this.passwordsMatchValidator.bind(this) }
+  );
   }
 
   passwordsMatchValidator(group: FormGroup): { [key: string]: boolean } | null {

@@ -107,6 +107,16 @@ namespace TFGinfo.Api
             }
             int userId = model.user;
 
+            bool tfgExists = context.tfg_student.Any(t => t.student == id);
+            if (tfgExists) {
+                throw new UnprocessableException("Cannot delete student because there are TFGs associated with it.");
+            }
+
+            bool groupExists = context.working_group_student.Any(g => g.student == id);
+            if (groupExists) {
+                throw new UnprocessableException("Cannot delete student because there are groups associated with it.");
+            }
+
             context.student.Remove(model);
             context.SaveChanges();
 

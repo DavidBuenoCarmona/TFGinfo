@@ -61,6 +61,11 @@ namespace TFGinfo.Api
             }
             int userId = model.user;
 
+            bool groupsExist = context.working_group_professor.Any(g => g.professor == id);
+            if (groupsExist) {
+                throw new UnprocessableException("Cannot delete professor because there are groups associated with it.");
+            }
+
             context.professor.Remove(model);
             context.SaveChanges();
 

@@ -45,6 +45,19 @@ namespace TFGinfo.Api
             if (model == null) {
                 throw new NotFoundException();
             }
+            bool tfgExists = context.tfg.Any(t => t.tfg_line == id);
+            if (tfgExists) {
+                throw new UnprocessableException("Cannot delete TFGLine because there are TFGs associated with it.");
+            }
+            TFGLineCareerModel? tfgLineCareer = context.tfg_line_career.FirstOrDefault(t => t.tfg_line == id);
+            if (tfgLineCareer != null) {
+                context.tfg_line_career.Remove(tfgLineCareer);
+            }
+            TFGLineProfessorModel? tfgLineProfessor = context.tfg_line_professor.FirstOrDefault(t => t.tfg_line == id);
+            if (tfgLineProfessor != null) {
+                context.tfg_line_professor.Remove(tfgLineProfessor);
+            }
+            
             context.tfg_line.Remove(model);
             context.SaveChanges();
         }

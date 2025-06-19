@@ -73,16 +73,18 @@ export class ProfessorSearchComponent implements OnInit {
 
     onSearch(): void {
         const formValues = this.filterForm.value;
-        let filters: Filter[] = [];
+        Object.keys(formValues).forEach(key => {
+            this.filters = this.filters.filter(filter => filter.key !== key);
+        });
 
         Object.keys(formValues).forEach(key => {
             const value = formValues[key];
             if (value !== null && value !== undefined && value !== '') {
-                filters.push({ key, value });
+                this.filters.push({ key, value });
             }
         });
 
-        this.professorService.searchProfessors(filters).subscribe(professors => {
+        this.professorService.searchProfessors(this.filters).subscribe(professors => {
             this.filteredProfessors = professors;
         });
     }

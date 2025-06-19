@@ -77,13 +77,16 @@ export class GroupSearchComponent implements OnInit {
         });
 
     }
-    
+
     onCreate(): void {
         this.router.navigate(['new'], { relativeTo: this.route });
     }
 
     onSearch(): void {
         const formValues = this.filterForm.value;
+        Object.keys(formValues).forEach(key => {
+            this.filters = this.filters.filter(filter => filter.key !== key);
+        });
 
         Object.keys(formValues).forEach(key => {
             const value = formValues[key].toString();

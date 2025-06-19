@@ -42,6 +42,15 @@ namespace TFGinfo.Api
             if (model == null) {
                 throw new NotFoundException();
             }
+            bool studentsExist = context.student.Any(s => s.career == id);
+            if (studentsExist) {
+                throw new UnprocessableException("Cannot delete career because there are students associated with it.");
+            }
+            bool tfgExists = context.tfg_line_career.Any(t => t.career == id);
+            if (tfgExists) {
+                throw new UnprocessableException("Cannot delete career because there are TFGs associated with it.");
+            }
+            
             context.career.Remove(model);
             context.SaveChanges();
         }

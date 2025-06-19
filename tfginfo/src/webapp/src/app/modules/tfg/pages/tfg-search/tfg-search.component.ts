@@ -75,13 +75,16 @@ export class TfgSearchComponent implements OnInit {
             this.filteredTfgs = [...this.tfgs];
         });
     }
-    
+
     onCreate(): void {
         this.router.navigate(['new'], { relativeTo: this.route });
     }
 
     onSearch(): void {
         const formValues = this.filterForm.value;
+        Object.keys(formValues).forEach(key => {
+            this.filters = this.filters.filter(filter => filter.key !== key);
+        });
 
         Object.keys(formValues).forEach(key => {
             const value = formValues[key];
@@ -111,11 +114,11 @@ export class TfgSearchComponent implements OnInit {
 
     deleteTfg(tfgId: number): void {
         this.tfgService.deleteTfg(tfgId).subscribe({
-            next: () => {},
+            next: () => { },
             error: (err) => console.error(err),
             complete: () => {
-              this.tfgs = this.tfgs.filter((item) => item.id !== tfgId);
-              this.filteredTfgs = this.filteredTfgs.filter((item) => item.id !== tfgId);
+                this.tfgs = this.tfgs.filter((item) => item.id !== tfgId);
+                this.filteredTfgs = this.filteredTfgs.filter((item) => item.id !== tfgId);
             }
         });
     }
@@ -127,7 +130,7 @@ export class TfgSearchComponent implements OnInit {
             this.filterForm.get('description')?.setValue('');
             this.filterForm.get('slots')?.setValue('');
             this.filterForm.get('departmentName')?.setValue('');
-        const formValues = this.filterForm.value;
+            const formValues = this.filterForm.value;
             Object.keys(formValues).forEach(key => {
                 if (key != "generic") this.filters = this.filters.filter(filter => filter.key !== key);
             });

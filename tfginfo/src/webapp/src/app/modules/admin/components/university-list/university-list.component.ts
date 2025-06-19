@@ -59,6 +59,7 @@ export class UniversityListComponent {
                 if (this.selectedUniversity === university.id) {
                     this.selectedUniversity = undefined;
                     this.configurationService.setSelectedUniversity(undefined);
+                    this.universitySelectionService.setUniversityId(null);
                 }
 
                 this.onDeleteUniversity.emit(university.id!);
