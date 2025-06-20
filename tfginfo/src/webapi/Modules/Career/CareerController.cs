@@ -174,7 +174,7 @@ public class CareerController : BaseController
             }
             token = token.Substring("Bearer ".Length).Trim();
             AuthManager authManager = new AuthManager(context, configuration);
-            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+            authManager.ValidateRoles(token, []);
 
             CareerManager manager = new CareerManager(context);
             return Ok(manager.SearchCareers(filters));

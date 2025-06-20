@@ -49,13 +49,13 @@ namespace TFGinfo.Api
             if (tfgExists) {
                 throw new UnprocessableException("Cannot delete TFGLine because there are TFGs associated with it.");
             }
-            TFGLineCareerModel? tfgLineCareer = context.tfg_line_career.FirstOrDefault(t => t.tfg_line == id);
-            if (tfgLineCareer != null) {
-                context.tfg_line_career.Remove(tfgLineCareer);
+            List<TFGLineCareerModel>? tfgLineCareers = context.tfg_line_career.Where(t => t.tfg_line == id).ToList(); ;
+            if (tfgLineCareers != null) {
+                context.tfg_line_career.RemoveRange(tfgLineCareers);
             }
-            TFGLineProfessorModel? tfgLineProfessor = context.tfg_line_professor.FirstOrDefault(t => t.tfg_line == id);
-            if (tfgLineProfessor != null) {
-                context.tfg_line_professor.Remove(tfgLineProfessor);
+            List<TFGLineProfessorModel>? tfgLineProfessors = context.tfg_line_professor.Where(t => t.tfg_line == id).ToList();
+            if (tfgLineProfessors != null) {
+                context.tfg_line_professor.RemoveRange(tfgLineProfessors);
             }
             
             context.tfg_line.Remove(model);

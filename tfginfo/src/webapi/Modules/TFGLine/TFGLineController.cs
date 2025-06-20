@@ -322,7 +322,8 @@ public class TFGLineController : BaseController
     [HttpGet("professor/{id}")]
     public IActionResult GetByProfessorId(int id)
     {
-        try {
+        try
+        {
             string token = Request.Headers["Authorization"].ToString();
             if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
             {
@@ -330,18 +331,27 @@ public class TFGLineController : BaseController
             }
             token = token.Substring("Bearer ".Length).Trim();
             AuthManager authManager = new AuthManager(context, configuration);
-            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
-            if (user.role.id != (int)RoleTypes.Admin && user.id != id)
-            {
-                return Unauthorized("You do not have permission to access this resource.");
-            }
+            AppUserDTO user = authManager.ValidateRoles(token, []);
 
             TFGLineManager manager = new TFGLineManager(context);
             return Ok(manager.GetByProfessorId(id));
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            // Log the exception (not shown here for brevity)
+            return StatusCode(500, "An unexpected error occurred: " + e.Message);
         }
     }
 

@@ -38,14 +38,14 @@ export class ChangePasswordDialogComponent {
       NewPassword: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }
-    // , { validators: this.passwordsMatchValidator.bind(this) }
+    , { validators: this.passwordsMatchValidator.bind(this) }
   );
   }
 
   passwordsMatchValidator(group: FormGroup): { [key: string]: boolean } | null {
     const newPassword = group.get('NewPassword')?.value;
-    const confirmPassword = group.get('OldPassword')?.value;
-    return newPassword === confirmPassword ? null : { passwordsMismatch: true };
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return newPassword == confirmPassword ? null : { passwordsMismatch: true };
   }
 
   onConfirm(): void {
@@ -57,7 +57,7 @@ export class ChangePasswordDialogComponent {
         NewPassword: formData.NewPassword
       }).subscribe(
         response => {
-          this.dialogRef.close(response);
+          this.dialogRef.close(formData.NewPassword);
         });
     }
   }

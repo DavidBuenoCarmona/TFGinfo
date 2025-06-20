@@ -48,6 +48,7 @@ export class ProfessorDetailComponent implements OnInit {
     tfgs: TFGLineDTO[] = [];
     tfgDisplayedColumns: string[] = ['name', 'description', 'actions'];
     canEdit: boolean = false;
+    loading: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -117,6 +118,7 @@ export class ProfessorDetailComponent implements OnInit {
     onSubmit(): void {
         if (this.professorForm.valid) {
             const professorData = this.professorForm.value;
+            this.loading = true;
             if (this.creation) {
                 this.professorService.createProfessor(professorData).subscribe((data) => this.openAuthCodeDialog(data.professor.email, data.auth_code));
             } else {

@@ -204,7 +204,7 @@ public class DepartmentController : BaseController
             }
             token = token.Substring("Bearer ".Length).Trim();
             AuthManager authManager = new AuthManager(context, configuration);
-            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+            authManager.ValidateRoles(token, []);
             DepartmentManager manager = new DepartmentManager(context);
             return Ok(manager.SearchDepartments(filters));
         }

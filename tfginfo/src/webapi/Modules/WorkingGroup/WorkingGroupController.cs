@@ -408,7 +408,11 @@ public class WorkingGroupController : BaseController
             }
             token = token.Substring("Bearer ".Length).Trim();
             AuthManager authManager = new AuthManager(context, configuration);
-            AppUserDTO user = authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+            AppUserDTO user = authManager.ValidateRoles(token, []);
+            if (user.role.id == (int)RoleTypes.Student && user.id != workingGroupStudent.user)
+            {
+                return Unauthorized("You are not authorized to remove students from this working group.");
+            }
 
             WorkingGroupManager manager = new WorkingGroupManager(context);
             manager.RemoveStudentFromWorkingGroup(workingGroupStudent.working_group, workingGroupStudent.user);

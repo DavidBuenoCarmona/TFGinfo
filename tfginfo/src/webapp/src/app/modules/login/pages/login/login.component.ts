@@ -56,6 +56,10 @@ export class LoginComponent implements OnInit {
             if (response.firstLogin) {
                 this.dialog.open(ChangePasswordDialogComponent, {
                     data: { username: credentials.username }
+                }).afterClosed().subscribe((result) => {
+                    if (result) {
+                        this.loginForm.get('password')?.setValue(result);
+                    }
                 });
             } else {
                 localStorage.setItem('token', response.user.token);

@@ -41,7 +41,7 @@
             </mat-checkbox>
         </div>
 
-        <tfg-list [tfgs]="tfgs" [displayedColumns]="tfgDisplayedColumns"></tfg-list>
+        <tfg-list *ngIf="!creation" [tfgs]="tfgs" [displayedColumns]="tfgDisplayedColumns"></tfg-list>
 
         <div class="actions">
             <button *ngIf="canEdit" mat-raised-button class="action-button" [ngClass]="professorForm.invalid ? 'disabled' : ''" type="submit" [disabled]="professorForm.invalid">

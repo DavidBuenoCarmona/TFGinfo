@@ -52,7 +52,7 @@ public class UniversityController : BaseController
             }
             token = token.Substring("Bearer ".Length).Trim();
             AuthManager authManager = new AuthManager(context, configuration);
-            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+            authManager.ValidateRoles(token, []);
 
             UniversityManager universityManager = new UniversityManager(context);
             return Ok(universityManager.GetAllUniversities());
