@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LogoComponent } from '../logo/logo.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router, RouterModule } from '@angular/router';
@@ -11,6 +11,8 @@ import { RoleId } from '../../../../modules/admin/models/role.model';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { UniversityService } from '../../../../modules/admin/services/university.service';
 import { UniversitySelectionService } from '../../../services/localstorage.service';
+declare var bootstrap: any; // Si usas Bootstrap 5 JS
+
 
 @Component({
     selector: 'layout-header',
@@ -27,6 +29,7 @@ import { UniversitySelectionService } from '../../../services/localstorage.servi
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit {
+    @ViewChild('navbarNav') navbarNav!: ElementRef;
     isAdmin: boolean = false;
     route = route;
     selectedUniversityName: string = '';
@@ -41,7 +44,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         let role = this.configService.getRole();
         this.isAdmin = role === RoleId.Admin;
+    }
 
+    closeNavbar() {
+        const navbar = this.navbarNav.nativeElement;
+        if (navbar.classList.contains('show')) {
+            const collapse = bootstrap.Collapse.getOrCreateInstance(navbar);
+            collapse.hide();
+        }
     }
 
     selectUniversity() {

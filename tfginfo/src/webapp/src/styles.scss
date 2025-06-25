@@ -173,6 +173,9 @@ body.dark-mode {
             &:hover {
                 color: var(--color-light-blue);
             }
+            &.active {
+                color: var(--color-light-blue);
+            }
         }
     }
 
