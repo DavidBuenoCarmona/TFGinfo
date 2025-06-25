@@ -18,15 +18,15 @@
         "TFG": "Mis reservas de TFGs"
     },
     "CAREER": {
-        "CREATE": "Crear carrera",
-        "EDIT": "Editar carrera",
-        "DELETE": "Eliminar carrera",
-        "NEW": "Nueva carrera",
-        "SELECT": "Seleccionar carrera(s)",
-        "TITLE_1": "Carrera",
-        "TITLE_N": "Carreras",
-        "VIEW": "Ver carrera",
-        "VIEW_LIST": "Ver lista de carreras"
+        "CREATE": "Crear titulación",
+        "EDIT": "Editar titulación",
+        "DELETE": "Eliminar titulación",
+        "NEW": "Nueva titulación",
+        "SELECT": "Seleccionar titulación(s)",
+        "TITLE_1": "Titulación",
+        "TITLE_N": "Titulaciónes",
+        "VIEW": "Ver titulación",
+        "VIEW_LIST": "Ver lista de titulacións"
     },
     "DEPARTMENT": {
         "CREATE": "Crear departamento",
@@ -39,7 +39,7 @@
         "VIEW_LIST": "Ver lista de departamentos"
     },
     "ERROR": {
-        "CARRER_REQUIRED": "La carrera es requerida",
+        "CARRER_REQUIRED": "La titulación es requerida",
         "DEPARTMENT_REQUIRED": "El departamento es requerido",
         "DNI_REQUIRED": "El DNI es requerido",
         "EMAIL_REQUIRED": "El correo electrónico es requerido",
@@ -52,7 +52,7 @@
         "PRIMARY_TUTOR_REQUIRED": "El tutor principal es requerido",
         "SURNAME_REQUIRED": "Los apellidos son requeridos",
         "TFG_SLOT_REQUIRED": "La plaza del TFG es requerida",
-        "UNIVERSITY_NOT_SELECTED": "No se ha seleccionado ninguna universidad"
+        "UNIVERSITY_NOT_SELECTED": "No se ha seleccionado ningun centro"
     },
     "GLOBAL": {
         "ACCEPT": "Aceptar",
@@ -77,7 +77,7 @@
         "MESSAGE": "Mensaje",
         "NAME": "Nombre",
         "NO_RESULTS": "No se han encontrado resultados",
-        "NO_UNIVERSITY_SELECTED": "No se ha seleccionado ninguna universidad, seleccione una para obtener los datos",
+        "NO_UNIVERSITY_SELECTED": "No se ha seleccionado ningun centro, seleccione una para obtener los datos",
         "PAGE_NOT_FOUND_DESCRIPTION": "La página que estás buscando no existe o ha sido movida.",
         "PAGE_NOT_FOUND_TITLE": "Página no encontrada",
         "PASSWORD": "Contraseña",
@@ -136,15 +136,15 @@
         "TITLE_N": "TFGs"
     },
     "UNIVERSITY": {
-        "CREATE": "Crear universidad",
-        "CHANGE": "Cambiar universidad",
-        "EDIT": "Editar universidad",
-        "DELETE": "Eliminar universidad",
-        "NEW": "Nueva universidad",
-        "TITLE_1": "Universidad",
-        "TITLE_N": "Universidades",
-        "VIEW": "Ver universidad",
-        "VIEW_LIST": "Ver lista de universidades"
+        "CREATE": "Crear centro",
+        "CHANGE": "Cambiar centro",
+        "EDIT": "Editar centro",
+        "DELETE": "Eliminar centro",
+        "NEW": "Nuevo centro",
+        "TITLE_1": "Centro",
+        "TITLE_N": "Centros",
+        "VIEW": "Ver centro",
+        "VIEW_LIST": "Ver lista de centros"
     },
     "USER": {
         "AUTH_CODE_TEXT": "Se ha generado una contraseña temporal para el usuario: ",
@@ -162,13 +162,13 @@
         "LEAVE": "Dejar",
         "IS_PRIVATE": "Privado",
         "IS_PUBLIC": "Público",
-        "NEW": "Nuevo grupo de trabajo",
+        "NEW": "Nuevo canal",
         "MESSAGE_SENT": "Mensaje enviado con éxito",	
         "PRIVACY": "Privacidad",
         "PRIVATE": "¿Grupo privado?",
         "SELECT_PROFESSOR": "Seleccionar profesor creador del grupo",
         "SEND_MESSAGE": "Enviar mensaje",
-        "TITLE_1": "Grupo de estudio",
-        "TITLE_N": "Grupos de estudio"
+        "TITLE_1": "Canal",
+        "TITLE_N": "Canales"
     }
 }

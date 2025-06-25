@@ -17,16 +17,16 @@
         "TITLE_N": "My bookings",
         "TFG": "My TFG bookings"
     },
-    "CAREER": {
-        "CREATE": "Create career",
-        "EDIT": "Edit career",
-        "DELETE": "Delete career",
-        "NEW": "New career",
-        "SELECT": "Select career(s)",
-        "TITLE_1": "Career",
-        "TITLE_N": "Careers",
-        "VIEW": "View career",
-        "VIEW_LIST": "View career list"
+    "titulation": {
+        "CREATE": "Create titulation",
+        "EDIT": "Edit titulation",
+        "DELETE": "Delete titulation",
+        "NEW": "New titulation",
+        "SELECT": "Select titulation(s)",
+        "TITLE_1": "titulation",
+        "TITLE_N": "titulations",
+        "VIEW": "View titulation",
+        "VIEW_LIST": "View titulation list"
     },
     "DEPARTMENT": {
         "CREATE": "Create department",
@@ -39,7 +39,7 @@
         "VIEW_LIST": "View department list"
     },
     "ERROR": {
-        "CARRER_REQUIRED": "Career is required",
+        "CARRER_REQUIRED": "titulation is required",
         "DEPARTMENT_REQUIRED": "Department is required",
         "DNI_REQUIRED": "DNI is required",
         "EMAIL_REQUIRED": "Email is required",
@@ -52,7 +52,7 @@
         "PRIMARY_TUTOR_REQUIRED": "Primary tutor is required",
         "SURNAME_REQUIRED": "Surname is required",
         "TFG_SLOT_REQUIRED": "TFG slot is required",
-        "UNIVERSITY_NOT_SELECTED": "No university selected"
+        "UNIVERSITY_NOT_SELECTED": "No center selected"
     },
     "GLOBAL": {
         "ACCEPT": "Accept",
@@ -78,7 +78,7 @@
         "NAME": "Name",
         "NAME_REQUIRED": "Name is required",
         "NO_RESULTS": "No results found",
-        "NO_UNIVERSITY_SELECTED": "No university selected, select one to get the data",
+        "NO_UNIVERSITY_SELECTED": "No center selected, select one to get the data",
         "PAGE_NOT_FOUND_DESCRIPTION": "The page you are looking for does not exist.",
         "PAGE_NOT_FOUND_TITLE": "Page not found",
         "PASSWORD": "Password",
@@ -137,15 +137,15 @@
         "TITLE_N": "TFGs"
     },
     "UNIVERSITY": {
-        "CREATE": "Create university",
-        "CHANGE": "Change university",
-        "EDIT": "Edit university",
-        "DELETE": "Delete university",
-        "NEW": "New university",
-        "TITLE_1": "University",
+        "CREATE": "Create center",
+        "CHANGE": "Change center",
+        "EDIT": "Edit center",
+        "DELETE": "Delete center",
+        "NEW": "New center",
+        "TITLE_1": "center",
         "TITLE_N": "Universities",
-        "VIEW": "View university",
-        "VIEW_LIST": "View university list"
+        "VIEW": "View center",
+        "VIEW_LIST": "View center list"
     },
     "USER": {
         "AUTH_CODE_TEXT": "A temporal password has beed generated for user: ",
@@ -163,13 +163,13 @@
         "LEAVE": "Leave",
         "IS_PRIVATE": "Private",
         "IS_PUBLIC": "Public",
-        "NEW": "New working group",
+        "NEW": "New channel",
         "MESSAGE_SENT": "Message sent successfully",
         "PRIVACY": "Privacy",
         "PRIVATE": "Private group?",
         "SELECT_PROFESSOR": "Select the porfessor owner of the group",
         "SEND_MESSAGE": "Send message",
-        "TITLE_1": "Working group",
-        "TITLE_N": "Working groups"
+        "TITLE_1": "Channel",
+        "TITLE_N": "Channels"
     }
 }
