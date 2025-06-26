@@ -25,6 +25,7 @@ namespace TFGinfo.Data
         public DbSet<WorkingGroupProfessorModel> working_group_professor { get; set; }
         public DbSet<WorkingGroupTFGModel> working_group_tfg { get; set; }
         public DbSet<TFGLineProfessorModel> tfg_line_professor { get; set; }
+        public DbSet<UniversityDepartmentModel> university_department { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +43,7 @@ namespace TFGinfo.Data
             modelBuilder.ApplyConfiguration(new WorkingGroupProfessorConfiguration());
             modelBuilder.ApplyConfiguration(new WorkingGroupTFGConfiguration());
             modelBuilder.ApplyConfiguration(new TFGLineProfessorConfiguration());
+            modelBuilder.ApplyConfiguration(new UniversityDepartmentConfiguration());
         }
     }
 }

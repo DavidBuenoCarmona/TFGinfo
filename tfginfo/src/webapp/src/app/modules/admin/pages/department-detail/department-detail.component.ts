@@ -52,7 +52,8 @@ export class DepartmentDetailComponent implements OnInit {
         this.departmentForm = this.fb.group({
             id: [this.creation ? null : this.id],
             name: ['', Validators.required],
-            universityId : ['', Validators.required],
+            universitiesId : [[], Validators.required],
+            acronym: ['', [Validators.minLength(2), Validators.maxLength(10)]]
         });
 
         this.universityService.getUniversities().subscribe((data) => {
@@ -63,7 +64,7 @@ export class DepartmentDetailComponent implements OnInit {
             this.departmentService.getDepartment(+this.id!).subscribe((data) => {
                 this.department = data;
                 this.departmentForm.patchValue(data);
-                this.departmentForm.get('universityId')?.setValue(data.university!.id);
+                this.departmentForm.get('universitiesId')?.setValue(data.universities!.map(u => u.id));
             });
         }
     }

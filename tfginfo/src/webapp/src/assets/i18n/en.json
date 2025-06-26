@@ -50,12 +50,14 @@
         "PASSWORD_REQUIRED": "Password is required",
         "PASSWORD_MISMATCH": "Passwords do not match",
         "PRIMARY_TUTOR_REQUIRED": "Primary tutor is required",
+        "PROFESSOR_NOT_SELECTED": "No professor selected",
         "SURNAME_REQUIRED": "Surname is required",
         "TFG_SLOT_REQUIRED": "TFG slot is required",
         "UNIVERSITY_NOT_SELECTED": "No center selected"
     },
     "GLOBAL": {
         "ACCEPT": "Accept",
+        "ACRONYM": "Acronym",
         "ACTIONS": "Actions",
         "ADDRESS": "Address",
         "BIRTH_DATE": "Birth date",

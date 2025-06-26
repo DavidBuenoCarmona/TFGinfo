@@ -33,7 +33,7 @@ export class GroupListComponent implements OnInit {
     @Input() displayedColumns: string[] = ['name', 'description', 'isPrivate', 'actions'];
     @Output() onDeleteGroup = new EventEmitter<number>();
     public canEdit: boolean = false;
-    public universitySelected: number | undefined;
+    public universitiesSelected: number[] | undefined;
 
     constructor(
         private dialog: MatDialog,
@@ -48,10 +48,10 @@ export class GroupListComponent implements OnInit {
     ngOnInit(): void {
         let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin;
-        this.universitySelected = this.configurationService.getSelectedUniversity();
-        if (!this.universitySelected) {
-            this.universitySelected = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : undefined;
-        }    
+        this.universitiesSelected = this.configurationService.getSelectedUniversities();
+        if (!this.universitiesSelected || this.universitiesSelected.length === 0) {
+            this.universitiesSelected = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : undefined;
+        }  
     }
 
     onEdit(group: WorkingGroupBase) {

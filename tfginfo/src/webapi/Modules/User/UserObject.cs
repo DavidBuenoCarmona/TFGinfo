@@ -46,12 +46,13 @@ namespace TFGinfo.Objects
         public string username { get; set; }
         public int? department { get; set; }
         public int? career { get; set; }
-        public int universityId { get; set; }
+        public List<int> universitiesId { get; set; }
         public AppUserDTO(UserModel model)
         {
             id = model.id;
             role = model.roleModel;
             username = model.username;
+            universitiesId = new List<int>();
         }
     }
 

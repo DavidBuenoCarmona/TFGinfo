@@ -23,7 +23,7 @@ export interface AppUserDTO {
     id: number;
     username: string;
     token: string;
-    universityId: number;
+    universitiesId: number[];
     department?: number;
     career?: number;
     role: RoleBase;

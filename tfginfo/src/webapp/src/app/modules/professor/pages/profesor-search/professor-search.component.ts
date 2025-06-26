@@ -55,11 +55,13 @@ export class ProfessorSearchComponent implements OnInit {
             department: [''],
         });
 
-        var selectedUniversity = this.configurationService.getSelectedUniversity()?.toString();
-        if (!selectedUniversity || selectedUniversity === '0') {
-            selectedUniversity = localStorage.getItem('selectedUniversity') || '0';
+        var selectedUniversities = this.configurationService.getSelectedUniversities();
+        if (!selectedUniversities || selectedUniversities.length === 0) {
+            selectedUniversities = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : [0];
+            this.filters.push({ key: 'university', value: selectedUniversities.map(id => id.toString()).join(',') });
+        } else {
+            this.filters.push({ key: 'universities', value: selectedUniversities.map(id => id.toString()).join(',') });
         }
-        this.filters.push({ key: 'university', value: selectedUniversity });
 
         this.professorService.searchProfessors(this.filters).subscribe(professors => {
             this.professors = professors;

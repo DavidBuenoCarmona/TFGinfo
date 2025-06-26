@@ -58,7 +58,7 @@ export class UniversityListComponent {
             if (result) {
                 if (this.selectedUniversity === university.id) {
                     this.selectedUniversity = undefined;
-                    this.configurationService.setSelectedUniversity(undefined);
+                    this.configurationService.setSelectedUniversities(undefined);
                     this.universitySelectionService.setUniversityId(null);
                 }
 

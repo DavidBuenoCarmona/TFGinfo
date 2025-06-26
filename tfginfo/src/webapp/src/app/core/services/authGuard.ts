@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
                 map(user => {
                     this.configurationService.setUser(user);
                     this.configurationService.setRole(user.role.id);
-                    this.configurationService.setSelectedUniversity(user.universityId);
+                    this.configurationService.setSelectedUniversities(user.universitiesId);
                     return true;
                 }),
                 catchError(() => {

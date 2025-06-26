@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem('token', response.user.token);
                 this.configService.setUser(response.user);
                 this.configService.setRole(response.user.role.id);
-                this.configService.setSelectedUniversity(response.user.universityId);
+                this.configService.setSelectedUniversities(response.user.universitiesId);
                 if (response.user.role.id === RoleId.Admin) {
                     this.universitySelectionService.setUniversityId(null);
                     this.router.navigate(['/tfg']);

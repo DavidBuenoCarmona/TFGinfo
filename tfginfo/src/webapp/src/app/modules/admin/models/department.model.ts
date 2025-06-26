@@ -4,14 +4,15 @@ export interface DepartmentBase
 {
     id?: number;
     name: string;
+    acronym: string;
 }
 
 export interface DepartmentDTO extends DepartmentBase
 {
-    university?: UniversityBase;
+    universities?: UniversityBase[];
 }
 
 export interface DepartmentFlatDTO extends DepartmentBase
 {
-    universityId: number;
+    universitiesId: number[];
 }

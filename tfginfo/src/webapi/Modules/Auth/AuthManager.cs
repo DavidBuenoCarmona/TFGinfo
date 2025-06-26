@@ -47,17 +47,17 @@ namespace TFGinfo.Api
                 {
                     newUser.user.career = student.career;
                     newUser.user.id = student.id;
-                    newUser.user.universityId = student.careerModel?.university ?? 0;
+                    newUser.user.universitiesId.Add(student.careerModel?.university ?? 0);
                 }
             }
             else if (newUser.user.role.id == (int)UserRole.Professor)
             {
-                var teacher = context.professor.Include(p => p.departmentModel).FirstOrDefault(t => t.user == newUser.user.id);
+                var teacher = context.professor.Include(p => p.departmentModel).ThenInclude(d => d.Universities).FirstOrDefault(t => t.user == newUser.user.id);
                 if (teacher != null)
                 {
                     newUser.user.department = teacher.department;
                     newUser.user.id = teacher.id;
-                    newUser.user.universityId = teacher.departmentModel?.university ?? 0;
+                    newUser.user.universitiesId.AddRange(teacher.departmentModel?.Universities.Select(u => u.university) ?? Enumerable.Empty<int>());
                 }
             }
             var token = GenerateJwtToken(newUser.user);
@@ -150,17 +150,17 @@ namespace TFGinfo.Api
                 {
                     userDto.career = student.career;
                     userDto.id = student.id;
-                    userDto.universityId = student.careerModel?.university ?? 0;
+                    userDto.universitiesId.Add(student.careerModel?.university ?? 0);
                 }
             }
             else if (userDto.role.id == (int)UserRole.Professor)
             {
-                var teacher = context.professor.Include(p => p.departmentModel).FirstOrDefault(t => t.user == userDto.id);
+                var teacher = context.professor.Include(p => p.departmentModel).ThenInclude(d => d.Universities).FirstOrDefault(t => t.user == userDto.id);
                 if (teacher != null)
                 {
                     userDto.department = teacher.department;
                     userDto.id = teacher.id;
-                    userDto.universityId = teacher.departmentModel?.university ?? 0;
+                    userDto.universitiesId.AddRange(teacher.departmentModel?.Universities.Select(u => u.university) ?? Enumerable.Empty<int>());
                 }
             }
 

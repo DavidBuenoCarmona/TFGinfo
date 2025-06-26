@@ -296,7 +296,7 @@ namespace TFGinfo.Api
         
         public List<WorkingGroupBase> SearchWorkingGroups(List<Filter> filters)
         {
-            IQueryable<WorkingGroupModel> query = context.working_group.Include(wg => wg.Professors).ThenInclude(wg => wg.professorModel).ThenInclude(p => p.departmentModel).AsQueryable();
+            IQueryable<WorkingGroupModel> query = context.working_group.Include(wg => wg.Professors).ThenInclude(wg => wg.professorModel).ThenInclude(p => p.departmentModel).ThenInclude(d => d.Universities).AsQueryable();
 
             foreach (var filter in filters)
             {
@@ -314,7 +314,7 @@ namespace TFGinfo.Api
                 }
                 else if (filter.key == "university")
                 {
-                    query = query.Where(wg => wg.Professors.First().professorModel.departmentModel.university == int.Parse(filter.value));
+                    query = query.Where(wg => wg.Professors.First().professorModel.departmentModel.Universities.Any(u => u.university == int.Parse(filter.value)));
                 }
                 else if (filter.key == "department")
                 {

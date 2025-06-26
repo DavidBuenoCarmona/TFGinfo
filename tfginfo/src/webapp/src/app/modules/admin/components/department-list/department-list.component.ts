@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
 })
 export class DepartmentListComponent {
   @Input() departments: DepartmentDTO[] = [];
-  @Input() displayedColumns: string[] = ['name', 'university', 'actions'];
+  @Input() displayedColumns: string[] = ['name', 'acronym', 'universities', 'actions'];
   @Output() onDeleteDepartment = new EventEmitter<number>();
 
   constructor(
@@ -49,4 +49,5 @@ export class DepartmentListComponent {
       }
     });
   }
+  
 }

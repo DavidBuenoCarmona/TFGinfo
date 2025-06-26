@@ -84,7 +84,7 @@ namespace TFGinfo.Api
         public TFGLineDTO GetTFGLine(int id)
         {
             TFGLineModel? model = context.tfg_line.
-                Include(d => d.departmentModel).
+                Include(d => d.departmentModel).ThenInclude(d => d.Universities).ThenInclude(u => u.universityModel).
                 Include(d => d.Careers).
                     ThenInclude(c => c.careerModel).
                 Include(p => p.Professors).
@@ -103,14 +103,14 @@ namespace TFGinfo.Api
 
         public List<TFGLineDTO> SearchTFGLines(List<Filter> filters)
         {
-            var query = context.tfg_line.Include(d => d.departmentModel).Include(t => t.Careers).ThenInclude(t => t.careerModel).AsQueryable();
+            var query = context.tfg_line.Include(d => d.departmentModel).ThenInclude(d => d.Universities).ThenInclude(u => u.universityModel).Include(t => t.Careers).ThenInclude(t => t.careerModel).AsQueryable();
 
             foreach (var filter in filters)
             {
                 if (filter.value == null || filter.value == "") continue;
                 if (filter.key == "university")
                 {
-                    query = query.Where(tfg => tfg.departmentModel.university == int.Parse(filter.value));
+                    query = query.Where(tfg => tfg.departmentModel.Universities.Any(u => u.university == int.Parse(filter.value)));
                 }
                 if (filter.key == "description")
                 {
@@ -147,7 +147,7 @@ namespace TFGinfo.Api
 
         public void AddCareers(int id, List<int> careers)
         {
-            var tfgLine = context.tfg_line.Include(d => d.departmentModel).Include(t => t.Careers).FirstOrDefault(t => t.id == id);
+            var tfgLine = context.tfg_line.Include(d => d.departmentModel).ThenInclude(d => d.Universities).Include(t => t.Careers).FirstOrDefault(t => t.id == id);
             if (tfgLine == null) {
                 throw new NotFoundException();
             }
@@ -158,7 +158,7 @@ namespace TFGinfo.Api
                 if (career == null) {
                     throw new NotFoundException($"Career with id {careerId} not found");
                 }
-                if (career.university != tfgLine.departmentModel.university) {
+                if (tfgLine.departmentModel.Universities.Any(u => u.university == career.university)) {
                     throw new UnprocessableException($"Career with id {careerId} does not belong to the same university as TFGLine with id {id}");
                 }
                 if (tfgLine.Careers.Any(c => c.career == careerId)) {

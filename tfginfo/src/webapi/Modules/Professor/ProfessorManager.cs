@@ -116,7 +116,7 @@ namespace TFGinfo.Api
         
         public List<ProfessorDTO> SearchProfessors(List<Filter> filters)
         {
-            IQueryable<ProfessorModel> query = context.professor.AsNoTracking().Include(d => d.departmentModel);
+            IQueryable<ProfessorModel> query = context.professor.AsNoTracking().Include(d => d.departmentModel).ThenInclude(d => d.Universities).ThenInclude(u => u.universityModel);
 
             foreach (var filter in filters)
             {
@@ -138,11 +138,17 @@ namespace TFGinfo.Api
                 }
                 else if (filter.key == "university")
                 {
-                    query = query.Where(p => p.departmentModel.university == int.Parse(filter.value));
+                    query = query.Where(p => p.departmentModel.Universities.Any(u => u.university == int.Parse(filter.value)));
                 }
-                else if (filter.key == "universityId")
+                else if (filter.key == "universityId" && filter.value != "0")
                 {
-                    query = query.Where(p => p.departmentModel.universityModel.id == int.Parse(filter.value));
+                    query = query.Where(p => p.departmentModel.Universities.Any(u => u.university == int.Parse(filter.value)));
+                }
+                else if (filter.key == "universities" && filter.value != "0")
+                {
+                    // Assuming 'universities' is a comma-separated list of university IDs
+                    var universityIds = filter.value.Split(',').Select(int.Parse).ToList();
+                    query = query.Where(p => p.departmentModel.Universities.Any(u => universityIds.Contains(u.university)));
                 }
                 else if (filter.key == "generic")
                 {

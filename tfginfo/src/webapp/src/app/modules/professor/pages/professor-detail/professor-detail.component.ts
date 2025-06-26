@@ -80,22 +80,22 @@ export class ProfessorDetailComponent implements OnInit {
             departmentId: ['', Validators.required],
             department_boss: [false]
         });
-        let universityId = this.configurationService.getSelectedUniversity()!;
+        let universitiesId = this.configurationService.getSelectedUniversities()!;
         if (!this.canEdit) {
             this.professorForm.disable();
         } else {
-            if (!universityId) {
-                universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
-                if (!universityId) {
+            if (!universitiesId || universitiesId.length === 0) {
+                universitiesId = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : [];
+                if (universitiesId.length === 0) {
                     this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
                     this.router.navigate(['/professor']);
                 }
             }
         }
 
-        if (universityId) {
+        if (universitiesId.length !== 0) {
             let universityFilter: Filter[] = [];
-            universityFilter.push({key: 'universityId', value: universityId.toString()});
+            universityFilter.push({key: 'universities', value: universitiesId.map(id => id.toString()).join(',')});
 
             this.departmentService.searchDepartments(universityFilter).subscribe((data) => this.departments = data);
         }

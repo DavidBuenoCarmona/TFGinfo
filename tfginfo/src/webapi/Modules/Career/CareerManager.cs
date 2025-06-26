@@ -103,6 +103,12 @@ namespace TFGinfo.Api
                 {
                     query = query.Where(c => c.universityModel.id == int.Parse(filter.value));
                 }
+                else if (filter.key == "universities" && filter.value != "0")
+                {
+                    // Assuming 'universities' is a comma-separated list of university IDs
+                    var universityIds = filter.value.Split(',').Select(int.Parse).ToList();
+                    query = query.Where(c => universityIds.Contains(c.universityModel.id));
+                }
                 else if (filter.key == "generic")
                 {
                     string searchValue = filter.value.ToLower();

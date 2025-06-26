@@ -84,22 +84,27 @@ export class TfgDetailComponent implements OnInit {
             careers: [[]],
             professors: [[]],
         });
-        let universityId = this.configurationService.getSelectedUniversity()!;
+        let universitiesId = this.configurationService.getSelectedUniversities()!;
         if (!this.isAdmin) {
             this.tfgForm.disable();
         } else {
-            if (!universityId) {
-                universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
-                if (!universityId) {
+            if (!universitiesId || universitiesId.length === 0) {
+                universitiesId = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : [];
+                if (universitiesId.length === 0) {
                     this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
                     this.router.navigate(['/tfg']);
                 }
             }
         }
 
-        if (universityId) {
+        if (universitiesId.length !== 0) {
             let universityFilter: Filter[] = [];
-            universityFilter.push({key: 'universityId', value: universityId.toString()});
+            if (universitiesId.length === 1) {
+                universityFilter.push({key: 'universityId', value: universitiesId[0].toString()});
+            } else {
+                universityFilter.push({key: 'universities', value: universitiesId.map(id => id.toString()).join(',')});
+            }
+            
             const departmentRequest = this.departmentService.searchDepartments(universityFilter);
             const careerRequest = this.careerService.searchCarrers(universityFilter);
             const professorRequest = this.professorService.searchProfessors(universityFilter);

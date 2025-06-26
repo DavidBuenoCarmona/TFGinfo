@@ -33,7 +33,7 @@ export class TfgListComponent implements OnInit {
     @Input() displayedColumns: string[] = ['name', 'description', 'department', 'slots', 'actions'];
     @Output() onDeleteTfg = new EventEmitter<number>();
     public isAdmin: boolean = false;
-    public universitySelected: number | undefined;
+    public universitiesSelected: number[] | undefined;
 
     constructor(
         private dialog: MatDialog,
@@ -46,9 +46,9 @@ export class TfgListComponent implements OnInit {
     ngOnInit(): void {
         let role = this.configurationService.getRole();
         this.isAdmin = role === RoleId.Admin;
-        this.universitySelected = this.configurationService.getSelectedUniversity();
-        if (!this.universitySelected) {
-            this.universitySelected = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : undefined;
+        this.universitiesSelected = this.configurationService.getSelectedUniversities();
+        if (!this.universitiesSelected || this.universitiesSelected.length === 0) {
+            this.universitiesSelected = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : undefined;
         }
     }
 

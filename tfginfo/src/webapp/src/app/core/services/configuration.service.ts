@@ -7,7 +7,7 @@ import { AppUserDTO } from "../../modules/admin/models/user.model";
 export class ConfigurationService {
     private user: AppUserDTO | undefined = undefined;
     private role: number | undefined = undefined;
-    private selectedUniversity: number | undefined = undefined;
+    private selectedUniversites: number[] | undefined = undefined;
 
     setUser(user: AppUserDTO | undefined): void {
         this.user = user;
@@ -25,11 +25,11 @@ export class ConfigurationService {
         return this.role;
     }
 
-    setSelectedUniversity(universityId: number | undefined): void {
-        this.selectedUniversity = universityId;
+    setSelectedUniversities(universitiesId: number[] | undefined): void {
+        this.selectedUniversites = universitiesId;
     }
 
-    getSelectedUniversity(): number | undefined {
-        return this.selectedUniversity;
+    getSelectedUniversities(): number[] | undefined {
+        return this.selectedUniversites;
     }
 }

@@ -24,7 +24,7 @@
         "NEW": "Nueva titulación",
         "SELECT": "Seleccionar titulación(s)",
         "TITLE_1": "Titulación",
-        "TITLE_N": "Titulaciónes",
+        "TITLE_N": "Titulaciones",
         "VIEW": "Ver titulación",
         "VIEW_LIST": "Ver lista de titulacións"
     },
@@ -50,12 +50,14 @@
         "PASSWORD_REQUIRED": "La contraseña es requerida",
         "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
         "PRIMARY_TUTOR_REQUIRED": "El tutor principal es requerido",
+        "PROFESSOR_NOT_SELECTED": "No se ha seleccionado ningun profesor",
         "SURNAME_REQUIRED": "Los apellidos son requeridos",
         "TFG_SLOT_REQUIRED": "La plaza del TFG es requerida",
         "UNIVERSITY_NOT_SELECTED": "No se ha seleccionado ningun centro"
     },
     "GLOBAL": {
         "ACCEPT": "Aceptar",
+        "ACRONYM": "Acrónimo",
         "ACTIONS": "Acciones",
         "ADDRESS": "Dirección",
         "BIRTH_DATE": "Fecha de nacimiento",

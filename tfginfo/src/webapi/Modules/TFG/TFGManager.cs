@@ -80,13 +80,19 @@ namespace TFGinfo.Api
 
         public List<TFGDTO> SearchTFGs(List<Filter> filters)
         {
-            var query = context.tfg.Include(d => d.tfgLineModel).ThenInclude(d => d.departmentModel).AsQueryable();
+            var query = context.tfg.Include(d => d.tfgLineModel).ThenInclude(d => d.departmentModel).ThenInclude(d => d.Universities).AsQueryable();
 
             foreach (var filter in filters)
             {
-                if (filter.key == "university")
+                if (filter.key == "university" && filter.value != "0")
                 {
-                    query = query.Where(tfg => tfg.tfgLineModel.departmentModel.university == int.Parse(filter.value));
+                    query = query.Where(tfg => tfg.tfgLineModel.departmentModel.Universities.Any(u => u.university == int.Parse(filter.value)));
+                }
+                else if (filter.key == "universities" && filter.value != "0")
+                {
+                    // Assuming 'universities' is a comma-separated list of university IDs
+                    var universityIds = filter.value.Split(',').Select(int.Parse).ToList();
+                    query = query.Where(tfg => tfg.tfgLineModel.departmentModel.Universities.Any(u => universityIds.Contains(u.university)));
                 }
                 else if (filter.key == "startDate")
                 {

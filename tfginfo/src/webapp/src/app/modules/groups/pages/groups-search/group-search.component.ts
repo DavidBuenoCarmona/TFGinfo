@@ -68,7 +68,7 @@ export class GroupSearchComponent implements OnInit {
         } else if (this.isProfessor) {
             this.filters.push({ key: 'department', value: this.configurationService.getUser()!.department!.toString() || '0' });
         } else {
-            this.filters.push({ key: 'university', value: this.configurationService.getUser()!.universityId.toString() || '0' });
+            this.filters.push({ key: 'university', value: this.configurationService.getSelectedUniversities()?.map(id => id.toString()).join(',') || '0' });
         }
 
         this.groupService.searchGroups(this.filters).subscribe(groups => {

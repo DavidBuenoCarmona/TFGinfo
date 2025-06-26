@@ -122,17 +122,17 @@ export class GroupDetailComponent implements OnInit {
                 }
             });
         } else if (this.isAdmin) {
-            let universityId = this.configurationService.getSelectedUniversity()!;
-            if (!universityId) {
-                universityId = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : 0;
+            let universitiesIds = this.configurationService.getSelectedUniversities()!;
+            if (!universitiesIds || universitiesIds.length === 0) {
+                universitiesIds = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : [];
             }
 
-            if (!universityId) {
+            if (!universitiesIds || universitiesIds.length === 0) {
                 this.snackbarService.error('ERROR.UNIVERSITY_NOT_SELECTED');
                 this.router.navigate(['/working-group']);
             } else {
                 let universityFilter: Filter[] = [];
-                universityFilter.push({key: 'university', value: universityId.toString()});
+                universityFilter.push({ key: 'universities', value: universitiesIds.map(id => id.toString()).join(',') });
 
                 this.professorService.searchProfessors(universityFilter).subscribe((professors) => {
                     this.professorList = professors;
@@ -149,11 +149,16 @@ export class GroupDetailComponent implements OnInit {
         if (this.groupForm.valid) {
             const groupData = this.groupForm.value;
             if (this.creation) {
-                var body: WorkingGroupProfessor = {
-                    working_group: groupData,
-                    professor: this.professor!
-                };
-                this.groupService.createGroup(body).subscribe(() => this.location.back());
+                if (!this.professor && this.isAdmin) {
+                    this.snackbarService.error('ERROR.PROFESSOR_NOT_SELECTED');
+                } else {
+                    var body: WorkingGroupProfessor = {
+                        working_group: groupData,
+                        professor: this.professor!
+                    };
+                    this.groupService.createGroup(body).subscribe(() => this.location.back());
+                }
+
             } else {
                 this.groupService.updateGroup(groupData).subscribe(() => this.location.back());
             }
