@@ -28,7 +28,7 @@ export interface TFGBase {
     startDate?: Date;
     external_tutor_name?: string;
     external_tutor_email?: string;
-    accepted: boolean;
+    status: number;
 }
 
 export interface TFGDTO extends TFGBase {
@@ -50,4 +50,12 @@ export interface TFGRequestDTO {
     studentName: string;
     tfgName: string;
     tfgId: number;
+    tfgStatus: number;
+}
+
+export enum TFGStatus {
+    Pending = 0,
+    Aproved = 1,
+    PreliminaryAproved = 2,
+    Finished = 3
 }

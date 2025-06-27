@@ -18,14 +18,35 @@
                         <td mat-cell *matCellDef="let request">{{ request.studentName }}</td>
                     </ng-container>
 
+                    <!-- Status Column -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.STATUS' | translate }}</th>
+                        <td mat-cell *matCellDef="let request">
+                            <ng-container [ngSwitch]="request.tfgStatus">
+                                <mat-card *ngSwitchCase="TFGStatus.Aproved" class="status-card accepted">
+                                    {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
+                                </mat-card>
+                                <mat-card *ngSwitchCase="TFGStatus.Finished" class="status-card rejected">
+                                    {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
+                                </mat-card>
+                                <mat-card *ngSwitchCase="TFGStatus.Pending" class="status-card pending">
+                                    {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
+                                </mat-card>
+                                <mat-card *ngSwitchDefault class="status-card default">
+                                    {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
+                                </mat-card>
+                            </ng-container>
+                        </td>
+                    </ng-container>
+
                     <!-- Acciones Column -->
                     <ng-container matColumnDef="actions">
                         <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
                         <td mat-cell *matCellDef="let request">
-                            <button mat-icon-button (click)="onAccept(request)">
+                            <button *ngIf="request.tfgStatus != TFGStatus.Finished" mat-icon-button (click)="onAccept(request)">
                                 <mat-icon>check</mat-icon>
                             </button>
-                            <button mat-icon-button (click)="onReject(request)">
+                            <button *ngIf="request.tfgStatus == TFGStatus.Pending" mat-icon-button (click)="onReject(request)">
                                 <mat-icon>close</mat-icon>
                             </button>
                         </td>

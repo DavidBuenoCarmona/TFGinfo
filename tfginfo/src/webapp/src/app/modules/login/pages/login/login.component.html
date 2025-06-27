@@ -6,7 +6,7 @@
                 <mat-label>{{ 'GLOBAL.EMAIL' | translate }}</mat-label>
                 <input matInput formControlName="username" type="email" placeholder="{{ 'GLOBAL.EMAIL' | translate }}" />
                 <mat-error *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-                    {{ 'LOGIN.EMAIL_REQUIRED' | translate }}
+                    {{ 'ERROR.EMAIL_REQUIRED' | translate }}
                 </mat-error>
             </mat-form-field>
 
@@ -14,7 +14,7 @@
                 <mat-label>{{ 'GLOBAL.PASSWORD' | translate }}</mat-label>
                 <input matInput formControlName="password" type="password" placeholder="{{ 'GLOBAL.PASSWORD' | translate }}" />
                 <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-                    {{ 'LOGIN.PASSWORD_REQUIRED' | translate }}
+                    {{ 'ERROR.PASSWORD_REQUIRED' | translate }}
                 </mat-error>
             </mat-form-field>
 

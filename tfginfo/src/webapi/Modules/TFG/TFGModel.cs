@@ -11,7 +11,7 @@ namespace TFGinfo.Models
         public int tfg_line { get; set; }
         public string? external_tutor_name { get; set; }
         public string? external_tutor_email { get; set; }
-        public int accepted { get; set; }
+        public int status { get; set; }
         [JsonIgnore]
         public TFGLineModel tfgLineModel { get; set; }
         public List<TFGStudentModel> Students { get; set; }

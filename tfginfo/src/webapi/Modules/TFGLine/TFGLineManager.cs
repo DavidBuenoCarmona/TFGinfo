@@ -97,7 +97,7 @@ namespace TFGinfo.Api
 
         public List<TFGLineDTO> GetByStudentId(int studentId)
         {
-            var query = context.tfg_line.Include(d => d.departmentModel).Include(d => d.TFGs).ThenInclude(d => d.Students).AsQueryable();
+            var query = context.tfg_line.Include(d => d.departmentModel).ThenInclude(d => d.Universities).ThenInclude(u => u.universityModel).Include(d => d.TFGs).ThenInclude(d => d.Students).AsQueryable();
             return query.Where(tfg => tfg.TFGs.Any(t => t.Students.Any(s => s.student == studentId))).ToList().ConvertAll(model => new TFGLineDTO(model));
         }
 
@@ -158,7 +158,7 @@ namespace TFGinfo.Api
                 if (career == null) {
                     throw new NotFoundException($"Career with id {careerId} not found");
                 }
-                if (tfgLine.departmentModel.Universities.Any(u => u.university == career.university)) {
+                if (!tfgLine.departmentModel.Universities.Any(u => u.university == career.university)) {
                     throw new UnprocessableException($"Career with id {careerId} does not belong to the same university as TFGLine with id {id}");
                 }
                 if (tfgLine.Careers.Any(c => c.career == careerId)) {
@@ -202,7 +202,7 @@ namespace TFGinfo.Api
 
         public List<TFGLineDTO> GetByProfessorId(int professorId)
         {
-            var query = context.tfg_line.Include(d => d.departmentModel).Include(d => d.Professors).ThenInclude(d => d.professorModel).AsQueryable();
+            var query = context.tfg_line.Include(d => d.departmentModel).ThenInclude(d => d.Universities).ThenInclude(u => u.universityModel).Include(d => d.Professors).ThenInclude(d => d.professorModel).AsQueryable();
             return query.Where(tfg => tfg.Professors.Any(t => t.professor == professorId)).ToList().ConvertAll(model => new TFGLineDTO(model));
         }
 

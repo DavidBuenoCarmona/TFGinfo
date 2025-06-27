@@ -90,7 +90,7 @@ export class StartTfgDialogComponent {
                 tfg: {
                     external_tutor_name: this.tutorForm.value.externalTutorName,
                     external_tutor_email: this.tutorForm.value.externalTutorEmail,
-                    accepted: false,
+                    status: 0,
                     tfgLineId: this.data.tfgLineId,
                 }
             }

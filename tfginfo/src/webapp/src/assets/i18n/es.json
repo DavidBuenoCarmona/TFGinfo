@@ -88,6 +88,7 @@
         "SAVE": "Guardar",
         "SEARCH": "Buscar",
         "SPANISH": "Español",
+        "STATUS": "Estado",
         "SURNAME": "Apellidos",
         "UPDATE": "Actualizar",
         "VIEW": "Ver",
@@ -133,6 +134,13 @@
         "SLOTS": "Plazas",
         "SLOTS>": "Plazas >=",
         "SLOTS_REQUIRED": "Plazas son requeridas",
+        "STATUS": {
+            "0": "Pendiente de aprobar",
+            "1": "Pendiente entrega anteproyecto",
+            "2": "Pendiente de defensa",
+            "3": "Finalizado"
+        },
+        "STATUS_UPDATED": "Estado actualizado correctamente",
         "STUDENT_REQUESTS": "Solicitudes de estudiantes",
         "TITLE_1": "TFG",
         "TITLE_N": "TFGs"

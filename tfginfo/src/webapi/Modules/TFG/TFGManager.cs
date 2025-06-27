@@ -13,7 +13,8 @@ namespace TFGinfo.Api
     {
         private readonly EmailService? emailService;
         private readonly IConfiguration? configuration;
-        public TFGManager(ApplicationDbContext context, EmailService? emailService = null, IConfiguration? configuration = null) : base(context) {
+        public TFGManager(ApplicationDbContext context, EmailService? emailService = null, IConfiguration? configuration = null) : base(context)
+        {
             this.emailService = emailService;
             this.configuration = configuration;
         }
@@ -24,9 +25,10 @@ namespace TFGinfo.Api
         }
 
         public TFGDTO CreateTFG(TFGFlatDTO TFG)
-        { 
+        {
 
-            TFGModel model = new TFGModel {
+            TFGModel model = new TFGModel
+            {
                 startDate = TFG.startDate.Value,
                 tfg_line = TFG.tfgLineId
             };
@@ -44,7 +46,8 @@ namespace TFGinfo.Api
         public void DeleteTFG(int id)
         {
             TFGModel? model = context.tfg.FirstOrDefault(TFG => TFG.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             context.tfg.Remove(model);
@@ -54,7 +57,8 @@ namespace TFGinfo.Api
         public TFGDTO UpdateTFG(TFGFlatDTO TFG)
         {
             TFGModel? model = context.tfg.Include(d => d.tfgLineModel).FirstOrDefault(d => d.id == TFG.id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
 
@@ -72,7 +76,8 @@ namespace TFGinfo.Api
         public TFGDTO GetTFGById(int id)
         {
             TFGModel? model = context.tfg.Include(d => d.tfgLineModel).FirstOrDefault(d => d.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             return new TFGDTO(model);
@@ -149,7 +154,7 @@ namespace TFGinfo.Api
                 startDate = DateTime.Now,
                 external_tutor_name = request.tfg.external_tutor_name,
                 external_tutor_email = request.tfg.external_tutor_email,
-                accepted = 0,
+                status = 0,
                 tfg_line = request.tfg.tfgLineId
             };
             context.tfg.Add(tfgModel);
@@ -182,20 +187,22 @@ namespace TFGinfo.Api
             context.SaveChanges();
         }
 
-        public List<TFGPendingRequestDTO> GetPendingTFGsByProfessor(int id)
+        public List<TFGPendingRequestDTO> GetTFGsByProfessor(int id)
         {
             List<TFGModel> tfgs = context.tfg_professor
                 .Include(d => d.tfgModel).ThenInclude(d => d.tfgLineModel)
                 .Include(d => d.tfgModel.Students).ThenInclude(d => d.studentModel)
-                .Where(d => d.professor == id && d.tfgModel.accepted == 0)
+                .Where(d => d.professor == id)
                 .Select(d => d.tfgModel)
                 .ToList();
-            List<TFGPendingRequestDTO> tfgsDTO = tfgs.ConvertAll(model => new TFGPendingRequestDTO{
+            List<TFGPendingRequestDTO> tfgsDTO = tfgs.ConvertAll(model => new TFGPendingRequestDTO
+            {
                 tfgId = model.id,
                 studentName = model.Students.FirstOrDefault()?.studentModel.name + " " + model.Students.FirstOrDefault()?.studentModel.surname,
                 tfgName = model.tfgLineModel.name,
+                tfgStatus = model.status
             });
-            
+
             return tfgsDTO;
         }
 
@@ -208,13 +215,14 @@ namespace TFGinfo.Api
                 .Include(d => d.Students).ThenInclude(d => d.studentModel)
                 .Where(d => d.id == tfgId)
                 .FirstOrDefault();
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException("TFG not found");
             }
-            model.accepted = 1;
+            model.status = 1;
             context.SaveChanges();
 
-            
+
             WorkingGroupManager wgManager = new WorkingGroupManager(context);
             WorkingGroupBase wg = new WorkingGroupBase
             {
@@ -245,10 +253,11 @@ namespace TFGinfo.Api
         {
             TFGModel? model = context.tfg
                 .Include(d => d.tfgLineModel)
-                .Include(d => d.Students).ThenInclude(d => d.studentModel) 
-                .Include(d => d.Professors).ThenInclude(d => d.professorModel)  
+                .Include(d => d.Students).ThenInclude(d => d.studentModel)
+                .Include(d => d.Professors).ThenInclude(d => d.professorModel)
                 .Where(d => d.id == tfgId).FirstOrDefault();
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException("TFG not found");
             }
             var studentEmail = model.Students.FirstOrDefault()?.studentModel.email;
@@ -270,6 +279,54 @@ namespace TFGinfo.Api
             var body = $"Tu solicitud de TFG ha sido rechazada por el profesor {model.Professors.FirstOrDefault()?.professorModel.name}.\n\n" +
                 $"Puedes ver la solicitud en el portal de gestión de TFGs: {configuration.GetSection("app:url").Value}.\n\n";
             await emailService.SendEmailAsync(studentEmail, "Solicitud TFG rechazada", body);
+        }
+
+        public async Task ChangeStatus(int tfgId)
+        {
+            TFGModel? model = context.tfg
+                .Include(d => d.tfgLineModel)
+                .Include(d => d.Professors).ThenInclude(d => d.professorModel)
+                .Include(d => d.Students).ThenInclude(d => d.studentModel)
+                .Where(d => d.id == tfgId)
+                .FirstOrDefault();
+
+            if (model == null)
+            {
+                throw new NotFoundException("TFG not found");
+            }
+            if (model.status == (int)TFGStatus.Pending || model.status == (int)TFGStatus.Finished)
+            {
+                throw new UnprocessableException("TFG status can't be changed from this status");
+            }
+            model.status = model.status + 1; // Increment the status;
+            context.SaveChanges();
+
+            if (emailService == null)
+            {
+                throw new UnprocessableException("Email service not available");
+            }
+            if (configuration == null)
+            {
+                throw new UnprocessableException("Configuration not available");
+            }
+            var body = string.Empty;
+            var subject = string.Empty;
+            switch (model.status)
+            {
+                case (int)TFGStatus.PreliminaryAproved:
+                    body = $"Tu anteproyecto para tu TFG ha sido aprobado.\n\n" +
+                        $"Puedes ver la solicitud en el portal de gestión de TFGs: {configuration.GetSection("app:url").Value}.\n\n";
+                    subject = "Anteproyecto TFG aprobado";
+                    break;
+                case (int)TFGStatus.Finished:
+                    body = $"Tu TFG ha sido presentado ante tribunal y finalizado.\n\n" +
+                        $"Puedes ver la solicitud en el portal de gestión de TFGs: {configuration.GetSection("app:url").Value}.\n\n";
+                    break;
+                default:
+                    throw new UnprocessableException("Invalid TFG status");
+            }
+            // Send email to the student
+            await emailService.SendEmailAsync(model.Students.FirstOrDefault()?.studentModel.email, subject, body);
         }
 
         #region Private Methods

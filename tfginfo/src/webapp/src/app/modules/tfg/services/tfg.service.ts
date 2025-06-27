@@ -76,4 +76,8 @@ export class TfgService extends BaseService {
         return this.post(`${this.url}/tfg/reject/${id}`, null);
     }
 
+    changeTfgStatus(id: number): Observable<void> {
+        return this.post(`${this.url}/tfg/change-status/${id}`, null);
+    }
+
 }

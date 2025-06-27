@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { TfgListComponent } from '../../../tfg/components/tfg-list/tfg-list.component';
 import { GroupListComponent } from '../../../groups/components/groups-list/groups-list.component';
-import { TFGDTO, TFGLineDTO, TFGRequestDTO } from '../../../tfg/models/tfg.model';
+import { TFGDTO, TFGLineDTO, TFGRequestDTO, TFGStatus } from '../../../tfg/models/tfg.model';
 import { TfgService } from '../../../tfg/services/tfg.service';
 import { RoleId } from '../../../admin/models/role.model';
 import { WorkingGroupBase } from '../../../groups/models/group.model';
@@ -63,5 +63,12 @@ export class BookingsComponent implements OnInit {
         this.workingGroupService.getGroupByProfessor(user!.id).subscribe((groups) => {
             this.workingGroups = groups;
         });
+    }
+
+    changeStatus(tfg: TFGRequestDTO) {
+        // CHange the status of the TFG request in the pinding Tfgs array with the infor from tfg
+        this.pendingTfgs = this.pendingTfgs.filter((t) => t.tfgId !== tfg.tfgId);
+        tfg.tfgStatus = tfg.tfgStatus + 1;
+        this.pendingTfgs.push(tfg);
     }
 }

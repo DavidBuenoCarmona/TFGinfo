@@ -11,11 +11,12 @@ using TFGinfo.Objects;
 [Route("/tfg")]
 [ApiController]
 public class TFGController : BaseController
-{   
+{
     private readonly EmailService emailService;
-    public TFGController(ApplicationDbContext context, EmailService emailService, IConfiguration configuration) : base(context, configuration) {
+    public TFGController(ApplicationDbContext context, EmailService emailService, IConfiguration configuration) : base(context, configuration)
+    {
         this.emailService = emailService;
-     }
+    }
 
 
     [HttpPost]
@@ -70,7 +71,7 @@ public class TFGController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
-        
+
     }
 
     [HttpPost("search")]
@@ -230,7 +231,7 @@ public class TFGController : BaseController
     }
 
     [HttpGet("professor-pending/{id}")]
-    public IActionResult GetPendingTFGsByProfessor(int id)
+    public IActionResult GetTFGsByProfessor(int id)
     {
         try
         {
@@ -248,7 +249,7 @@ public class TFGController : BaseController
             }
 
             TFGManager manager = new TFGManager(context);
-            return Ok(manager.GetPendingTFGsByProfessor(id));
+            return Ok(manager.GetTFGsByProfessor(id));
         }
         catch (NotFoundException)
         {
@@ -321,6 +322,38 @@ public class TFGController : BaseController
         catch (UnprocessableException e)
         {
             return UnprocessableEntity(e.GetError());
+        }
+    }
+    
+    [HttpPost("change-status/{id}")]
+    public async Task<IActionResult> ChangeStatus(int id)
+    {
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin, (int)RoleTypes.Professor });
+
+            TFGManager manager = new TFGManager(context, emailService, configuration);
+            await manager.ChangeStatus(id);
+            return Ok();
+        }
+        catch (NotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
     }
 }

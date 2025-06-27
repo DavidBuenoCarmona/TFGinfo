@@ -13,7 +13,7 @@
     </div>
     <div *ngIf="isProfessor" class="row mt-4">
         <div>
-            <tfg-request-list (procesedRequest)="removeRequest($event)" [tfgStudentRequests]="pendingTfgs"></tfg-request-list>
+            <tfg-request-list (requestAccepted)="changeStatus($event)" (procesedRequest)="removeRequest($event)" [tfgStudentRequests]="pendingTfgs"></tfg-request-list>
         </div>
     </div>
 </div>

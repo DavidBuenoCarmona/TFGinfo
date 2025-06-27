@@ -1,0 +1,25 @@
+.status-card {
+  display: inline-block;
+  padding: 2px 12px;
+  font-size: 0.95em;
+  border-radius: 8px;
+  color: #fff;
+  min-width: 80px;
+  text-align: center;
+  box-shadow: none;
+  margin: 0;
+}
+
+.status-card.accepted {
+  background: #43a047;
+}
+.status-card.rejected {
+  background: #e53935;
+}
+.status-card.pending {
+  background: #fbc02d;
+  color: #333;
+}
+.status-card.default {
+  background: #90a4ae;
+}

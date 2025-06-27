@@ -89,6 +89,7 @@
         "SAVE": "Save",
         "SEARCH": "Search",
         "SPANISH": "Spanish",
+        "STATUS": "Status",
         "SURNAME": "Surname",
         "UPDATE": "Update",
         "VIEW": "View",
@@ -134,6 +135,13 @@
         "SLOTS": "Slots",
         "SLOTS>": "Slots >=",
         "SLOTS_REQUIRED": "Slots are required",
+        "STATUS": {
+            "0": "Pending approval",
+            "1": "Pending project submission",
+            "2": "Pending defense",
+            "3": "Completed"
+        },
+        "STATUS_UPDATED": "Status updated successfully",
         "STUDENT_REQUESTS": "Student requests",
         "TITLE_1": "TFG",
         "TITLE_N": "TFGs"

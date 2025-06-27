@@ -177,7 +177,7 @@ CREATE TABLE `tfg` (
   `startdate` datetime NOT NULL,
   `external_tutor_email` varchar(45) DEFAULT NULL,
   `external_tutor_name` varchar(45) DEFAULT NULL,
-  `accepted` smallint DEFAULT NULL,
+  `status` int DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `tfg_line_idx` (`tfg_line`),
   CONSTRAINT `tfg_line` FOREIGN KEY (`tfg_line`) REFERENCES `tfg_line` (`id`)
