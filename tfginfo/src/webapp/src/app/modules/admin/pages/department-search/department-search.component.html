@@ -17,11 +17,17 @@
                         </mat-form-field>
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 mb-2">
-                            <mat-form-field appearance="fill" class="form-field w-100">
-                                <mat-label>{{ 'UNIVERSITY.TITLE_1' | translate }}</mat-label>
-                                <input matInput formControlName="university" />
-                            </mat-form-field>
-                        </div>
+                        <mat-form-field appearance="fill" class="form-field w-100">
+                            <mat-label>{{ 'GLOBAL.ACRONYM' | translate }}</mat-label>
+                            <input matInput formControlName="acronym" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 mb-2">
+                        <mat-form-field appearance="fill" class="form-field w-100">
+                            <mat-label>{{ 'UNIVERSITY.TITLE_1' | translate }}</mat-label>
+                            <input matInput formControlName="university" />
+                        </mat-form-field>
+                    </div>
                 </ng-container>
                 <div class="col-12 col-sm-6 col-md-3 mb-2">
                     <button mat-raised-button class="action-button" type="submit">
@@ -42,5 +48,6 @@
             </button>
         </div>
     </div>
-    <department-list (onDeleteDepartment)="deleteDepartment($event)" [departments]="filteredDepartments"></department-list>
+    <department-list (onDeleteDepartment)="deleteDepartment($event)"
+        [departments]="filteredDepartments"></department-list>
 </div>

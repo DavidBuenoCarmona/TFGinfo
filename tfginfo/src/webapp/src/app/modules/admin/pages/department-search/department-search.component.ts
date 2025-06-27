@@ -4,13 +4,14 @@ import { DepartmentService } from '../../services/department.service';
 import { DepartmentDTO } from '../../models/department.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { Filter } from '../../../../core/core.model';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-department-search',
@@ -36,13 +37,15 @@ export class DepartmentSearchComponent implements OnInit {
         public departmentService: DepartmentService,
         private router: Router,
         private fb: FormBuilder,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        public translateService: TranslateService
     ) { }
 
     ngOnInit(): void {
         this.filterForm = this.fb.group({
             generic: [''],
             name: [''],
+            acronym: [''],
             university: [''],
         });
 
@@ -93,6 +96,7 @@ export class DepartmentSearchComponent implements OnInit {
         if (!this.showExtraFilters) {
             this.filterForm.get('university')?.setValue(''); // Limpiar el campo de universidad
             this.filterForm.get('name')?.setValue(''); // Limpiar el campo de nombre
+            this.filterForm.get('acronym')?.setValue(''); // Limpiar el campo de acrónimo
         }
     }
 }
