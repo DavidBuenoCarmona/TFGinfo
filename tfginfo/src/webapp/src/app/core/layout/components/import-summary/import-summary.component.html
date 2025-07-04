@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Resumen de importación</h2>
+    <mat-dialog-content>
+      <div>
+        <p>{{ 'GLOBAL.IMPORT_CORRECTLY' | translate }} <b>{{ data.success }}</b></p>
+      </div>
+      <div *ngIf="data?.items?.length">
+        <ul>
+          <li *ngFor="let item of data.items">{{ item }}</li>
+        </ul>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>{{ 'GLOBAL.CLOSE' | translate }}</button>
+    </mat-dialog-actions>

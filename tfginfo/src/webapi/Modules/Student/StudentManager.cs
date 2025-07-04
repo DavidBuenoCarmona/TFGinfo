@@ -13,7 +13,8 @@ namespace TFGinfo.Api
     public class StudentManager : BaseManager
     {
         private readonly EmailService? emailService;
-        public StudentManager(ApplicationDbContext context, EmailService? emailService = null) : base(context) {
+        public StudentManager(ApplicationDbContext context, EmailService? emailService = null) : base(context)
+        {
             this.emailService = emailService;
         }
 
@@ -21,7 +22,7 @@ namespace TFGinfo.Api
         {
             return context.student.AsNoTracking().Include(d => d.careerModel).ThenInclude(c => c.universityModel).ToList().ConvertAll(model => new StudentDTO(model));
         }
-        
+
         public List<StudentDTO> SearchStudents(List<Filter> filters)
         {
             IQueryable<StudentModel> query = context.student.AsNoTracking().Include(d => d.careerModel).ThenInclude(c => c.universityModel);
@@ -102,18 +103,21 @@ namespace TFGinfo.Api
         public void DeleteStudent(int id)
         {
             StudentModel? model = context.student.FirstOrDefault(Student => Student.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             int userId = model.user;
 
             bool tfgExists = context.tfg_student.Any(t => t.student == id);
-            if (tfgExists) {
+            if (tfgExists)
+            {
                 throw new UnprocessableException("Cannot delete student because there are TFGs associated with it.");
             }
 
             bool groupExists = context.working_group_student.Any(g => g.student == id);
-            if (groupExists) {
+            if (groupExists)
+            {
                 throw new UnprocessableException("Cannot delete student because there are groups associated with it.");
             }
 
@@ -127,7 +131,8 @@ namespace TFGinfo.Api
         public StudentDTO UpdateStudent(StudentFlatDTO Student)
         {
             StudentModel? model = context.student.Include(d => d.careerModel).FirstOrDefault(d => d.id == Student.id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
 
@@ -157,7 +162,8 @@ namespace TFGinfo.Api
         public StudentDTO UpdateOptionalData(int id, StudentOptionalDataDTO optionalData)
         {
             StudentModel? model = context.student.Include(d => d.careerModel).FirstOrDefault(Student => Student.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
 
@@ -177,23 +183,113 @@ namespace TFGinfo.Api
         public StudentDTO GetById(int id)
         {
             StudentModel? model = context.student.Include(d => d.careerModel).ThenInclude(c => c.universityModel).FirstOrDefault(Student => Student.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             return new StudentDTO(model);
         }
 
+
+        public async Task<CSVOutput> ImportStudents(string base64)
+        {
+            var output = new CSVOutput();
+
+            // Decodifica el base64 a texto
+            var bytes = Convert.FromBase64String(base64);
+            var csvContent = System.Text.Encoding.UTF8.GetString(bytes);
+
+            // Separa líneas y elimina vacías
+            var lines = csvContent.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Opcional: Si la primera línea es cabecera, sáltala
+            // var startIndex = lines[0].StartsWith("Nombre") ? 1 : 0;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+                // Divide por ';'
+                var fields = line.Split(';');
+                if (fields.Length < 5) // Mínimo los obligatorios
+                {
+                    output.errorItems.Add($"Line {i + 1}: Some fields doesn't have any value.");
+                    continue;
+                }
+
+                try
+                {
+                    CareerModel? career = context.career.FirstOrDefault(c => c.name.ToLower() == fields[4].Trim().ToLower());
+                    if (career == null)
+                    {
+                        output.errorItems.Add($"Line {i + 1}: Career '{fields[4].Trim()}' not found.");
+                        continue;
+                    }
+                    DateTime birthDate = default;
+                    if (fields.Length >= 6 && !string.IsNullOrWhiteSpace(fields[5]) && !DateTime.TryParse(fields[5], out birthDate))
+                    {
+                        output.errorItems.Add($"Line {i + 1}: Invalid date.");
+                        continue;
+                    }
+
+                    var student = new StudentFlatDTO
+                    {
+                        name = fields[0].Trim(),
+                        surname = fields[1].Trim(),
+                        email = fields[2].Trim(),
+                        dni = fields[3].Trim(),
+                        careerId = career.id,
+                        birthdate = birthDate != default ? birthDate : null,
+                        phone = fields.Length >= 7 && !string.IsNullOrWhiteSpace(fields[6]) ? fields[6].Trim() : null,
+                        address = fields.Length >= 8 && !string.IsNullOrWhiteSpace(fields[7]) ? fields[7] : null
+                    };
+
+                    // Validación de obligatorios
+                    if (string.IsNullOrWhiteSpace(student.name) ||
+                        string.IsNullOrWhiteSpace(student.surname) ||
+                        string.IsNullOrWhiteSpace(student.email) ||
+                        string.IsNullOrWhiteSpace(student.dni))
+                    {
+                        output.errorItems.Add($"Line {i + 1}: Some fields doesn't have any value");
+                        continue;
+                    }
+
+                    // Aquí puedes guardar el estudiante en la base de datos
+                    try
+                    {
+                        await CreateStudent(student);
+                    }
+                    catch (Exception ex)
+                    {
+                        output.errorItems.Add($"Line {i + 1}: {ex.Message}");
+                        continue;
+                    }
+                    
+                    // output.SuccessItems.Add(created);
+
+                    output.success++;
+                }
+                catch (Exception ex)
+                {
+                    output.errorItems.Add($"Line {i + 1}: {ex.Message}");
+                }
+            }
+
+            return output;
+        }
+
         #region Private Methods
         private void CheckEmailIsNotRepeated(StudentFlatDTO student)
         {
-            if (context.student.Any(s => s.id != student.id && s.email.ToLower() == student.email.ToLower())) {
+            if (context.student.Any(s => s.id != student.id && s.email.ToLower() == student.email.ToLower()))
+            {
                 throw new UnprocessableException("Student email already exists");
             }
         }
 
         private void CheckDniIsNotRepeated(StudentFlatDTO student)
         {
-            if (context.student.Any(s => s.id != student.id && s.dni.ToLower() == student.dni.ToLower())) {
+            if (context.student.Any(s => s.id != student.id && s.dni.ToLower() == student.dni.ToLower()))
+            {
                 throw new UnprocessableException("Student dni already exists");
             }
         }

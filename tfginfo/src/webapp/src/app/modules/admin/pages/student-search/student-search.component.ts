@@ -11,6 +11,10 @@ import { StudentService } from '../../services/student.service';
 import { StudentListComponent } from '../../components/student-list/student-list.component';
 import { Filter } from '../../../../core/core.model';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ImportDialogComponent } from '../../../../core/layout/components/import-dialog/import-dialog.component';
+import { ImportSummaryComponent } from '../../../../core/layout/components/import-summary/import-summary.component';
+import { error } from 'console';
 
 @Component({
     selector: 'app-student-search',
@@ -20,6 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
         TranslateModule,
         ReactiveFormsModule,
         MatButtonModule,
+        MatDialogModule,
         MatIconModule,
         CommonModule],
     templateUrl: './student-search.component.html',
@@ -36,7 +41,8 @@ export class StudentSearchComponent implements OnInit {
         public studentService: StudentService,
         private router: Router,
         private fb: FormBuilder,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private dialog: MatDialog
     ) { }
 
     ngOnInit(): void {
@@ -54,7 +60,7 @@ export class StudentSearchComponent implements OnInit {
             this.filteredStudents = [...this.students];
         });
     }
-    
+
     onCreate(): void {
         this.router.navigate(['new'], { relativeTo: this.route });
     }
@@ -69,8 +75,8 @@ export class StudentSearchComponent implements OnInit {
                 filters.push({ key, value });
             }
         });
-        
-        this.studentService.searchStudents(filters).subscribe(students =>{
+
+        this.studentService.searchStudents(filters).subscribe(students => {
             this.filteredStudents = students;
         });
     }
@@ -82,7 +88,7 @@ export class StudentSearchComponent implements OnInit {
 
     deleteStudent(studentId: number): void {
         this.studentService.deleteStudent(studentId).subscribe({
-            next: () => {},
+            next: () => { },
             error: (err) => console.error(err),
             complete: () => {
                 this.students = this.students.filter((item) => item.id !== studentId);
@@ -100,5 +106,33 @@ export class StudentSearchComponent implements OnInit {
             this.filterForm.get('email')?.setValue(''); // Limpiar el campo de email
             this.filterForm.get('career')?.setValue(''); // Limpiar el campo de carrera
         }
+    }
+
+    openImportDialog(): void {
+        const format = "STUDENT.CSV_FORMAT";
+        const dialogRef = this.dialog.open(ImportDialogComponent, {data: { format: format}});
+        dialogRef.afterClosed().subscribe((result: File) => {
+            if (result) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = (reader.result as string).split(',')[1]; // Solo la parte base64
+                    this.studentService.importFromCSV(base64).subscribe({
+                        next: (res) => {
+                            if (res.errorItems.length > 0) {
+                                this.dialog.open(ImportSummaryComponent, {
+                                    data: {
+                                        success: res.success,
+                                        items: res.errorItems
+                                    }
+                                });
+                            }
+                            this.onSearch();
+                        }
+                        , error: (err) => console.error(err)
+                    });
+                };
+                reader.readAsDataURL(result);
+            }
+        });
     }
 }
