@@ -11,6 +11,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { Filter } from '../../../../core/core.model';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { ImportDialogComponent } from '../../../../core/layout/components/import-dialog/import-dialog.component';
+import { ImportSummaryComponent } from '../../../../core/layout/components/import-summary/import-summary.component';
 
 @Component({
     selector: 'app-career-search',
@@ -36,7 +39,8 @@ export class CareerSearchComponent implements OnInit {
         public careerService: CareerService,
         private router: Router,
         private fb: FormBuilder,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private dialog: MatDialog
     ) { }
 
     ngOnInit(): void {
@@ -51,7 +55,7 @@ export class CareerSearchComponent implements OnInit {
             this.filteredCareers = [...this.careers];
         });
     }
-    
+
     onCreate(): void {
         this.router.navigate(['new'], { relativeTo: this.route });
     }
@@ -67,7 +71,7 @@ export class CareerSearchComponent implements OnInit {
             }
         });
 
-        this.careerService.searchCarrers(filters).subscribe(careers =>{
+        this.careerService.searchCarrers(filters).subscribe(careers => {
             this.filteredCareers = careers;
         });
     }
@@ -79,7 +83,7 @@ export class CareerSearchComponent implements OnInit {
 
     deleteCareer(careerId: number): void {
         this.careerService.deleteCareer(careerId).subscribe({
-            next: () => {},
+            next: () => { },
             error: (err) => console.error(err),
             complete: () => {
                 this.careers = this.careers.filter((item) => item.id !== careerId);
@@ -94,5 +98,33 @@ export class CareerSearchComponent implements OnInit {
             this.filterForm.get('university')?.setValue(''); // Limpiar el campo de universidad
             this.filterForm.get('name')?.setValue(''); // Limpiar el campo de nombre
         }
+    }
+
+    openImportDialog(): void {
+        const format = "CAREER.CSV_FORMAT";
+        const dialogRef = this.dialog.open(ImportDialogComponent, { data: { format: format } });
+        dialogRef.afterClosed().subscribe((result: File) => {
+            if (result) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = (reader.result as string).split(',')[1]; // Solo la parte base64
+                    this.careerService.importFromCSV(base64).subscribe({
+                        next: (res) => {
+                            if (res.errorItems.length > 0) {
+                                this.dialog.open(ImportSummaryComponent, {
+                                    data: {
+                                        success: res.success,
+                                        items: res.errorItems
+                                    }
+                                });
+                            }
+                            this.onSearch();
+                        }
+                        , error: (err) => console.error(err)
+                    });
+                };
+                reader.readAsDataURL(result);
+            }
+        });
     }
 }

@@ -11,6 +11,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Filter } from '../../../../core/core.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ImportDialogComponent } from '../../../../core/layout/components/import-dialog/import-dialog.component';
+import { ImportSummaryComponent } from '../../../../core/layout/components/import-summary/import-summary.component';
 
 @Component({
     selector: 'app-university-search',
@@ -36,7 +39,8 @@ export class UniversitySearchComponent implements OnInit {
         public universityService: UniversityService,
         private router: Router,
         private fb: FormBuilder,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private dialog: MatDialog
     ) { }
 
     ngOnInit(): void {
@@ -51,7 +55,7 @@ export class UniversitySearchComponent implements OnInit {
             this.filteredUniversities = [...this.universities];
         });
     }
-    
+
     onCreate(): void {
         this.router.navigate(['new'], { relativeTo: this.route });
     }
@@ -79,7 +83,7 @@ export class UniversitySearchComponent implements OnInit {
 
     deleteUniversity(universityId: number): void {
         this.universityService.deleteUniversity(universityId).subscribe({
-            next: () => {},
+            next: () => { },
             error: (err) => console.error(err),
             complete: () => {
                 this.universities = this.universities.filter((item) => item.id !== universityId);
@@ -88,11 +92,39 @@ export class UniversitySearchComponent implements OnInit {
         });
     }
 
-        onShowExtraFilters(): void {
+    onShowExtraFilters(): void {
         this.showExtraFilters = !this.showExtraFilters;
         if (!this.showExtraFilters) {
             this.filterForm.get('address')?.setValue(''); // Limpiar el campo de universidad
             this.filterForm.get('name')?.setValue(''); // Limpiar el campo de nombre
         }
+    }
+
+    openImportDialog(): void {
+        const format = "UNIVERSITY.CSV_FORMAT";
+        const dialogRef = this.dialog.open(ImportDialogComponent, { data: { format: format } });
+        dialogRef.afterClosed().subscribe((result: File) => {
+            if (result) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = (reader.result as string).split(',')[1]; // Solo la parte base64
+                    this.universityService.importFromCSV(base64).subscribe({
+                        next: (res) => {
+                            if (res.errorItems.length > 0) {
+                                this.dialog.open(ImportSummaryComponent, {
+                                    data: {
+                                        success: res.success,
+                                        items: res.errorItems
+                                    }
+                                });
+                            }
+                            this.onSearch();
+                        }
+                        , error: (err) => console.error(err)
+                    });
+                };
+                reader.readAsDataURL(result);
+            }
+        });
     }
 }

@@ -41,4 +41,8 @@ export class ProfessorService extends BaseService {
     searchProfessors(filters: Filter[]): Observable<ProfessorDTO[]> {
         return this.post(`${this.url}/professor/search`, filters);
     }
+
+    importFromCSV(content: string): Observable<any> {
+        return this.post(`${this.url}/professor/import`, { content });
+    }
 }

@@ -19,6 +19,7 @@
     },
     "CAREER": {
         "CREATE": "Crear titulación",
+        "CSV_FORMAT": "Formato CSV: \n Nombre*; Centro* ",
         "EDIT": "Editar titulación",
         "DELETE": "Eliminar titulación",
         "NEW": "Nueva titulación",
@@ -30,6 +31,7 @@
     },
     "DEPARTMENT": {
         "CREATE": "Crear departamento",
+        "CSV_FORMAT": "Formato CSV: \n Nombre*;Acrónimo;Centros* \n \n Centros: Nombre1,Nombre2,...",
         "EDIT": "Editar departamento",
         "DELETE": "Eliminar departamento",
         "NEW": "Nuevo departamento",
@@ -76,7 +78,7 @@
         "ENGLISH": "Inglés",
         "GO_HOME": "Ir a inicio",
         "IMPORT": "Importar",
-        "IMPORT_CORRECTLY": "La cantidad de elementos importadas correctamente es: ",
+        "IMPORT_CORRECTLY": "La cantidad de elementos importados correctamente es: ",
         "IMPORT_FORMAT_DESCRIPTION": "Los elementos con * son obligatorios.",
         "IMPORT_FROM_CSV": "Importar desde CSV",
         "LOGIN": "Iniciar sesión",
@@ -101,6 +103,7 @@
         "WANT_TO_CONFIRM": "¿Quieres confirmar la acción?"
     },
     "PROFESSOR": {
+        "CSV_FORMAT": "Formato CSV: \n Nombre*; Apellidos*; Correo electrónico*; Departamento* \n \n Departamento: Nombre o Acrónimo del departamento",
         "NEW": "Nuevo profesor",
         "IS_DEPARTMENT_BOSS": "¿Es jefe de departamento?",
         "SELECT": "Seleccionar profesor(es)",
@@ -113,7 +116,7 @@
     },
     "STUDENT": {
         "CREATE": "Crear estudiante",
-        "CSV_FORMAT": "Formato CSV: Nombre*;Apellidos*;Correo electrónico*;DNI*;Carrera*;Fecha de nacimiento;Teléfono;Dirección",
+        "CSV_FORMAT": "Formato CSV: \n Nombre*; Apellidos*; Correo electrónico*; DNI*; Carrera*; Fecha de nacimiento; Teléfono; Dirección \n \n Fecha de nacimiento: dd/mm/yyyy", 
         "EDIT": "Editar estudiante",
         "DELETE": "Eliminar estudiante",
         "NEW": "Nuevo estudiante",
@@ -123,6 +126,7 @@
         "VIEW_LIST": "Ver lista de estudiantes"
     },
     "TFG": {
+        "CSV_FORMAT": "Formato CSV: \n Título*; Departamento*; Plazas*; Grupo; Descripción*; \n \n Grupo: 1 para proyecto en grupo, 0 para proyecto individual. El valor por defecto es 0.",
         "DEPARTMENT_REQUIRED": "El departamento es requerido",
         "EXTERNAL_TUTOR": {
             "TITLE_1": "Tutor externo",
@@ -154,6 +158,7 @@
     },
     "UNIVERSITY": {
         "CREATE": "Crear centro",
+        "CSV_FORMAT": "Formato CSV: \n Nombre*; Dirección*",
         "CHANGE": "Cambiar centro",
         "EDIT": "Editar centro",
         "DELETE": "Eliminar centro",

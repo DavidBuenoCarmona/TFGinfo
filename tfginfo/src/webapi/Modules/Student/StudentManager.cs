@@ -216,6 +216,16 @@ namespace TFGinfo.Api
                     continue;
                 }
 
+                // Validación de obligatorios
+                if (string.IsNullOrWhiteSpace(fields[0]) ||
+                    string.IsNullOrWhiteSpace(fields[1]) ||
+                    string.IsNullOrWhiteSpace(fields[2]) ||
+                    string.IsNullOrWhiteSpace(fields[3]))
+                {
+                    output.errorItems.Add($"Line {i + 1}: Some fields doesn't have any value");
+                    continue;
+                }
+
                 try
                 {
                     CareerModel? career = context.career.FirstOrDefault(c => c.name.ToLower() == fields[4].Trim().ToLower());
@@ -243,16 +253,6 @@ namespace TFGinfo.Api
                         address = fields.Length >= 8 && !string.IsNullOrWhiteSpace(fields[7]) ? fields[7] : null
                     };
 
-                    // Validación de obligatorios
-                    if (string.IsNullOrWhiteSpace(student.name) ||
-                        string.IsNullOrWhiteSpace(student.surname) ||
-                        string.IsNullOrWhiteSpace(student.email) ||
-                        string.IsNullOrWhiteSpace(student.dni))
-                    {
-                        output.errorItems.Add($"Line {i + 1}: Some fields doesn't have any value");
-                        continue;
-                    }
-
                     // Aquí puedes guardar el estudiante en la base de datos
                     try
                     {
@@ -263,7 +263,7 @@ namespace TFGinfo.Api
                         output.errorItems.Add($"Line {i + 1}: {ex.Message}");
                         continue;
                     }
-                    
+
                     // output.SuccessItems.Add(created);
 
                     output.success++;

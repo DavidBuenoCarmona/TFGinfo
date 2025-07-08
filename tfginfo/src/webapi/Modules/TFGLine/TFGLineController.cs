@@ -11,7 +11,7 @@ using TFGinfo.Objects;
 [ApiController]
 public class TFGLineController : BaseController
 {
-    public TFGLineController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration){}
+    public TFGLineController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
 
     [HttpPost]
@@ -296,7 +296,8 @@ public class TFGLineController : BaseController
     [HttpGet("student/{id}")]
     public IActionResult GetByStudentId(int id)
     {
-        try {
+        try
+        {
             string token = Request.Headers["Authorization"].ToString();
             if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
             {
@@ -312,9 +313,13 @@ public class TFGLineController : BaseController
 
             TFGLineManager manager = new TFGLineManager(context);
             return Ok(manager.GetByStudentId(id));
-        } catch (NotFoundException) {
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-        } catch (UnprocessableException e) {
+        }
+        catch (UnprocessableException e)
+        {
             return UnprocessableEntity(e.GetError());
         }
     }
@@ -352,6 +357,34 @@ public class TFGLineController : BaseController
         {
             // Log the exception (not shown here for brevity)
             return StatusCode(500, "An unexpected error occurred: " + e.Message);
+        }
+    }
+    
+    [HttpPost("import")]
+    public IActionResult Import([FromBody] CSVImport input)
+    {
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
+            TFGLineManager manager = new TFGLineManager(context);
+            var result = manager.ImportTFGs(input.content);
+            return Ok(result);
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
     }
 

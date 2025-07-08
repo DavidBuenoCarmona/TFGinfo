@@ -4,7 +4,7 @@ import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { Injectable } from "@angular/core";
 import { DepartmentDTO, DepartmentFlatDTO } from "../models/department.model";
-import { Filter } from "../../../core/core.model";
+import { Filter, ImportResponse } from "../../../core/core.model";
 
 @Injectable({
     providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
@@ -42,5 +42,9 @@ export class DepartmentService extends BaseService {
 
     searchDepartments(filters: Filter[]): Observable<DepartmentDTO[]> {
         return this.post(`${this.url}/department/search`, filters);
+    }
+
+    importFromCSV(content: string): Observable<ImportResponse> {
+        return this.post(`${this.url}/department/import`, { content });
     }
 }

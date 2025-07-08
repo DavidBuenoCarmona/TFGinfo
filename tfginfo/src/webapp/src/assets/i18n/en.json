@@ -17,19 +17,21 @@
         "TITLE_N": "My bookings",
         "TFG": "My TFG bookings"
     },
-    "titulation": {
+    "CAREER": {
         "CREATE": "Create titulation",
+        "CSV_FORMAT": "CSV format: \n Name*; Center* ",
         "EDIT": "Edit titulation",
         "DELETE": "Delete titulation",
         "NEW": "New titulation",
         "SELECT": "Select titulation(s)",
-        "TITLE_1": "titulation",
-        "TITLE_N": "titulations",
+        "TITLE_1": "Titulation",
+        "TITLE_N": "Titulations",
         "VIEW": "View titulation",
         "VIEW_LIST": "View titulation list"
     },
     "DEPARTMENT": {
         "CREATE": "Create department",
+        "CSV_FORMAT": "CSV format: \n Name*; Acronym; Centers* \n \n Centers: Name1,Name2,...",
         "EDIT": "Edit department",
         "DELETE": "Delete department",
         "NEW": "New department",
@@ -102,6 +104,7 @@
         "WANT_TO_CONFIRM": "Do you want to confirm the action?"
     },
     "PROFESSOR": {
+        "CSV_FORMAT": "CSV format: \n Name*; Surname*; Email*; Department* \n \n Departament: Department's name or acronym",
         "NEW": "New professor",
         "IS_DEPARTMENT_BOSS": "Is department boss?",
         "SELECT": "Select professor(s)",
@@ -114,7 +117,7 @@
     },
     "STUDENT": {
         "CREATE": "Create student",
-        "CSV_FORMAT": "CSV format: Name*;Surname*;Email*;DNI*;Titulation*;Birth date;Phone;Address",
+        "CSV_FORMAT": "CSV format: \n Name*; Surname*; Email*; DNI*; Titulation*; Birth date; Phone; Address \n \n Birth date format: DD/MM/YYYY",
         "EDIT": "Edit student",
         "DELETE": "Delete student",
         "NEW": "New student",
@@ -124,6 +127,7 @@
         "VIEW_LIST": "View student list"
     },
     "TFG": {
+        "CSV_FORMAT": "CSV format: \n Title*; Department*; Slots*; Group; Description*; \n \n Group: 1 for group project, 0 for individual project. Default value is 0.",
         "DEPARTMENT_REQUIRED": "Department is required",
         "EXTERNAL_TUTOR": {
             "TITLE_1": "External tutor",
@@ -155,12 +159,13 @@
     },
     "UNIVERSITY": {
         "CREATE": "Create center",
+        "CSV_FORMAT": "CSV format: \n Name*; Address*",
         "CHANGE": "Change center",
         "EDIT": "Edit center",
         "DELETE": "Delete center",
         "NEW": "New center",
         "TITLE_1": "center",
-        "TITLE_N": "Universities",
+        "TITLE_N": "Centers",
         "VIEW": "View center",
         "VIEW_LIST": "View center list"
     },

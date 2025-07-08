@@ -4,7 +4,7 @@ import { BaseService } from "../../../core/services/base.service";
 import { AppConfigService } from "../../../core/services/app-config.service";
 import { Injectable } from "@angular/core";
 import { TFGDTO, TFGLineDTO, TFGLineFlatDTO, TFGRequest, TFGRequestDTO } from "../models/tfg.model";
-import { Filter } from "../../../core/core.model";
+import { Filter, ImportResponse } from "../../../core/core.model";
 
 @Injectable({
     providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
@@ -78,6 +78,10 @@ export class TfgService extends BaseService {
 
     changeTfgStatus(id: number): Observable<void> {
         return this.post(`${this.url}/tfg/change-status/${id}`, null);
+    }
+
+    importFromCSV(content: string): Observable<ImportResponse> {
+        return this.post(`${this.url}/tfg-line/import`, {content});
     }
 
 }

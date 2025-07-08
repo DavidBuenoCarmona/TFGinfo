@@ -2,7 +2,7 @@
 <mat-dialog-content>
   <form>
     <div class="mb-3">
-      <label for="csvFile" class="form-label">{{ format }}</label>
+      <label for="csvFile" class="form-label" style="white-space: pre-line;">{{ format }}</label>
         <p class="text-muted">{{ 'GLOBAL.IMPORT_FORMAT_DESCRIPTION' | translate }}</p>
       <input type="file" class="form-control" id="csvFile" accept=".csv" (change)="onFileSelected($event)">
     </div>

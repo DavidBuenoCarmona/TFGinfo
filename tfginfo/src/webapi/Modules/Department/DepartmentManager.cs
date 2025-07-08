@@ -147,6 +147,86 @@ namespace TFGinfo.Api
             return query.ToList().ConvertAll(model => new DepartmentDTO(model));
         }
 
+        public CSVOutput ImportDepartments(string base64)
+        {
+            var output = new CSVOutput();
+
+            // Decodifica el base64 a texto
+            var bytes = Convert.FromBase64String(base64);
+            var csvContent = System.Text.Encoding.UTF8.GetString(bytes);
+
+            // Separa líneas y elimina vacías
+            var lines = csvContent.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Opcional: Si la primera línea es cabecera, sáltala
+            // var startIndex = lines[0].StartsWith("Nombre") ? 1 : 0;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+                // Divide por ';'
+                var fields = line.Split(';');
+
+                if (fields.Length < 3)
+                {
+                    output.errorItems.Add($"Line {i + 1}: Invalid format, expected at least 2 fields.");
+                    continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(fields[0]))
+                {
+                    output.errorItems.Add($"Line {i + 1}: Name cannot be empty.");
+                    continue;
+                }
+                if (string.IsNullOrWhiteSpace(fields[2]))
+                {
+                    output.errorItems.Add($"Line {i + 1}: Center list cannot be empty.");
+                    continue;
+                }
+
+                var acronym = string.IsNullOrWhiteSpace(fields[2]) ? "" : fields[2].Trim();
+                var universityNames = fields[2].Split(',').Select(u => u.Trim().ToLower()).ToList();
+                var universityIds = context.university
+                    .Where(u => universityNames.Contains(u.name.ToLower()))
+                    .Select(u => u.id)
+                    .ToList();
+                if (universityIds.Count == 0)
+                {
+                    output.errorItems.Add($"Line {i + 1}: No valid universities found for '{fields[2]}'.");
+                    continue;
+                }
+
+                foreach (var universityName in universityNames)
+                {
+                    var university = context.university.FirstOrDefault(u => u.name.ToLower() == universityName);
+                    if (university == null)
+                    {
+                        output.errorItems.Add($"Line {i + 1}: University '{universityName}' does not exist. This relation will be ignored.");
+                    }
+                }
+
+                var department = new DepartmentFlatDTO
+                {
+                    name = fields[0].Trim(),
+                    acronym = acronym,
+                    universitiesId = universityIds
+                };
+
+                try
+                {
+                    CreateDepartment(department);
+                    output.success++;
+                }
+                catch (Exception e)
+                {
+                    output.errorItems.Add($"Line {i + 1}: {e.Message}");
+                }
+
+            }
+
+            return output;
+        }
+
         #region Private Methods
         private void CheckNameIsNotRepeated(DepartmentFlatDTO department)
         {

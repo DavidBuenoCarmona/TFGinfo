@@ -13,6 +13,9 @@ import { Filter } from '../../../../core/core.model';
 import { RoleId } from '../../../admin/models/role.model';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ImportDialogComponent } from '../../../../core/layout/components/import-dialog/import-dialog.component';
+import { ImportSummaryComponent } from '../../../../core/layout/components/import-summary/import-summary.component';
 
 @Component({
     selector: 'app-tfg-search',
@@ -41,7 +44,8 @@ export class TfgSearchComponent implements OnInit {
         private router: Router,
         private fb: FormBuilder,
         private route: ActivatedRoute,
-        private configurationService: ConfigurationService
+        private configurationService: ConfigurationService,
+        private dialog: MatDialog
     ) { }
 
     ngOnInit(): void {
@@ -135,6 +139,34 @@ export class TfgSearchComponent implements OnInit {
                 if (key != "generic") this.filters = this.filters.filter(filter => filter.key !== key);
             });
         }
+    }
+
+    openImportDialog(): void {
+        const format = "TFG.CSV_FORMAT";
+        const dialogRef = this.dialog.open(ImportDialogComponent, { data: { format: format } });
+        dialogRef.afterClosed().subscribe((result: File) => {
+            if (result) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = (reader.result as string).split(',')[1]; // Solo la parte base64
+                    this.tfgService.importFromCSV(base64).subscribe({
+                        next: (res) => {
+                            if (res.errorItems.length > 0) {
+                                this.dialog.open(ImportSummaryComponent, {
+                                    data: {
+                                        success: res.success,
+                                        items: res.errorItems
+                                    }
+                                });
+                            }
+                            this.onSearch();
+                        }
+                        , error: (err) => console.error(err)
+                    });
+                };
+                reader.readAsDataURL(result);
+            }
+        });
     }
 
 }

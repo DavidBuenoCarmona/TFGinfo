@@ -87,6 +87,63 @@ namespace TFGinfo.Api
             return query.ToList().ConvertAll(model => new UniversityBase(model)); 
         }
 
+        public CSVOutput ImportUniversities(string base64)
+        {
+            var output = new CSVOutput();
+
+            // Decodifica el base64 a texto
+            var bytes = Convert.FromBase64String(base64);
+            var csvContent = System.Text.Encoding.UTF8.GetString(bytes);
+
+            // Separa líneas y elimina vacías
+            var lines = csvContent.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Opcional: Si la primera línea es cabecera, sáltala
+            // var startIndex = lines[0].StartsWith("Nombre") ? 1 : 0;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+                // Divide por ';'
+                var fields = line.Split(';');
+                if (fields.Length < 2)
+                {
+                    output.errorItems.Add($"Line {i + 1}: Invalid format, expected at least 2 fields.");
+                    continue;
+                }
+                string name = fields[0].Trim();
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    output.errorItems.Add($"Line {i + 1}: Name cannot be empty.");
+                    continue;
+                }
+                string address = fields.Length > 1 ? fields[1].Trim() : "";
+                if (string.IsNullOrWhiteSpace(address))
+                {
+                    output.errorItems.Add($"Line {i + 1}: Address cannot be empty.");
+                    continue;
+                }
+                var university = new UniversityBase
+                {
+                    name = name,
+                    address = address
+                };
+
+                try
+                {
+                    CreateUniversity(university);
+                    output.success++;
+                }
+                catch (Exception e)
+                {
+                    output.errorItems.Add($"Line {i + 1}: {e.Message}");
+                    continue;
+                }
+            }
+            
+            return output;
+        }
+
         #region Private Methods
         private void CheckNameIsNotRepeated(UniversityBase university)
         {

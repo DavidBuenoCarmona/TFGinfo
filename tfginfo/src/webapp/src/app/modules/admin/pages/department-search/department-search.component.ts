@@ -12,6 +12,9 @@ import { CommonModule } from '@angular/common';
 import { Filter } from '../../../../core/core.model';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog } from '@angular/material/dialog';
+import { ImportSummaryComponent } from '../../../../core/layout/components/import-summary/import-summary.component';
+import { ImportDialogComponent } from '../../../../core/layout/components/import-dialog/import-dialog.component';
 
 @Component({
     selector: 'app-department-search',
@@ -38,7 +41,8 @@ export class DepartmentSearchComponent implements OnInit {
         private router: Router,
         private fb: FormBuilder,
         private route: ActivatedRoute,
-        public translateService: TranslateService
+        public translateService: TranslateService,
+        private dialog: MatDialog
     ) { }
 
     ngOnInit(): void {
@@ -99,4 +103,32 @@ export class DepartmentSearchComponent implements OnInit {
             this.filterForm.get('acronym')?.setValue(''); // Limpiar el campo de acrónimo
         }
     }
+
+    openImportDialog(): void {
+            const format = "DEPARTMENT.CSV_FORMAT";
+            const dialogRef = this.dialog.open(ImportDialogComponent, {data: { format: format}});
+            dialogRef.afterClosed().subscribe((result: File) => {
+                if (result) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const base64 = (reader.result as string).split(',')[1]; // Solo la parte base64
+                        this.departmentService.importFromCSV(base64).subscribe({
+                            next: (res) => {
+                                if (res.errorItems.length > 0) {
+                                    this.dialog.open(ImportSummaryComponent, {
+                                        data: {
+                                            success: res.success,
+                                            items: res.errorItems
+                                        }
+                                    });
+                                }
+                                this.onSearch();
+                            }
+                            , error: (err) => console.error(err)
+                        });
+                    };
+                    reader.readAsDataURL(result);
+                }
+            });
+        }
 }

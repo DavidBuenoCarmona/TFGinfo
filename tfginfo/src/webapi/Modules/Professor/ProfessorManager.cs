@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TFGinfo.Common;
@@ -14,7 +15,7 @@ namespace TFGinfo.Api
         public ProfessorManager(ApplicationDbContext context, EmailService? emailService = null) : base(context)
         {
             this.emailService = emailService;
-         }
+        }
 
         public List<ProfessorDTO> GetAllProfessors()
         {
@@ -22,16 +23,18 @@ namespace TFGinfo.Api
         }
 
         public async Task<NewProfessorDTO> CreateProfessor(ProfessorFlatDTO Professor)
-        { 
+        {
             CheckEmailIsNotRepeated(Professor);
 
             UserManager userManager = new UserManager(context, emailService);
-            UserDTO user = await userManager.CreateUser(new UserFlatDTO {
+            UserDTO user = await userManager.CreateUser(new UserFlatDTO
+            {
                 username = Professor.email,
                 roleId = (int)RoleTypes.Professor
             });
 
-            ProfessorModel model = new ProfessorModel {
+            ProfessorModel model = new ProfessorModel
+            {
                 name = Professor.name,
                 department = Professor.departmentId,
                 surname = Professor.surname,
@@ -56,13 +59,15 @@ namespace TFGinfo.Api
         public void DeleteProfessor(int id)
         {
             ProfessorModel? model = context.professor.FirstOrDefault(Professor => Professor.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             int userId = model.user;
 
             bool groupsExist = context.working_group_professor.Any(g => g.professor == id);
-            if (groupsExist) {
+            if (groupsExist)
+            {
                 throw new UnprocessableException("Cannot delete professor because there are groups associated with it.");
             }
 
@@ -76,7 +81,8 @@ namespace TFGinfo.Api
         public ProfessorDTO UpdateProfessor(ProfessorFlatDTO Professor)
         {
             ProfessorModel? model = context.professor.Include(d => d.departmentModel).FirstOrDefault(d => d.id == Professor.id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
 
@@ -108,12 +114,13 @@ namespace TFGinfo.Api
         public ProfessorDTO GetProfessorById(int id)
         {
             ProfessorModel? model = context.professor.Include(d => d.departmentModel).FirstOrDefault(d => d.id == id);
-            if (model == null) {
+            if (model == null)
+            {
                 throw new NotFoundException();
             }
             return new ProfessorDTO(model);
         }
-        
+
         public List<ProfessorDTO> SearchProfessors(List<Filter> filters)
         {
             IQueryable<ProfessorModel> query = context.professor.AsNoTracking().Include(d => d.departmentModel).ThenInclude(d => d.Universities).ThenInclude(u => u.universityModel);
@@ -161,6 +168,69 @@ namespace TFGinfo.Api
             }
 
             return query.ToList().ConvertAll(model => new ProfessorDTO(model));
+        }
+
+        public async Task<CSVOutput> ImportProfessors(string base64)
+        {
+            var output = new CSVOutput();
+
+            // Decodifica el base64 a texto
+            var bytes = Convert.FromBase64String(base64);
+            var csvContent = System.Text.Encoding.UTF8.GetString(bytes);
+
+            // Separa líneas y elimina vacías
+            var lines = csvContent.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Opcional: Si la primera línea es cabecera, sáltala
+            // var startIndex = lines[0].StartsWith("Nombre") ? 1 : 0;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+                // Divide por ';'
+                var fields = line.Split(';');
+                if (fields.Length < 4)
+                {
+                    output.errorItems.Add($"Error in line {i + 1}: Not enough fields.");
+                    continue;
+                }
+                var name = fields[0].Trim();
+                var surname = fields[1].Trim();
+                var email = fields[2].Trim();
+                var departmentName = fields[3].Trim();
+                if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(departmentName))
+                {
+                    output.errorItems.Add($"Error in line {i + 1}: Missing required fields.");
+                    continue;
+                }
+                var department = context.department.Where(d => d.name.ToLower() == departmentName.ToLower() || d.acronym.ToLower() == departmentName.ToLower()).Select(d => d.id).FirstOrDefault();
+                if (department == 0)
+                {
+                    output.errorItems.Add($"Error in line {i + 1}: Department '{departmentName}' not found.");
+                    continue;
+                }
+                var professor = new ProfessorFlatDTO
+                {
+                    name = name,
+                    surname = surname,
+                    email = email,
+                    departmentId = department,
+                    department_boss = false // Default value, can be adjusted later
+                };
+
+                try
+                {
+                    await CreateProfessor(professor);
+                    output.success++;
+                }
+                catch (Exception ex)
+                {
+                    output.errorItems.Add($"Line {i + 1}: {ex.Message}");
+                    continue;
+                }
+
+            }
+            return output;
         }
 
         #region Private Methods

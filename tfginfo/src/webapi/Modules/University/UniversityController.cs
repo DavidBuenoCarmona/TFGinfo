@@ -187,4 +187,32 @@ public class UniversityController : BaseController
             return Unauthorized(e.Message);
         }
     }
+
+    [HttpPost("import")]
+    public IActionResult Import([FromBody] CSVImport input)
+    {
+        try
+        {
+            string token = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+            {
+                return Unauthorized("Invalid or missing authorization token.");
+            }
+            token = token.Substring("Bearer ".Length).Trim();
+            AuthManager authManager = new AuthManager(context, configuration);
+            authManager.ValidateRoles(token, new List<int> { (int)RoleTypes.Admin });
+
+            UniversityManager manager = new UniversityManager(context);
+            var result = manager.ImportUniversities(input.content);
+            return Ok(result);
+        }
+        catch (UnprocessableException e)
+        {
+            return UnprocessableEntity(e.GetError());
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+    }
 }
