@@ -27,7 +27,7 @@
                     <!-- Carrera Column -->
                     <ng-container matColumnDef="career">
                         <th mat-header-cell *matHeaderCellDef>{{ 'CAREER.TITLE_1' | translate }}</th>
-                        <td mat-cell *matCellDef="let student">{{ student.career.name }} ({{student.career.university.name}})</td>
+                        <td mat-cell *matCellDef="let student">{{ student.career.name }} ({{student.career.university ? student.career.university.name : student.career.doubleCareers[0].university.name + ", " + student.career.doubleCareers[1].university.name}})</td>
                     </ng-container>
 
                     <!-- Acciones Column -->

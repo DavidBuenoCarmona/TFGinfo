@@ -316,6 +316,11 @@ namespace TFGinfo.Api
                 {
                     query = query.Where(wg => wg.Professors.First().professorModel.departmentModel.Universities.Any(u => u.university == int.Parse(filter.value)));
                 }
+                else if (filter.key == "universities")
+                {
+                    var universities = filter.value.Split(',').Select(int.Parse).ToList();
+                    query = query.Where(wg => wg.Professors.First().professorModel.departmentModel.Universities.Any(u => universities.Contains(u.university)));
+                }
                 else if (filter.key == "department")
                 {
                     query = query.Where(wg => wg.Professors.First().professorModel.department == int.Parse(filter.value));

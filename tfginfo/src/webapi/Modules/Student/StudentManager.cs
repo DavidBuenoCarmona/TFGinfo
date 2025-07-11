@@ -20,12 +20,19 @@ namespace TFGinfo.Api
 
         public List<StudentDTO> GetAllStudents()
         {
-            return context.student.AsNoTracking().Include(d => d.careerModel).ThenInclude(c => c.universityModel).ToList().ConvertAll(model => new StudentDTO(model));
+            return context.student.AsNoTracking()
+                .Include(d => d.careerModel).ThenInclude(c => c.universityModel)
+                .Include(d => d.careerModel).ThenInclude(d => d.DoubleCareer).ThenInclude(d => d.primaryCareerModel).ThenInclude(c => c.universityModel)
+                .Include(d => d.careerModel).ThenInclude(d => d.DoubleCareer).ThenInclude(d => d.secondaryCareerModel).ThenInclude(c => c.universityModel)
+                .ToList().ConvertAll(model => new StudentDTO(model));
         }
 
         public List<StudentDTO> SearchStudents(List<Filter> filters)
         {
-            IQueryable<StudentModel> query = context.student.AsNoTracking().Include(d => d.careerModel).ThenInclude(c => c.universityModel);
+            IQueryable<StudentModel> query = context.student.AsNoTracking()
+            .Include(d => d.careerModel).ThenInclude(c => c.universityModel)
+            .Include(d => d.careerModel).ThenInclude(d => d.DoubleCareer).ThenInclude(d => d.primaryCareerModel).ThenInclude(c => c.universityModel)
+            .Include(d => d.careerModel).ThenInclude(d => d.DoubleCareer).ThenInclude(d => d.secondaryCareerModel).ThenInclude(c => c.universityModel);
 
             foreach (var filter in filters)
             {
@@ -47,7 +54,10 @@ namespace TFGinfo.Api
                 }
                 else if (filter.key == "university")
                 {
-                    query = query.Where(s => s.careerModel.universityModel.name.ToLower().Contains(filter.value.ToLower()));
+                    query = query.Where(s => s.careerModel.universityModel != null ?
+                                             s.careerModel.universityModel.name.ToLower().Contains(filter.value.ToLower()) :
+                                             (s.careerModel.DoubleCareer.primaryCareerModel.universityModel != null && s.careerModel.DoubleCareer.primaryCareerModel.universityModel.name.ToLower().Contains(filter.value.ToLower())) ||
+                                             (s.careerModel.DoubleCareer.secondaryCareerModel != null && s.careerModel.DoubleCareer.secondaryCareerModel.universityModel != null && s.careerModel.DoubleCareer.secondaryCareerModel.universityModel.name.ToLower().Contains(filter.value.ToLower())));
                 }
                 else if (filter.key == "generic")
                 {
@@ -182,7 +192,11 @@ namespace TFGinfo.Api
 
         public StudentDTO GetById(int id)
         {
-            StudentModel? model = context.student.Include(d => d.careerModel).ThenInclude(c => c.universityModel).FirstOrDefault(Student => Student.id == id);
+            StudentModel? model = context.student
+            .Include(d => d.careerModel).ThenInclude(c => c.universityModel)
+            .Include(d => d.careerModel).ThenInclude(d => d.DoubleCareer).ThenInclude(d => d.primaryCareerModel).ThenInclude(c => c.universityModel)
+            .Include(d => d.careerModel).ThenInclude(d => d.DoubleCareer).ThenInclude(d => d.secondaryCareerModel).ThenInclude(c => c.universityModel)
+            .FirstOrDefault(Student => Student.id == id);
             if (model == null)
             {
                 throw new NotFoundException();

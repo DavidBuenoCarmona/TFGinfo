@@ -112,7 +112,11 @@ export class ProfileDetailComponent implements OnInit {
             this.studentService.getStudent(+this.id!).subscribe((data) => {
                 this.profile = data;
                 this.profileForm.patchValue(data);
-                this.profileForm.get('universityId')?.setValue(data.career.university.id);
+                if (data.career.university) {
+                    this.profileForm.get('universityId')?.setValue(data.career.university.id);
+                } else {
+                    this.profileForm.get('universityId')?.setValue(data.career.doubleCareers![0].university!.id);
+                }
                 this.profileForm.get('careerId')?.setValue(data.career.id);
                 if (data.birthdate) {
                   const utcDate = new Date(data.birthdate);

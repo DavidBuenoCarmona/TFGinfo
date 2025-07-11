@@ -110,7 +110,9 @@ namespace TFGinfo.Api
 
         public List<TFGLineDTO> SearchTFGLines(List<Filter> filters)
         {
-            var query = context.tfg_line.Include(d => d.departmentModel).ThenInclude(d => d.Universities).ThenInclude(u => u.universityModel).Include(t => t.Careers).ThenInclude(t => t.careerModel).AsQueryable();
+            var query = context.tfg_line.
+                Include(d => d.departmentModel).ThenInclude(d => d.Universities).ThenInclude(u => u.universityModel).Include(t => t.Careers).ThenInclude(t => t.careerModel).ThenInclude(c => c.DoubleCareer)
+                .AsQueryable();
 
             foreach (var filter in filters)
             {
@@ -133,7 +135,16 @@ namespace TFGinfo.Api
                 }
                 else if (filter.key == "career")
                 {
-                    query = query.Where(tfg => tfg.Careers.Any(c => c.careerModel.id == int.Parse(filter.value)));
+                    var DoubleCareer = context.double_career.Where(c => c.career == int.Parse(filter.value)).FirstOrDefault();
+                    if (DoubleCareer == null)
+                    {
+                        query = query.Where(tfg => tfg.Careers.Any(c => c.careerModel.id == int.Parse(filter.value)));
+                    }
+                    else
+                    {
+                        // Si es una carrera doble, buscamos tanto la carrera primaria como la secundaria
+                        query = query.Where(tfg => tfg.Careers.Any(c => c.career == DoubleCareer.primary_career || c.career == DoubleCareer.secondary_career));
+                    }
                 }
                 else if (filter.key == "department")
                 {

@@ -14,7 +14,7 @@ namespace TFGinfo.Api
 
         public List<CareerDTO> GetAllCareers()
         {
-            return context.career.Include(d => d.universityModel).ToList().ConvertAll(model => new CareerDTO(model));
+            return context.career.Include(d => d.universityModel).Include(d => d.DoubleCareer).ThenInclude(d => d.primaryCareerModel).Include(d => d.DoubleCareer).ThenInclude(d => d.secondaryCareerModel).ToList().ConvertAll(model => new CareerDTO(model));
         }
 
         public CareerDTO CreateCareer(CareerFlatDTO Career)
@@ -24,15 +24,23 @@ namespace TFGinfo.Api
             CareerModel model = new CareerModel
             {
                 name = Career.name,
-                university = Career.universityId
+                university = Career.universityId,
+                double_career = Career.doubleCareer ? 1 : 0,
             };
+            context.career.Add(model);
+
+            if (Career.doubleCareer)
+            {
+                model.DoubleCareer = new DoubleCareerModel
+                {
+                    primary_career = Career.doubleCareers.Count > 0 ? Career.doubleCareers[0] : 0,
+                    secondary_career = Career.doubleCareers.Count > 1 ? Career.doubleCareers[1] : 0
+                };
+            }
             context.career.Add(model);
             context.SaveChanges();
 
-            var savedCareer = context.career
-                .Where(d => d.id == model.id)
-                .Include(d => d.universityModel)
-                .FirstOrDefault();
+            var savedCareer = context.career.Include(d => d.universityModel).Include(d => d.DoubleCareer).ThenInclude(d => d.primaryCareerModel).Include(d => d.DoubleCareer).ThenInclude(d => d.secondaryCareerModel).FirstOrDefault(d => d.id == model.id);
 
             return new CareerDTO(model);
         }
@@ -54,6 +62,11 @@ namespace TFGinfo.Api
             {
                 throw new UnprocessableException("Cannot delete career because there are TFGs associated with it.");
             }
+            var doubleCareer = context.double_career.FirstOrDefault(dc => dc.career == id);
+            if (doubleCareer != null)
+            {
+                context.double_career.Remove(doubleCareer);
+            }
 
             context.career.Remove(model);
             context.SaveChanges();
@@ -61,7 +74,7 @@ namespace TFGinfo.Api
 
         public CareerDTO UpdateCareer(CareerFlatDTO Career)
         {
-            CareerModel? model = context.career.Include(d => d.universityModel).FirstOrDefault(d => d.id == Career.id);
+            CareerModel? model = context.career.Include(d => d.universityModel).Include(d => d.DoubleCareer).ThenInclude(d => d.primaryCareerModel).Include(d => d.DoubleCareer).ThenInclude(d => d.secondaryCareerModel).FirstOrDefault(d => d.id == Career.id);
             if (model == null)
             {
                 throw new NotFoundException();
@@ -71,14 +84,32 @@ namespace TFGinfo.Api
 
             model.name = Career.name;
             model.university = Career.universityId;
+            model.double_career = Career.doubleCareer ? 1 : 0;
+            if (model.DoubleCareer == null && Career.doubleCareer)
+            {
+                model.DoubleCareer = new DoubleCareerModel();
+            }
+            else if (!Career.doubleCareer)
+            {
+                model.DoubleCareer = null;
+            }
+
+            if (model.DoubleCareer != null)
+            {
+                model.DoubleCareer.primary_career = Career.doubleCareers.Count > 0 ? Career.doubleCareers[0] : 0;
+                model.DoubleCareer.secondary_career = Career.doubleCareers.Count > 1 ? Career.doubleCareers[1] : 0;
+            }
+
+            model = context.career.Include(d => d.universityModel).Include(d => d.DoubleCareer).ThenInclude(d => d.primaryCareerModel).Include(d => d.DoubleCareer).ThenInclude(d => d.secondaryCareerModel).FirstOrDefault(d => d.id == Career.id);
+
             context.SaveChanges();
 
-            return new CareerDTO(model);
+            return new CareerDTO(model!);
         }
 
         public CareerDTO GetCareerById(int id)
         {
-            CareerModel? model = context.career.Include(d => d.universityModel).FirstOrDefault(Career => Career.id == id);
+            CareerModel? model = context.career.Include(d => d.universityModel).Include(d => d.DoubleCareer).ThenInclude(d => d.primaryCareerModel).Include(d => d.DoubleCareer).ThenInclude(d => d.secondaryCareerModel).FirstOrDefault(Career => Career.id == id);
             if (model == null)
             {
                 throw new NotFoundException();
@@ -86,14 +117,9 @@ namespace TFGinfo.Api
             return new CareerDTO(model);
         }
 
-        public List<CareerDTO> GetCareersByUniversity(int universityId)
-        {
-            return context.career.Where(Career => Career.university == universityId).Include(d => d.universityModel).ToList().ConvertAll(model => new CareerDTO(model));
-        }
-
         public List<CareerDTO> SearchCareers(List<Filter> filters)
         {
-            IQueryable<CareerModel> query = context.career.Include(d => d.universityModel);
+            IQueryable<CareerModel> query = context.career.Include(d => d.universityModel).Include(d => d.DoubleCareer).ThenInclude(d => d.primaryCareerModel).ThenInclude(c => c.universityModel).Include(d => d.DoubleCareer).ThenInclude(d => d.secondaryCareerModel).ThenInclude(c => c.universityModel);
 
             foreach (var filter in filters)
             {
@@ -103,17 +129,20 @@ namespace TFGinfo.Api
                 }
                 else if (filter.key == "university")
                 {
-                    query = query.Where(c => c.universityModel.name.ToLower().Contains(filter.value.ToLower()));
+                    query = query.Where(c => c.universityModel != null ? c.universityModel.name.ToLower().Contains(filter.value.ToLower()) :
+                        (c.DoubleCareer.primaryCareerModel.universityModel!.name.ToLower().Contains(filter.value.ToLower()) || c.DoubleCareer.secondaryCareerModel.universityModel!.name.ToLower().Contains(filter.value.ToLower())));
                 }
                 else if (filter.key == "universityId")
                 {
-                    query = query.Where(c => c.universityModel.id == int.Parse(filter.value));
+                    query = query.Where(c => c.universityModel != null ? c.universityModel.id == int.Parse(filter.value) :
+                        (c.DoubleCareer.primaryCareerModel.university == int.Parse(filter.value) || c.DoubleCareer.secondaryCareerModel.university == int.Parse(filter.value)));
                 }
                 else if (filter.key == "universities" && filter.value != "0")
                 {
                     // Assuming 'universities' is a comma-separated list of university IDs
                     var universityIds = filter.value.Split(',').Select(int.Parse).ToList();
-                    query = query.Where(c => universityIds.Contains(c.universityModel.id));
+                    query = query.Where(c => universityIds.Contains(c.universityModel != null ? c.universityModel.id : (c.DoubleCareer.primaryCareerModel.university ?? 0)) ||
+                        universityIds.Contains(c.DoubleCareer.secondaryCareerModel != null ? c.DoubleCareer.secondaryCareerModel.university ?? 0 : 0));
                 }
                 else if (filter.key == "generic")
                 {
@@ -154,23 +183,45 @@ namespace TFGinfo.Api
                     output.errorItems.Add($"Line {i + 1}: Career name cannot be empty.");
                     continue;
                 }
-                if (string.IsNullOrWhiteSpace(fields[1].Trim()))
+                if (string.IsNullOrWhiteSpace(fields[1].Trim()) && string.IsNullOrWhiteSpace(fields[2].Trim()))
                 {
-                    output.errorItems.Add($"Line {i + 1}: Center name cannot be empty.");
+                    output.errorItems.Add($"Line {i + 1}: Center or Careers must have value.");
                     continue;
                 }
 
-                var university = context.university.Where(u => u.name.ToLower() == fields[1].Trim().ToLower()).Select(u => u.id).FirstOrDefault();
-                if (university == 0)
+                var university = 0;
+                if (!string.IsNullOrWhiteSpace(fields[1]))
                 {
-                    output.errorItems.Add($"Line {i + 1}: University '{fields[1].Trim()}' does not exist.");
-                    continue;
+                    university = context.university.Where(u => u.name.ToLower() == fields[1].Trim().ToLower()).Select(u => u.id).FirstOrDefault();
+                    if (university == 0)
+                    {
+                        output.errorItems.Add($"Line {i + 1}: University '{fields[1].Trim()}' does not exist.");
+                        continue;
+                    }
                 }
+
+
+                var doubleCareer = 0;
+                var doubleCareers = new List<int>();
+                if (!string.IsNullOrWhiteSpace(fields[2].Trim()))
+                {
+                    var careerNames = fields[2].Trim().Split(',').Select(c => c.Trim()).ToList();
+                    if (careerNames.Count != 2)
+                    {
+                        output.errorItems.Add($"Line {i + 1}: Double career can only have 2 careers.");
+                        continue;
+                    }
+                    doubleCareer = 1;
+                    doubleCareers = context.career.Where(c => careerNames.Contains(c.name.Trim())).Select(c => c.id).ToList();
+                }
+
 
                 var career = new CareerFlatDTO
                 {
                     name = fields[0].Trim(),
-                    universityId = university
+                    universityId = university > 0 ? university : null,
+                    doubleCareer = doubleCareer == 1,
+                    doubleCareers = doubleCareers
                 };
 
                 try

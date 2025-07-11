@@ -42,12 +42,23 @@ namespace TFGinfo.Api
             newUser.user = new AppUserDTO(model);
             if (newUser.user.role.id == (int)UserRole.Student)
             {
-                var student = context.student.Include(s => s.careerModel).FirstOrDefault(s => s.user == newUser.user.id);
+                var student = context.student.
+                Include(s => s.careerModel).ThenInclude(c => c.DoubleCareer).ThenInclude(d => d.primaryCareerModel).
+                Include(s => s.careerModel).ThenInclude(c => c.DoubleCareer).ThenInclude(d => d.secondaryCareerModel).FirstOrDefault(s => s.user == newUser.user.id);
                 if (student != null)
                 {
                     newUser.user.career = student.career;
                     newUser.user.id = student.id;
-                    newUser.user.universitiesId.Add(student.careerModel?.university ?? 0);
+                    if (student.careerModel?.university != null)
+                    {
+                        newUser.user.universitiesId.Add(student.careerModel?.university ?? 0);
+                    }
+                    else
+                    {
+                        newUser.user.universitiesId.Add(student.careerModel?.DoubleCareer?.primaryCareerModel?.university ?? 0);
+                        newUser.user.universitiesId.Add(student.careerModel?.DoubleCareer?.secondaryCareerModel?.university ?? 0);
+                    }
+                    
                 }
             }
             else if (newUser.user.role.id == (int)UserRole.Professor)

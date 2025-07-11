@@ -19,7 +19,8 @@
     },
     "CAREER": {
         "CREATE": "Crear titulación",
-        "CSV_FORMAT": "Formato CSV: \n Nombre*; Centro* ",
+        "CSV_FORMAT": "Formato CSV: \n Nombre*; Centro; Titulaciones \n \n Titulaciones: Nombre1,Nombre2,... \n \n Centro o Titulaciones deben tener valor",
+        "DOUBLE_TITULATION": "¿Doble grado?",
         "EDIT": "Editar titulación",
         "DELETE": "Eliminar titulación",
         "NEW": "Nueva titulación",

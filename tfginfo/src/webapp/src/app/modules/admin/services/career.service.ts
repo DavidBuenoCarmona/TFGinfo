@@ -32,11 +32,11 @@ export class CareerService extends BaseService {
         return this.get(`${this.url}/career/${id}`);
     }
 
-    createCareer(career: CareerDTO): Observable<CareerFlatDTO> {
+    createCareer(career: CareerFlatDTO): Observable<CareerFlatDTO> {
         return this.post(`${this.url}/career`, career);
     }
 
-    updateCareer(career: CareerDTO): Observable<CareerFlatDTO> {
+    updateCareer(career: CareerFlatDTO): Observable<CareerFlatDTO> {
         return this.put(`${this.url}/career`, career);
     }
 

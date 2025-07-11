@@ -19,7 +19,8 @@
     },
     "CAREER": {
         "CREATE": "Create titulation",
-        "CSV_FORMAT": "CSV format: \n Name*; Center* ",
+        "CSV_FORMAT": "CSV format: \n Name*; Center; Titulations \n \n Titulations: Name1,Name2,... \n \n Center or Titulations must have a value",
+        "DOUBLE_TITULATION": "Double titulation?",
         "EDIT": "Edit titulation",
         "DELETE": "Delete titulation",
         "NEW": "New titulation",
