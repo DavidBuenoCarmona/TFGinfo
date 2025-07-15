@@ -6,27 +6,37 @@
         <mat-card-content>
             <ng-container *ngIf="professors && professors.length > 0; else noResults">
                 <table mat-table [dataSource]="professors" class="mat-table">
+                    <!-- Columna combinada solo para móvil -->
+                    <ng-container matColumnDef="nameEmail">
+                        <th mat-header-cell *matHeaderCellDef class="mobile-only">{{ 'GLOBAL.NAME' | translate }} {{ 'GLOBAL.SURNAME' | translate }} <div class="responsive-email">  {{'GLOBAL.EMAIL' | translate }}</div><div *ngIf="!groupId" class="responsive-extra-info">{{ 'DEPARTMENT.TITLE_1' | translate }}</div></th>
+                        <td mat-cell *matCellDef="let professor" class="mobile-only">
+                            <div>
+                                <div>{{ professor.name }} {{ professor.surname }}</div>
+                                <div class="responsive-email">{{ professor.email }}</div>
+                                <div *ngIf="!groupId" class="responsive-extra-info">{{ professor.department?.name }}</div>
+                            </div>
+                        </td>
+                    </ng-container>
                     <!-- Nombre Column -->
                     <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
-                        <td mat-cell *matCellDef="let professor">{{ professor.name }}</td>
+                        <th mat-header-cell *matHeaderCellDef class="desktop-only">{{ 'GLOBAL.NAME' | translate }}</th>
+                        <td mat-cell *matCellDef="let professor" class="desktop-only">{{ professor.name }}</td>
                     </ng-container>
-
                     <!-- Apellido Column -->
                     <ng-container matColumnDef="surname">
-                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.SURNAME' | translate }}</th>
-                        <td mat-cell *matCellDef="let professor">{{ professor.surname }}</td>
+                        <th mat-header-cell *matHeaderCellDef class="desktop-only">{{ 'GLOBAL.SURNAME' | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let professor" class="desktop-only">{{ professor.surname }}</td>
                     </ng-container>
-
                     <!-- Email Column -->
                     <ng-container matColumnDef="email">
-                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.EMAIL' | translate }}</th>
-                        <td mat-cell *matCellDef="let professor">{{ professor.email }}</td>
+                        <th mat-header-cell *matHeaderCellDef class="desktop-only">{{ 'GLOBAL.EMAIL' | translate }}</th>
+                        <td mat-cell *matCellDef="let professor" class="desktop-only">{{ professor.email }}</td>
                     </ng-container>
 
                     <!-- Departamento Column -->
                     <ng-container matColumnDef="department">
-                        <th mat-header-cell *matHeaderCellDef>{{ 'DEPARTMENT.TITLE_1' | translate }}</th>
+                        <th mat-header-cell *matHeaderCellDef class="desktop-only">{{ 'DEPARTMENT.TITLE_1' | translate }}</th>
                         <td mat-cell *matCellDef="let professor">{{ professor.department?.name }}</td>
                     </ng-container>
 
@@ -46,7 +56,7 @@
                     <!-- Header and Row Definitions -->
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table> 
+                </table>
             </ng-container>
             <ng-template #noResults>
                 <div class="text-center py-4">

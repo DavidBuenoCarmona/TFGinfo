@@ -6,6 +6,20 @@
         <mat-card-content>
             <ng-container *ngIf="tfgs && tfgs.length > 0; else noResults">
                 <table mat-table [dataSource]="tfgs" class="mat-table">
+
+                    <!-- Nombre + Departamento Column -->
+                    <ng-container matColumnDef="nameDepartment">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }} <div class="responsive-extra-info">{{ 'DEPARTMENT.TITLE_1' | translate}}</div></th>
+                        <td mat-cell *matCellDef="let tfg">
+                            <div>
+                                <div>{{ tfg.name }}</div>
+                                <div *ngIf="tfg.department" class="responsive-extra-info">
+                                    {{ tfg.department.name }}
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+
                     <!-- Nombre Column -->
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
@@ -49,8 +63,10 @@
             </ng-container>
             <ng-template #noResults>
                 <div class="text-center py-4">
-                    {{ (!universitiesSelected || universitiesSelected.length == 0 ? 'GLOBAL.NO_UNIVERSITY_SELECTED' : 'GLOBAL.NO_RESULTS') | translate }}
-                    <a *ngIf="!universitiesSelected  || universitiesSelected.length == 0" class="cursor-pointer" (click)="changeUniversity()">
+                    {{ (!universitiesSelected || universitiesSelected.length == 0 ? 'GLOBAL.NO_UNIVERSITY_SELECTED' :
+                    'GLOBAL.NO_RESULTS') | translate }}
+                    <a *ngIf="!universitiesSelected  || universitiesSelected.length == 0" class="cursor-pointer"
+                        (click)="changeUniversity()">
                         {{ 'UNIVERSITY.CHANGE' | translate }}
                     </a>
                 </div>

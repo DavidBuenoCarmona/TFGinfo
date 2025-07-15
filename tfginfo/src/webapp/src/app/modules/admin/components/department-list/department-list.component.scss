@@ -3,4 +3,33 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 180px;
+  font-size: small;
+}
+
+.ellipsis-hover {
+  position: relative;
+  cursor: pointer;
+}
+
+.more-tooltip {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 120%;
+  background: #333;
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.95em;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.ellipsis-hover:hover .more-tooltip {
+  display: block;
+}
+
+.universities-ellipsis {
+  position: relative;
+  overflow: visible !important;
 }

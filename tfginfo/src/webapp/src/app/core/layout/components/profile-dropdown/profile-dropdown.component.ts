@@ -14,7 +14,6 @@ import { UniversitySelectionService } from '../../../services/localstorage.servi
     styleUrl: './profile-dropdown.component.scss'
 })
 export class ProfileDropdownComponent implements OnInit {
-    @Output() onNavigation: EventEmitter<void> = new EventEmitter<void>();
     route = route;
     isAdmin: boolean = false;
     isProfessor: boolean = false;
@@ -47,7 +46,6 @@ export class ProfileDropdownComponent implements OnInit {
     }
 
     changeUniversity() {
-        this.onNavigation.emit();
         this.router.navigate(['/admin/university']);
     }
 }

@@ -22,11 +22,21 @@
                     <ng-container matColumnDef="universities">
                         <th mat-header-cell *matHeaderCellDef>{{ 'UNIVERSITY.TITLE_1' | translate }}</th>
                         <td mat-cell *matCellDef="let department" class="universities-ellipsis">
-                            <ng-container>
+                            <ng-container *ngIf="department.universities?.length <= 2; else ellipsisUniversities">
                                 <span *ngFor="let uni of department.universities; let last = last">
                                     {{ uni.name }}<span *ngIf="!last">, </span>
                                 </span>
                             </ng-container>
+                            <ng-template #ellipsisUniversities>
+                                <span class="ellipsis-hover">
+                                    {{ department.universities[0]?.name }}, {{ department.universities[1]?.name }}, ...
+                                    <span class="more-tooltip">
+                                        <ng-container *ngFor="let uni of department.universities; let last = last">
+                                            {{ uni.name }}<span *ngIf="!last">, </span>
+                                        </ng-container>
+                                    </span>
+                                </span>
+                            </ng-template>
                         </td>
                     </ng-container>
 

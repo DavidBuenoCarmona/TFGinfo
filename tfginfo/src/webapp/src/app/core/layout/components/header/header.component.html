@@ -8,22 +8,22 @@
     <div class="collapse navbar-collapse" #navbarNav id="navbarNav">
       <ul class="navbar-nav">
         <li *ngIf="!isAdmin" class="nav-item">
-          <a (click)="closeNavbar()" class="nav-link" [routerLink]="route.booking" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link" [routerLink]="route.booking" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             {{ 'BOOKING.TITLE_N' | translate }}
           </a>
         </li>
         <li class="nav-item">
-          <a (click)="closeNavbar()" class="nav-link" [routerLink]="route.tfg.list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link" [routerLink]="route.tfg.list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             {{ 'TFG.TITLE_N' | translate }}
           </a>
         </li>
         <li class="nav-item">
-          <a (click)="closeNavbar()" class="nav-link" [routerLink]="route.workingGroup.list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link" [routerLink]="route.workingGroup.list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
              {{ 'WORKING_GROUP.TITLE_N' | translate }}
           </a>
         </li>
         <li class="nav-item">
-          <a (click)="closeNavbar()" class="nav-link" [routerLink]="route.professor.list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link" [routerLink]="route.professor.list" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
              {{ 'PROFESSOR.TITLE_N' | translate }}
           </a>
         </li>
@@ -34,22 +34,22 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="adminDropdown">
             <li>
-              <a (click)="closeNavbar()" class="dropdown-item" [routerLink]="route.student.list" routerLinkActive="active">
+              <a class="dropdown-item" [routerLink]="route.student.list" routerLinkActive="active">
                 {{ 'STUDENT.TITLE_N' | translate }}
               </a>
             </li>
             <li>
-              <a (click)="closeNavbar()" class="dropdown-item" [routerLink]="route.admin.department.list" routerLinkActive="active">
+              <a class="dropdown-item" [routerLink]="route.admin.department.list" routerLinkActive="active">
                 {{ 'DEPARTMENT.TITLE_N' | translate }}
               </a>
             </li>
             <li>
-              <a (click)="closeNavbar()" class="dropdown-item" [routerLink]="route.admin.career.list" routerLinkActive="active">
+              <a class="dropdown-item" [routerLink]="route.admin.career.list" routerLinkActive="active">
                 {{ 'CAREER.TITLE_N' | translate }}
               </a>
             </li>
             <li>
-              <a (click)="closeNavbar()" class="dropdown-item" [routerLink]="route.admin.university.list" routerLinkActive="active">
+              <a class="dropdown-item" [routerLink]="route.admin.university.list" routerLinkActive="active">
                 {{ 'UNIVERSITY.TITLE_N' | translate }}
               </a>
             </li>
@@ -74,7 +74,7 @@
         </li>
         <li class="nav-item">
           <div class="nav-link">
-            <profile-dropdown (onNavigation)="closeNavbar()"></profile-dropdown>
+            <profile-dropdown></profile-dropdown>
           </div>
         </li>
       </ul>

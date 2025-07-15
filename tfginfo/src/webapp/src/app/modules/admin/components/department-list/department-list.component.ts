@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,7 +25,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './department-list.component.html',
   styleUrls: ['./department-list.component.scss']
 })
-export class DepartmentListComponent {
+export class DepartmentListComponent implements OnInit {
   @Input() departments: DepartmentDTO[] = [];
   @Input() displayedColumns: string[] = ['name', 'acronym', 'universities', 'actions'];
   @Output() onDeleteDepartment = new EventEmitter<number>();
@@ -35,6 +35,27 @@ export class DepartmentListComponent {
     private router: Router,
     private route: ActivatedRoute
   ) { }
+
+  ngOnInit(): void {
+    this.setDisplayedColumns();
+    window.addEventListener('resize', this.onResize);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.onResize);
+  }
+
+  onResize = () => {
+    this.setDisplayedColumns();
+  };
+
+  setDisplayedColumns() {
+    if (window.innerWidth < 600) {
+      this.displayedColumns = ['name', 'universities', 'actions'];
+    } else {
+      this.displayedColumns = ['name', 'acronym', 'universities', 'actions'];
+    }
+  }
 
   onEdit(department: DepartmentDTO) {
     this.router.navigate([department.id], { relativeTo: this.route });
@@ -49,5 +70,5 @@ export class DepartmentListComponent {
       }
     });
   }
-  
+
 }

@@ -34,6 +34,7 @@ export class ProfessorListComponent implements OnInit {
     @Output() onDeleteProfessor = new EventEmitter<number>();
     @Input() groupId: number | undefined = undefined;
     public canEdit: boolean = false;
+    public columnsInputCloned: string[] = [];
     public universitySelected: number | undefined;
 
     constructor(
@@ -44,10 +45,31 @@ export class ProfessorListComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.columnsInputCloned = this.displayedColumns;
         let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin;
         this.universitySelected = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : undefined;
+
+        this.setDisplayedColumns();
+        window.addEventListener('resize', this.onResize);
     }
+
+    ngOnDestroy(): void {
+        window.removeEventListener('resize', this.onResize);
+    }
+
+    onResize = () => {
+        this.setDisplayedColumns();
+    };
+
+    setDisplayedColumns() {
+        if (window.innerWidth < 600) {
+            this.displayedColumns = ['nameEmail', 'actions'];
+        } else {
+            this.displayedColumns = this.columnsInputCloned;
+        }
+    }
+
     onEdit(professor: ProfessorDTO) {
         this.router.navigate([professor.id], { relativeTo: this.route });
     }

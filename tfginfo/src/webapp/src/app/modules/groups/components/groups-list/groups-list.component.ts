@@ -51,7 +51,11 @@ export class GroupListComponent implements OnInit {
         this.universitiesSelected = this.configurationService.getSelectedUniversities();
         if (!this.universitiesSelected || this.universitiesSelected.length === 0) {
             this.universitiesSelected = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : undefined;
-        }  
+        }
+
+        if (window.innerWidth < 600) {
+            this.displayedColumns = this.displayedColumns.filter(col => col !== 'description');
+        }
     }
 
     onEdit(group: WorkingGroupBase) {

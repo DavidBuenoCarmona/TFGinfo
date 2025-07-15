@@ -1,42 +1,53 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 :root {
     /* Sistema de espaciado en múltiplos de 4px */
     --spacing-unit: 4px;
-    
+
     /* Márgenes verticales */
     --margin-top: var(--spacing-unit);
     --margin-bottom: calc(var(--spacing-unit) * 2);
     --margin-vertical: var(--spacing-unit);
-    
+
     /* Márgenes horizontales */
     --margin-left: var(--spacing-unit);
     --margin-right: var(--spacing-unit);
     --margin-horizontal: var(--spacing-unit);
-    
+
     /* Márgenes compuestos */
     --margin-sm: var(--spacing-unit);
     --margin-md: calc(var(--spacing-unit) * 2);
     --margin-lg: calc(var(--spacing-unit) * 3);
     --margin-xl: calc(var(--spacing-unit) * 4);
-    
+
     /* Márgenes específicos para componentes */
     --margin-container: calc(var(--spacing-unit) * 3);
     --margin-section: calc(var(--spacing-unit) * 2);
     --margin-component: var(--spacing-unit);
 
 
-      /* 🎨 Colores Principales */
+    /* 🎨 Colores Principales */
     --color-white: #ffffff;
     --color-black: #000000;
-    --color-light-blue: #4da8da; /* Azul Claro */
+    --color-light-blue: #4da8da;
+    /* Azul Claro */
 
-    --color-error: #ff4d4d; /* Rojo Claro */
-    --color-error-light: #ff9999; /* Rojo Claro Intermedio */
-    --color-error-dark: #b30000; /* Rojo Oscuro */
+    --color-error: #ff4d4d;
+    /* Rojo Claro */
+    --color-error-light: #ff9999;
+    /* Rojo Claro Intermedio */
+    --color-error-dark: #b30000;
+    /* Rojo Oscuro */
 
     /* 🎨 Tonos Intermedios */
     --color-gray-dark: #1c1c1c;
@@ -44,18 +55,28 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --color-gray-light: #d3d3d3;
 
     /* 🎨 Variantes de Azul */
-    --color-blue-lighter: #a8d0e6; /* Azul Muy Claro */
-    --color-blue-light: #7fb3d5; /* Azul Claro Intermedio */
-    --color-blue-medium: #4682b4; /* Azul Medio */
-    --color-blue-dark: #005f99; /* Azul Oscuro */
-    --color-blue-darker: #00334e; /* Azul Muy Oscuro */
+    --color-blue-lighter: #a8d0e6;
+    /* Azul Muy Claro */
+    --color-blue-light: #7fb3d5;
+    /* Azul Claro Intermedio */
+    --color-blue-medium: #4682b4;
+    /* Azul Medio */
+    --color-blue-dark: #005f99;
+    /* Azul Oscuro */
+    --color-blue-darker: #00334e;
+    /* Azul Muy Oscuro */
 
     /* 🎨 Variantes de Gris */
-    --color-gray-lighter: #f0f0f0; /* Gris Muy Claro */
-    --color-gray-light: #d3d3d3; /* Gris Claro */
-    --color-gray-medium: #525252; /* Gris Medio */
-    --color-gray-dark: #1c1c1c; /* Gris Oscuro */
-    --color-gray-darker: #0f0f0f; /* Gris Muy Oscuro */
+    --color-gray-lighter: #f0f0f0;
+    /* Gris Muy Claro */
+    --color-gray-light: #d3d3d3;
+    /* Gris Claro */
+    --color-gray-medium: #525252;
+    /* Gris Medio */
+    --color-gray-dark: #1c1c1c;
+    /* Gris Oscuro */
+    --color-gray-darker: #0f0f0f;
+    /* Gris Muy Oscuro */
 
     /* 🎨 Fondos y Bordes */
     --bg-light: var(--color-white);
@@ -148,7 +169,7 @@ body.dark-mode {
     .mat-form-field-disabled {
         .mat-mdc-text-field-wrapper {
             background-color: var(--color-gray-light);
-            
+
         }
     }
 
@@ -160,6 +181,7 @@ body.dark-mode {
 
     .dropdown-item {
         color: var(--text-light);
+
         &:hover {
             background-color: #444;
         }
@@ -168,11 +190,14 @@ body.dark-mode {
     /* Headers */
     .header {
         background-color: var(--color-blue-dark);
+
         .nav-link {
             color: var(--text-light);
+
             &:hover {
                 color: var(--color-light-blue);
             }
+
             &.active {
                 color: var(--color-light-blue);
             }
@@ -182,10 +207,12 @@ body.dark-mode {
     /* Cards */
     .card {
         border: 1px solid var(--color-light-blue);
+
         .card-header {
             background-color: var(--color-blue-dark);
             color: var(--text-light);
         }
+
         .card-body {
             background-color: var(--color-gray-medium);
             color: var(--text-light);
@@ -196,10 +223,12 @@ body.dark-mode {
     table {
         background-color: var(--color-gray-medium);
         color: var(--text-light);
+
         th {
             background-color: var(--color-blue-dark);
             color: var(--text-light);
         }
+
         td {
             background-color: var(--color-gray-medium);
             color: var(--text-light);
@@ -226,7 +255,7 @@ body.dark-mode {
     .action-button {
         background-color: var(--color-blue-dark) !important;
         color: var(--color-gray-light) !important;
-    
+
         &.disabled {
             background-color: var(--color-blue-darker) !important;
             color: var(--color-gray-light) !important;
@@ -242,10 +271,26 @@ body.dark-mode {
         background-color: var(--color-gray-medium) !important;
         color: var(--color-gray-light) !important;
     }
+
     &.create-button {
-      margin-left: auto;
+        margin-left: auto;
     }
 }
+
+.responsive-email {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--color-gray-light);
+    font-size: small;
+}
+
+.responsive-extra-info {
+    color: var(--color-light-blue);
+    font-size: small;
+}
+
 
 .basic-page {
     margin: var(--margin-xl);
@@ -261,7 +306,8 @@ body.dark-mode {
 
 /* Estilos globales para formularios de Angular Material */
 mat-form-field {
-    border-radius: 25px; /* Ajusta el valor para cambiar el nivel de redondez */
+    border-radius: 25px;
+    /* Ajusta el valor para cambiar el nivel de redondez */
 
     .mat-mdc-text-field-wrapper {
         border-radius: inherit;
@@ -270,13 +316,15 @@ mat-form-field {
 
     .mat-form-field-flex {
         border-radius: inherit;
-        background-color: var(--color-gray-light); /* Cambia el color si es necesario */
+        background-color: var(--color-gray-light);
+        /* Cambia el color si es necesario */
 
     }
 
     .mat-input-element {
         border-radius: inherit;
-        padding: 0.5rem; /* Ajusta el padding si es necesario */
+        padding: 0.5rem;
+        /* Ajusta el padding si es necesario */
     }
 
     .mat-form-field-outline {
@@ -285,7 +333,8 @@ mat-form-field {
 }
 
 mat-select {
-    border-radius: 25px; /* Ajusta el valor para cambiar el nivel de redondez */
+    border-radius: 25px;
+    /* Ajusta el valor para cambiar el nivel de redondez */
 
     .mat-select-trigger {
         border-radius: inherit;
@@ -293,9 +342,11 @@ mat-select {
 }
 
 button.mat-raised-button {
-    border-radius: 25px; /* Botones redondeados */
+    border-radius: 25px;
+    /* Botones redondeados */
 }
 
 mat-input {
-    border-radius: 25px; /* Ajusta el valor para cambiar el nivel de redondez */
+    border-radius: 25px;
+    /* Ajusta el valor para cambiar el nivel de redondez */
 }

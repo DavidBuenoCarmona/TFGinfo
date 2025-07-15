@@ -50,6 +50,25 @@ export class TfgListComponent implements OnInit {
         if (!this.universitiesSelected || this.universitiesSelected.length === 0) {
             this.universitiesSelected = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : undefined;
         }
+
+        this.setDisplayedColumns();
+        window.addEventListener('resize', this.onResize);
+    }
+
+    ngOnDestroy(): void {
+        window.removeEventListener('resize', this.onResize);
+    }
+
+    onResize = () => {
+        this.setDisplayedColumns();
+    };
+
+    setDisplayedColumns() {
+        if (window.innerWidth < 600) {
+            this.displayedColumns = ['nameDepartment', 'slots', 'actions'];
+        } else {
+            this.displayedColumns = ['name', 'description', 'department', 'slots', 'actions'];
+        }
     }
 
     onEdit(tfg: TFGLineDTO) {

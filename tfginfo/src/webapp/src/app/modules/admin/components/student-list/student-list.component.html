@@ -6,6 +6,23 @@
         <mat-card-content>
             <ng-container *ngIf="students && students.length > 0; else noResults">
                 <table mat-table [dataSource]="students" class="mat-table">
+                    <!-- Columna combinada solo para móvil -->
+                    <ng-container matColumnDef="nameEmail">
+                        <th mat-header-cell *matHeaderCellDef class="mobile-only">{{ 'GLOBAL.NAME' | translate }} {{ 'GLOBAL.SURNAME' | translate }}<div
+                                class="responsive-email"> {{'GLOBAL.EMAIL' | translate }}</div>
+                            <div *ngIf="!groupId" class="responsive-extra-info">{{ 'CAREER.TITLE_1' | translate }}</div>
+                        </th>
+                        <td mat-cell *matCellDef="let student" class="mobile-only">
+                            <div>
+                                <div>{{ student.name }} {{ student.surname }}</div>
+                                <div class="responsive-email">{{ student.email }}</div>
+                                <div *ngIf="!groupId" class="responsive-extra-info">{{ student.career.name }} ({{student.career.university ?
+                            student.career.university.name : student.career.doubleCareers[0].university.name + ", " +
+                            student.career.doubleCareers[1].university.name}})</div>
+                            </div>
+                        </td>
+                    </ng-container>
+
                     <!-- Nombre Column -->
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
@@ -27,7 +44,9 @@
                     <!-- Carrera Column -->
                     <ng-container matColumnDef="career">
                         <th mat-header-cell *matHeaderCellDef>{{ 'CAREER.TITLE_1' | translate }}</th>
-                        <td mat-cell *matCellDef="let student">{{ student.career.name }} ({{student.career.university ? student.career.university.name : student.career.doubleCareers[0].university.name + ", " + student.career.doubleCareers[1].university.name}})</td>
+                        <td mat-cell *matCellDef="let student">{{ student.career.name }} ({{student.career.university ?
+                            student.career.university.name : student.career.doubleCareers[0].university.name + ", " +
+                            student.career.doubleCareers[1].university.name}})</td>
                     </ng-container>
 
                     <!-- Acciones Column -->

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LogoComponent } from '../logo/logo.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { route } from '../../../../routes';
 import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.component';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
@@ -44,6 +44,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         let role = this.configService.getRole();
         this.isAdmin = role === RoleId.Admin;
+
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.closeNavbar();
+            }
+        });
     }
 
     closeNavbar() {
