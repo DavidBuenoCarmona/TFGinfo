@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StudentDTO } from '../../models/student.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ImportDialogComponent } from '../../../../core/layout/components/import-dialog/import-dialog.component';
 import { ImportSummaryComponent } from '../../../../core/layout/components/import-summary/import-summary.component';
 import { error } from 'console';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-student-search',
@@ -26,6 +27,7 @@ import { error } from 'console';
         MatButtonModule,
         MatDialogModule,
         MatIconModule,
+        MatTooltipModule,
         CommonModule],
     templateUrl: './student-search.component.html',
     styleUrl: './student-search.component.scss'
@@ -39,6 +41,7 @@ export class StudentSearchComponent implements OnInit {
 
     constructor(
         public studentService: StudentService,
+        public translateService: TranslateService,
         private router: Router,
         private fb: FormBuilder,
         private route: ActivatedRoute,

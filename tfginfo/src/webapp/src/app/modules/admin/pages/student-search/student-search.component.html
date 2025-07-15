@@ -49,19 +49,18 @@
                     <button mat-raised-button class="action-button ms-2" type="button" (click)="onClearFilters()">
                         {{ 'GLOBAL.CLEAR_FILTERS' | translate }}
                     </button>
-                    <button mat-icon-button (click)="onShowExtraFilters()">
+                    <button mat-icon-button [matTooltip]="translateService.instant('GLOBAL.ADVANCED_FILTERS')"
+                        (click)="onShowExtraFilters()">
                         <mat-icon>filter_list</mat-icon>
                     </button>
                 </div>
             </div>
 
         </form>
-        <div class="mb-2 d-flex align-items-end justify-content-end">
+        <div class="mb-2 d-flex align-items-end justify-content-end  gap-2">
                 <button mat-raised-button class="action-button create-button" type="button" (click)="openImportDialog()">
                     {{ 'GLOBAL.IMPORT_FROM_CSV' | translate }}
                 </button>
-        </div>
-        <div class="mb-2 d-flex align-items-end justify-content-end">
                 <button mat-raised-button class="action-button create-button" type="button" (click)="onCreate()">
                     {{ 'GLOBAL.CREATE' | translate }}
                 </button>

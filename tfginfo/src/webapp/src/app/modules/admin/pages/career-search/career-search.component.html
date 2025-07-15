@@ -17,11 +17,11 @@
                         </mat-form-field>
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 mb-2">
-                            <mat-form-field appearance="fill" class="form-field w-100">
-                                <mat-label>{{ 'UNIVERSITY.TITLE_1' | translate }}</mat-label>
-                                <input matInput formControlName="university" />
-                            </mat-form-field>
-                        </div>
+                        <mat-form-field appearance="fill" class="form-field w-100">
+                            <mat-label>{{ 'UNIVERSITY.TITLE_1' | translate }}</mat-label>
+                            <input matInput formControlName="university" />
+                        </mat-form-field>
+                    </div>
                 </ng-container>
                 <div class="col-12 col-sm-6 col-md-3 mb-2">
                     <button mat-raised-button class="action-button" type="submit">
@@ -30,18 +30,17 @@
                     <button mat-raised-button class="action-button ms-2" type="button" (click)="onClearFilters()">
                         {{ 'GLOBAL.CLEAR_FILTERS' | translate }}
                     </button>
-                    <button mat-icon-button (click)="onShowExtraFilters()">
+                    <button mat-icon-button [matTooltip]="translateService.instant('GLOBAL.ADVANCED_FILTERS')"
+                        (click)="onShowExtraFilters()">
                         <mat-icon>filter_list</mat-icon>
                     </button>
                 </div>
             </div>
         </form>
-        <div class="mb-2 d-flex align-items-end justify-content-end">
-                <button mat-raised-button class="action-button create-button" type="button" (click)="openImportDialog()">
-                    {{ 'GLOBAL.IMPORT_FROM_CSV' | translate }}
-                </button>
-        </div>
-        <div class="mb-2 d-flex align-items-end justify-content-end">
+        <div class="mb-2 d-flex align-items-end justify-content-end  gap-2">
+            <button mat-raised-button class="action-button create-button" type="button" (click)="openImportDialog()">
+                {{ 'GLOBAL.IMPORT_FROM_CSV' | translate }}
+            </button>
             <button mat-raised-button class="action-button create-button" type="button" (click)="onCreate()">
                 {{ 'GLOBAL.CREATE' | translate }}
             </button>

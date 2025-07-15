@@ -3,21 +3,24 @@
     <h2 *ngIf="creation" class="mb-3">{{ 'UNIVERSITY.NEW' | translate }}</h2>
 
     <form class="university-form" [formGroup]="universityForm" (ngSubmit)="onSubmit()">
-        <div class="form-row">
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
-                <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
-                <mat-error *ngIf="universityForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'GLOBAL.ADDRESS' | translate }}</mat-label>
-                <input matInput formControlName="address" placeholder="{{ 'GLOBAL.ADDRESS' | translate }}" />
-                <mat-error *ngIf="universityForm.get('address')?.invalid">{{ 'ERROR.LOCATION_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
+        <div class="row">
+            <div class="col-12 col-md-6 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
+                    <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
+                    <mat-error *ngIf="universityForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-6 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'GLOBAL.ADDRESS' | translate }}</mat-label>
+                    <input matInput formControlName="address" placeholder="{{ 'GLOBAL.ADDRESS' | translate }}" />
+                    <mat-error *ngIf="universityForm.get('address')?.invalid">{{ 'ERROR.LOCATION_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
         </div>
 
-        <div class="actions">
+        <div class="actions d-flex flex-wrap gap-2 mt-3">
             <button mat-raised-button class="action-button" [ngClass]="universityForm.invalid ? 'disabled' : ''" type="submit" [disabled]="universityForm.invalid">
                 {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
             </button>

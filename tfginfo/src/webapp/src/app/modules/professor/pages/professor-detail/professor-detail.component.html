@@ -3,53 +3,68 @@
     <h2 *ngIf="creation" class="mb-3">{{ 'PROFESSOR.NEW' | translate }}</h2>
 
     <form class="professor-form" [formGroup]="professorForm" (ngSubmit)="onSubmit()">
-        <div class="form-row">
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
-                <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
-                <mat-error *ngIf="professorForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'GLOBAL.SURNAME' | translate }}</mat-label>
-                <input matInput formControlName="surname" placeholder="{{ 'GLOBAL.SURNAME' | translate }}" />
-                <mat-error *ngIf="professorForm.get('surname')?.invalid">{{ 'ERROR.SURNAME_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'GLOBAL.EMAIL' | translate }}</mat-label>
-                <input matInput type="email" formControlName="email" placeholder="{{ 'GLOBAL.EMAIL' | translate }}" />
-                <mat-error *ngIf="professorForm.get('email')?.invalid">{{ 'ERROR.EMAIL_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
+        <!-- Primera fila: Nombre, Apellido, Email -->
+        <div class="row">
+            <div class="col-12 col-md-4 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
+                    <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
+                    <mat-error *ngIf="professorForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-4 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'GLOBAL.SURNAME' | translate }}</mat-label>
+                    <input matInput formControlName="surname" placeholder="{{ 'GLOBAL.SURNAME' | translate }}" />
+                    <mat-error *ngIf="professorForm.get('surname')?.invalid">{{ 'ERROR.SURNAME_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-4 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'GLOBAL.EMAIL' | translate }}</mat-label>
+                    <input matInput type="email" formControlName="email" placeholder="{{ 'GLOBAL.EMAIL' | translate }}" />
+                    <mat-error *ngIf="professorForm.get('email')?.invalid">{{ 'ERROR.EMAIL_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
         </div>
 
-        <div class="form-row">
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'DEPARTMENT.TITLE_1' | translate }}</mat-label>
-                <mat-select formControlName="departmentId">
-                    <mat-option *ngFor="let department of departments" [value]="department.id">
-                        {{ department.name }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="professorForm.get('departmentId')?.invalid">{{ 'ERROR.DEPARTMENT_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
+        <!-- Segunda fila: Departamento -->
+        <div class="row">
+            <div class="col-12 col-md-6 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'DEPARTMENT.TITLE_1' | translate }}</mat-label>
+                    <mat-select formControlName="departmentId">
+                        <mat-option *ngFor="let department of departments" [value]="department.id">
+                            {{ department.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="professorForm.get('departmentId')?.invalid">{{ 'ERROR.DEPARTMENT_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-6 mb-2 d-flex align-items-center">
+                <mat-checkbox formControlName="department_boss">
+                    {{ 'PROFESSOR.IS_DEPARTMENT_BOSS' | translate }}
+                </mat-checkbox>
+            </div>
         </div>
 
-        <div class="form-row">
-            <mat-checkbox formControlName="department_boss">
-                {{ 'PROFESSOR.IS_DEPARTMENT_BOSS' | translate }}
-            </mat-checkbox>
+        <!-- Lista de TFGs -->
+        <div class="row" *ngIf="!creation">
+            <div class="col-12 mb-2">
+                <tfg-list [tfgs]="tfgs" [displayedColumns]="tfgDisplayedColumns"></tfg-list>
+            </div>
         </div>
 
-        <tfg-list *ngIf="!creation" [tfgs]="tfgs" [displayedColumns]="tfgDisplayedColumns"></tfg-list>
-
-        <div class="actions">
-            <button *ngIf="canEdit" mat-raised-button class="action-button" [ngClass]="professorForm.invalid ? 'disabled' : ''" type="submit" [disabled]="professorForm.invalid">
-                {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
-            </button>
-            <button mat-raised-button class="action-button" type="button" (click)="onCancel()">
-                {{ 'GLOBAL.CANCEL' | translate }}
-            </button>
+        <!-- Botones -->
+        <div class="row">
+            <div class="col-12 d-flex flex-wrap gap-2">
+                <button *ngIf="canEdit" mat-raised-button class="action-button" [ngClass]="professorForm.invalid ? 'disabled' : ''" type="submit" [disabled]="professorForm.invalid">
+                    {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
+                </button>
+                <button mat-raised-button class="action-button" type="button" (click)="onCancel()">
+                    {{ 'GLOBAL.CANCEL' | translate }}
+                </button>
+            </div>
         </div>
     </form>
 </div>

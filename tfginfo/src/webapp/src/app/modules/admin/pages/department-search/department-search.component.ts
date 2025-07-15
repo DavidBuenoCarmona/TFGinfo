@@ -24,6 +24,7 @@ import { ImportDialogComponent } from '../../../../core/layout/components/import
         TranslateModule,
         ReactiveFormsModule,
         MatIconModule,
+        MatTooltipModule,
         MatButtonModule,
         CommonModule],
     templateUrl: './department-search.component.html',

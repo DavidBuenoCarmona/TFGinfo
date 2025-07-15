@@ -1,4 +1,3 @@
-
 <div class="basic-page">
     <h2 class="mb-4">{{ 'TFG.LINES_TITLE_N' | translate }}</h2>
     <div class="container-fluid">
@@ -43,21 +42,24 @@
                     <button mat-raised-button class="action-button ms-2" type="button" (click)="onClearFilters()">
                         {{ 'GLOBAL.CLEAR_FILTERS' | translate }}
                     </button>
-                    <button mat-icon-button (click)="onShowExtraFilters()">
+                    <button mat-icon-button [matTooltip]="translateService.instant('GLOBAL.ADVANCED_FILTERS')"
+                        (click)="onShowExtraFilters()">
                         <mat-icon>filter_list</mat-icon>
                     </button>
                 </div>
             </div>
         </form>
-        <div class="mb-2 d-flex align-items-end justify-content-end">
-                <button mat-raised-button class="action-button create-button" type="button" (click)="openImportDialog()">
-                    {{ 'GLOBAL.IMPORT_FROM_CSV' | translate }}
-                </button>
-        </div>
-        <div class="mb-2 d-flex align-items-end justify-content-end">
-            <button *ngIf="isAdmin" mat-raised-button class="action-button create-button" type="button" (click)="onCreate()">
+        <!-- Botones Importar y Crear alineados -->
+
+        <div class="mb-2 d-flex justify-content-end gap-2">
+            <button mat-raised-button class="action-button create-button" type="button" (click)="openImportDialog()">
+                {{ 'GLOBAL.IMPORT_FROM_CSV' | translate }}
+            </button>
+            <button *ngIf="isAdmin" mat-raised-button class="action-button create-button" type="button"
+                (click)="onCreate()">
                 {{ 'GLOBAL.CREATE' | translate }}
             </button>
         </div>
-    <tfg-list (onDeleteTfg)="deleteTfg($event)" [tfgs]="filteredTfgs"></tfg-list>
+        <tfg-list (onDeleteTfg)="deleteTfg($event)" [tfgs]="filteredTfgs"></tfg-list>
+    </div>
 </div>

@@ -48,13 +48,12 @@
                 </div>
             </div>
         </form>
-        <div class="mb-2 d-flex align-items-end justify-content-end">
+        <div class="mb-2 d-flex align-items-end justify-content-end gap-2">
             <button mat-raised-button class="action-button create-button" type="button" (click)="openImportDialog()">
-                    {{ 'GLOBAL.IMPORT_FROM_CSV' | translate }}
-                </button>
-        </div>
-        <div class="mb-2 d-flex align-items-end justify-content-end">
-            <button *ngIf="canEdit" mat-raised-button class="action-button create-button" type="button" (click)="onCreate()">
+                {{ 'GLOBAL.IMPORT_FROM_CSV' | translate }}
+            </button>
+            <button *ngIf="canEdit" mat-raised-button class="action-button create-button" type="button"
+                (click)="onCreate()">
                 {{ 'GLOBAL.CREATE' | translate }}
             </button>
         </div>

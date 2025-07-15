@@ -3,50 +3,58 @@
     <h2 *ngIf="creation" class="mb-3">{{ 'CAREER.NEW' | translate }}</h2>
 
     <form class="career-form" [formGroup]="careerForm" (ngSubmit)="onSubmit()">
-        <div class="form-row">
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
-                <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
-                <mat-error *ngIf="careerForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'UNIVERSITY.TITLE_1' | translate }}</mat-label>
-                <mat-select formControlName="universityId">
-                    <mat-option *ngFor="let university of universities" [value]="university.id">
-                        {{ university.name }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="careerForm.get('universityId')?.invalid">{{ 'GLOBAL.UNIVERSITY_REQUIRED' | translate
-                    }}</mat-error>
-            </mat-form-field>
-            <mat-checkbox formControlName="checkboxDoubleCareer" (change)="onCheckboxChange($event)">
-                {{ 'CAREER.DOUBLE_TITULATION' | translate }}
-            </mat-checkbox>
+        <div class="row align-items-center">
+            <div class="col-12 col-md-4 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
+                    <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
+                    <mat-error *ngIf="careerForm.get('name')?.invalid">{{ 'GLOBAL.NAME_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-4 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'UNIVERSITY.TITLE_1' | translate }}</mat-label>
+                    <mat-select formControlName="universityId">
+                        <mat-option *ngFor="let university of universities" [value]="university.id">
+                            {{ university.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="careerForm.get('universityId')?.invalid">{{ 'GLOBAL.UNIVERSITY_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-4 mb-2 d-flex align-items-center">
+                <mat-checkbox formControlName="checkboxDoubleCareer" (change)="onCheckboxChange($event)">
+                    {{ 'CAREER.DOUBLE_TITULATION' | translate }}
+                </mat-checkbox>
+            </div>
         </div>
-        <div *ngIf="showCareers" class="form-row">
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'CAREER.TITLE_1' | translate }}</mat-label>
-                <mat-select formControlName="primaryCareer">
-                    <mat-option *ngFor="let career of careers" [value]="career.id">
-                        {{ career.name }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="careerForm.get('primaryCareer')?.invalid">{{ 'GLOBAL.UNIVERSITY_REQUIRED' | translate
-                    }}</mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'CAREER.TITLE_1' | translate }}</mat-label>
-                <mat-select formControlName="secondaryCareer">
-                    <mat-option *ngFor="let career of careers" [value]="career.id">
-                        {{ career.name }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="careerForm.get('secondaryCareer')?.invalid">{{ 'GLOBAL.UNIVERSITY_REQUIRED' |
-                    translate
-                    }}</mat-error>
-            </mat-form-field>
+
+        <div *ngIf="showCareers" class="row">
+            <div class="col-12 col-md-6 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'CAREER.TITLE_1' | translate }}</mat-label>
+                    <mat-select formControlName="primaryCareer">
+                        <mat-option *ngFor="let career of careers" [value]="career.id">
+                            {{ career.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="careerForm.get('primaryCareer')?.invalid">{{ 'GLOBAL.UNIVERSITY_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-6 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'CAREER.TITLE_1' | translate }}</mat-label>
+                    <mat-select formControlName="secondaryCareer">
+                        <mat-option *ngFor="let career of careers" [value]="career.id">
+                            {{ career.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="careerForm.get('secondaryCareer')?.invalid">{{ 'GLOBAL.UNIVERSITY_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
         </div>
-        <div class="actions">
+
+        <div class="actions d-flex flex-wrap gap-2 mt-3">
             <button mat-raised-button class="action-button" [ngClass]="careerForm.invalid ? 'disabled' : ''"
                 type="submit" [disabled]="careerForm.invalid">
                 {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}

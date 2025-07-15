@@ -4,7 +4,7 @@ import { TfgService } from '../../services/tfg.service';
 import { TFGLineDTO } from '../../models/tfg.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +16,7 @@ import { ConfigurationService } from '../../../../core/services/configuration.se
 import { MatDialog } from '@angular/material/dialog';
 import { ImportDialogComponent } from '../../../../core/layout/components/import-dialog/import-dialog.component';
 import { ImportSummaryComponent } from '../../../../core/layout/components/import-summary/import-summary.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-tfg-search',
@@ -25,6 +26,7 @@ import { ImportSummaryComponent } from '../../../../core/layout/components/impor
         TranslateModule,
         ReactiveFormsModule,
         MatButtonModule,
+        MatTooltipModule,
         MatIconModule,
         CommonModule],
     templateUrl: './tfg-search.component.html',
@@ -41,6 +43,7 @@ export class TfgSearchComponent implements OnInit {
 
     constructor(
         public tfgService: TfgService,
+        public translateService: TranslateService,
         private router: Router,
         private fb: FormBuilder,
         private route: ActivatedRoute,

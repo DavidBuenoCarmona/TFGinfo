@@ -4,7 +4,7 @@ import { UniversityService } from '../../services/university.service';
 import { UniversityBase } from '../../models/university.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,7 @@ import { Filter } from '../../../../core/core.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportDialogComponent } from '../../../../core/layout/components/import-dialog/import-dialog.component';
 import { ImportSummaryComponent } from '../../../../core/layout/components/import-summary/import-summary.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-university-search',
@@ -24,6 +25,7 @@ import { ImportSummaryComponent } from '../../../../core/layout/components/impor
         MatIconModule,
         ReactiveFormsModule,
         MatButtonModule,
+        MatTooltipModule,
         CommonModule],
     templateUrl: './university-search.component.html',
     styleUrl: './university-search.component.scss'
@@ -37,6 +39,7 @@ export class UniversitySearchComponent implements OnInit {
 
     constructor(
         public universityService: UniversityService,
+        public translateService: TranslateService,
         private router: Router,
         private fb: FormBuilder,
         private route: ActivatedRoute,

@@ -3,76 +3,96 @@
     <h2 *ngIf="creation" class="mb-3">{{ 'TFG.NEW' | translate }}</h2>
 
     <form class="tfg-form" [formGroup]="tfgForm" (ngSubmit)="onSubmit()">
-        <div class="form-row">
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
-                <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
-                <mat-error *ngIf="tfgForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'DEPARTMENT.TITLE_1' | translate }}</mat-label>
-                <mat-select formControlName="departmentId">
-                    <mat-option *ngFor="let department of departments" [value]="department.id">
-                        {{ department.name }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="tfgForm.get('department')?.invalid">{{ 'ERROR.DEPARTMENT_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>{{ 'TFG.SLOTS' | translate }}</mat-label>
-                <input matInput type="number" formControlName="slots" placeholder="{{ 'TFG.SLOTS' | translate }}" />
-                <mat-error *ngIf="tfgForm.get('slots')?.invalid">{{ 'ERROR.TFG_SLOTS_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
+        <!-- Primera fila: Nombre, Departamento, Plazas -->
+        <div class="row">
+            <div class="col-12 col-md-4 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'GLOBAL.NAME' | translate }}</mat-label>
+                    <input matInput formControlName="name" placeholder="{{ 'GLOBAL.NAME' | translate }}" />
+                    <mat-error *ngIf="tfgForm.get('name')?.invalid">{{ 'ERROR.NAME_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-4 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'DEPARTMENT.TITLE_1' | translate }}</mat-label>
+                    <mat-select formControlName="departmentId">
+                        <mat-option *ngFor="let department of departments" [value]="department.id">
+                            {{ department.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="tfgForm.get('department')?.invalid">{{ 'ERROR.DEPARTMENT_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-4 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'TFG.SLOTS' | translate }}</mat-label>
+                    <input matInput type="number" formControlName="slots" placeholder="{{ 'TFG.SLOTS' | translate }}" />
+                    <mat-error *ngIf="tfgForm.get('slots')?.invalid">{{ 'ERROR.TFG_SLOTS_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
         </div>
 
-        <div class="form-row">
-            <mat-checkbox formControlName="group">
-                {{ 'TFG.IS_GROUP' | translate }}
-            </mat-checkbox>
+        <!-- Checkbox en una fila aparte -->
+        <div class="row">
+            <div class="col-12 mb-2">
+                <mat-checkbox formControlName="group">
+                    {{ 'TFG.IS_GROUP' | translate }}
+                </mat-checkbox>
+            </div>
         </div>
 
-        <div class="form-row">
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>{{ 'GLOBAL.DESCRIPTION' | translate }}</mat-label>
-                <textarea matInput formControlName="description" placeholder="{{ 'GLOBAL.DESCRIPTION' | translate }}"></textarea>
-                <mat-error *ngIf="tfgForm.get('description')?.invalid">{{ 'ERROR.DESCRIPTION_REQUIRED' | translate }}</mat-error>
-            </mat-form-field>
+        <!-- Descripción -->
+        <div class="row">
+            <div class="col-12 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'GLOBAL.DESCRIPTION' | translate }}</mat-label>
+                    <textarea matInput formControlName="description" placeholder="{{ 'GLOBAL.DESCRIPTION' | translate }}"></textarea>
+                    <mat-error *ngIf="tfgForm.get('description')?.invalid">{{ 'ERROR.DESCRIPTION_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
         </div>
 
-        <div *ngIf="!creation" class="form-row">
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>{{ 'CAREER.TITLE_N' | translate }}</mat-label>
-                <mat-select formControlName="careers" multiple>
-                    <mat-option *ngFor="let career of careers" [value]="career.id">
-                        {{ career.name }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+        <!-- Carreras (solo si !creation) -->
+        <div class="row" *ngIf="!creation">
+            <div class="col-12 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'CAREER.TITLE_N' | translate }}</mat-label>
+                    <mat-select formControlName="careers" multiple>
+                        <mat-option *ngFor="let career of careers" [value]="career.id">
+                            {{ career.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
         </div>
 
-        <div *ngIf="!creation" class="form-row">
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>{{ 'PROFESSOR.TITLE_N' | translate }}</mat-label>
-                <mat-select formControlName="professors" multiple>
-                    <mat-option *ngFor="let professor of professors" [value]="professor.id">
-                        {{ professor.name }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+        <!-- Profesores (solo si !creation) -->
+        <div class="row" *ngIf="!creation">
+            <div class="col-12 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'PROFESSOR.TITLE_N' | translate }}</mat-label>
+                    <mat-select formControlName="professors" multiple>
+                        <mat-option *ngFor="let professor of professors" [value]="professor.id">
+                            {{ professor.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
         </div>
 
-        <div class="actions">
-            <button *ngIf="isAdmin" mat-raised-button class="action-button" [ngClass]="tfgForm.invalid ? 'disabled' : '' " type="submit" [disabled]="tfgForm.invalid">
-                {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
-            </button>
-            <button *ngIf="isStudent" mat-raised-button class="action-button" type="button" (click)="onRequest()">
-                {{ 'GLOBAL.REQUEST' | translate }}
-            </button>
-            <button mat-raised-button class="action-button" type="button" (click)="onCancel()">
-                {{ 'GLOBAL.CANCEL' | translate }}
-            </button>
+        <!-- Botones -->
+        <div class="row">
+            <div class="col-12 d-flex flex-wrap gap-2">
+                <button *ngIf="isAdmin" mat-raised-button class="action-button" [ngClass]="tfgForm.invalid ? 'disabled' : '' " type="submit" [disabled]="tfgForm.invalid">
+                    {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
+                </button>
+                <button *ngIf="isStudent" mat-raised-button class="action-button" type="button" (click)="onRequest()">
+                    {{ 'GLOBAL.REQUEST' | translate }}
+                </button>
+                <button mat-raised-button class="action-button" type="button" (click)="onCancel()">
+                    {{ 'GLOBAL.CANCEL' | translate }}
+                </button>
+            </div>
         </div>
     </form>
 </div>

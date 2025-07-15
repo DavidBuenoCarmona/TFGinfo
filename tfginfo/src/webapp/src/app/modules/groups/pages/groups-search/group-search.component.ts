@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { ConfigurationService } from '../../../../core/services/configuration.service';
+import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-group-search',
@@ -29,6 +30,7 @@ import { ConfigurationService } from '../../../../core/services/configuration.se
         MatCheckboxModule,
         MatOptionModule,
         MatSelectModule,
+        MatTooltipModule,
         CommonModule],
     templateUrl: './group-search.component.html',
     styleUrl: './group-search.component.scss'
@@ -49,6 +51,7 @@ export class GroupSearchComponent implements OnInit {
         private router: Router,
         private fb: FormBuilder,
         private route: ActivatedRoute,
+        public translateService: TranslateService,
         private configurationService: ConfigurationService
     ) { }
 
