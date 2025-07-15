@@ -4,7 +4,7 @@
 </a>
 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
     <li *ngIf="!isAdmin">
-        <a class="dropdown-item" [routerLink]="profileRoute" routerLinkActive="active">
+        <a class="dropdown-item" (click)="onNavigation.emit()" [routerLink]="profileRoute" routerLinkActive="active">
             {{ 'PROFILE.TITLE_1' | translate }}
         </a>
     </li>

@@ -55,6 +55,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     selectUniversity() {
+        this.closeNavbar();
         this.router.navigate(["/admin/university"]);
     }
 
