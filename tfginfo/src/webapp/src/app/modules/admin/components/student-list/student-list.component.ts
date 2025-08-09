@@ -54,7 +54,11 @@ export class StudentListComponent implements OnInit {
 
     setDisplayedColumns() {
         if (window.innerWidth < 600) {
-            this.displayedColumns = ['nameEmail', 'actions'];
+            if (this.columnsInputCloned.includes('actions')) {
+                this.displayedColumns = ['nameEmail', 'actions'];
+            } else {
+                this.displayedColumns = ['nameEmail'];
+            }
         } else {
             this.displayedColumns = this.columnsInputCloned;
         }

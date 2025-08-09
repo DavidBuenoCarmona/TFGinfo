@@ -34,6 +34,7 @@ export class GroupListComponent implements OnInit {
     @Output() onDeleteGroup = new EventEmitter<number>();
     public canEdit: boolean = false;
     public universitiesSelected: number[] | undefined;
+    public columnsInputCloned: string[] = [];
 
     constructor(
         private dialog: MatDialog,
@@ -46,15 +47,30 @@ export class GroupListComponent implements OnInit {
 
 
     ngOnInit(): void {
+        this.columnsInputCloned = this.displayedColumns;
         let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin;
         this.universitiesSelected = this.configurationService.getSelectedUniversities();
         if (!this.universitiesSelected || this.universitiesSelected.length === 0) {
             this.universitiesSelected = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : undefined;
         }
+        this.setDisplayedColumns();
+        window.addEventListener('resize', this.onResize);
+    }
 
+    ngOnDestroy(): void {
+        window.removeEventListener('resize', this.onResize);
+    }
+
+    onResize = () => {
+        this.setDisplayedColumns();
+    };
+
+    setDisplayedColumns() {
         if (window.innerWidth < 600) {
-            this.displayedColumns = this.displayedColumns.filter(col => col !== 'description');
+            this.displayedColumns = this.displayedColumns.filter(col => col !== 'description');   
+        } else {
+            this.displayedColumns = this.columnsInputCloned;
         }
     }
 

@@ -5,57 +5,61 @@
         </mat-card-header>
         <mat-card-content>
             <ng-container *ngIf="tfgStudentRequests && tfgStudentRequests.length > 0; else noResults">
-                <table mat-table [dataSource]="tfgStudentRequests" class="mat-table">
-                    <!-- TFG Nombre Column -->
-                    <ng-container matColumnDef="tfgName">
-                        <th mat-header-cell *matHeaderCellDef>{{ 'TFG.TITLE_1' | translate }}</th>
-                        <td mat-cell *matCellDef="let request">{{ request.tfgName }}</td>
-                    </ng-container>
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="tfgStudentRequests" class="mat-table w-100">
+                        <!-- TFG Nombre Column -->
+                        <ng-container matColumnDef="tfgName">
+                            <th mat-header-cell *matHeaderCellDef>{{ 'TFG.TITLE_1' | translate }}</th>
+                            <td mat-cell *matCellDef="let request">{{ request.tfgName }}</td>
+                        </ng-container>
 
-                    <!-- Alumno Nombre Column -->
-                    <ng-container matColumnDef="studentName">
-                        <th mat-header-cell *matHeaderCellDef>{{ 'STUDENT.TITLE_1' | translate }}</th>
-                        <td mat-cell *matCellDef="let request">{{ request.studentName }}</td>
-                    </ng-container>
+                        <!-- Alumno Nombre Column -->
+                        <ng-container matColumnDef="studentName">
+                            <th mat-header-cell *matHeaderCellDef>{{ 'STUDENT.TITLE_1' | translate }}</th>
+                            <td mat-cell *matCellDef="let request">{{ request.studentName }}</td>
+                        </ng-container>
 
-                    <!-- Status Column -->
-                    <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.STATUS' | translate }}</th>
-                        <td mat-cell *matCellDef="let request">
-                            <ng-container [ngSwitch]="request.tfgStatus">
-                                <mat-card *ngSwitchCase="TFGStatus.Aproved" class="status-card accepted">
-                                    {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
-                                </mat-card>
-                                <mat-card *ngSwitchCase="TFGStatus.Finished" class="status-card rejected">
-                                    {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
-                                </mat-card>
-                                <mat-card *ngSwitchCase="TFGStatus.Pending" class="status-card pending">
-                                    {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
-                                </mat-card>
-                                <mat-card *ngSwitchDefault class="status-card default">
-                                    {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
-                                </mat-card>
-                            </ng-container>
-                        </td>
-                    </ng-container>
+                        <!-- Status Column -->
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.STATUS' | translate }}</th>
+                            <td mat-cell *matCellDef="let request">
+                                <ng-container [ngSwitch]="request.tfgStatus">
+                                    <mat-card *ngSwitchCase="TFGStatus.Aproved" class="status-card accepted">
+                                        {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
+                                    </mat-card>
+                                    <mat-card *ngSwitchCase="TFGStatus.Finished" class="status-card rejected">
+                                        {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
+                                    </mat-card>
+                                    <mat-card *ngSwitchCase="TFGStatus.Pending" class="status-card pending">
+                                        {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
+                                    </mat-card>
+                                    <mat-card *ngSwitchDefault class="status-card default">
+                                        {{ ('TFG.STATUS.' + request.tfgStatus) | translate }}
+                                    </mat-card>
+                                </ng-container>
+                            </td>
+                        </ng-container>
 
-                    <!-- Acciones Column -->
-                    <ng-container matColumnDef="actions">
-                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
-                        <td mat-cell *matCellDef="let request">
-                            <button *ngIf="request.tfgStatus != TFGStatus.Finished" mat-icon-button (click)="onAccept(request)">
-                                <mat-icon>check</mat-icon>
-                            </button>
-                            <button *ngIf="request.tfgStatus == TFGStatus.Pending" mat-icon-button (click)="onReject(request)">
-                                <mat-icon>close</mat-icon>
-                            </button>
-                        </td>
-                    </ng-container>
+                        <!-- Acciones Column -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
+                            <td mat-cell *matCellDef="let request">
+                                <div class="d-flex flex-wrap gap-1">
+                                    <button *ngIf="request.tfgStatus != TFGStatus.Finished" mat-icon-button (click)="onAccept(request)">
+                                        <mat-icon>check</mat-icon>
+                                    </button>
+                                    <button *ngIf="request.tfgStatus == TFGStatus.Pending" mat-icon-button (click)="onReject(request)">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
 
-                    <!-- Header and Row Definitions -->
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
+                        <!-- Header and Row Definitions -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
             </ng-container>
             <ng-template #noResults>
                 <div class="text-center py-4">

@@ -99,24 +99,34 @@
 
     <!-- Botones de acción -->
     <div class="actions d-flex flex-wrap gap-2 mt-3">
-        <button *ngIf="canEdit && (creation ? true : (userAlreadyInGroup || isAdmin))" mat-raised-button
-            class="action-button" [ngClass]="groupForm.invalid ? 'disabled' : ''" type="submit"
-            [disabled]="groupForm.invalid" (click)="onSubmit()">
-            {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
-        </button>
-        <button *ngIf="!userAlreadyInGroup && !isAdmin && !creation && !(group!.isPrivate)" mat-raised-button
-            class="action-button" (click)="onJoin()">
-            {{ 'WORKING_GROUP.JOIN' | translate }}
-        </button>
-        <button *ngIf="userAlreadyInGroup && !isAdmin && !creation" mat-raised-button class="action-button"
-            (click)="onLeave()">
-            {{ 'WORKING_GROUP.LEAVE' | translate }}
-        </button>
-        <button mat-raised-button class="action-button" type="button" (click)="onCancel()">
-            {{ 'GLOBAL.CANCEL' | translate }}
-        </button>
-        <button *ngIf="canEdit && !creation" mat-raised-button class="action-button delete-button" type="button"
-            (click)="onDelete()">
+        <div class=" d-flex flex-wrap gap-2">
+            <button *ngIf="canEdit && (creation ? true : (userAlreadyInGroup || isAdmin))" mat-raised-button
+                class="action-button flex-grow-1" [ngClass]="groupForm.invalid ? 'disabled' : ''" type="submit"
+                [disabled]="groupForm.invalid" (click)="onSubmit()">
+                {{ creation ? ('GLOBAL.CREATE' | translate) : ('GLOBAL.UPDATE' | translate) }}
+            </button>
+            <button *ngIf="!userAlreadyInGroup && !isAdmin && !creation && !(group!.isPrivate)" mat-raised-button
+                class="action-button flex-grow-1" (click)="onJoin()">
+                {{ 'WORKING_GROUP.JOIN' | translate }}
+            </button>
+            <button *ngIf="userAlreadyInGroup && !isAdmin && !creation" mat-raised-button
+                class="action-button flex-grow-1" (click)="onLeave()">
+                {{ 'WORKING_GROUP.LEAVE' | translate }}
+            </button>
+            <button mat-raised-button class="action-button flex-grow-1" type="button" (click)="onCancel()">
+                {{ 'GLOBAL.CANCEL' | translate }}
+            </button>
+        </div>
+        <!-- Eliminar en nueva fila solo en pantallas pequeñas -->
+        <div class="w-100 d-block d-md-none mt-5">
+            <button *ngIf="canEdit && !creation" mat-raised-button class="action-button delete-button w-100"
+                type="button" (click)="onDelete()">
+                {{ 'GLOBAL.DELETE' | translate }}
+            </button>
+        </div>
+        <!-- Eliminar en la misma fila en escritorio -->
+        <button *ngIf="canEdit && !creation" mat-raised-button
+            class="action-button delete-button flex-grow-1 d-none d-md-block" type="button" (click)="onDelete()">
             {{ 'GLOBAL.DELETE' | translate }}
         </button>
     </div>
