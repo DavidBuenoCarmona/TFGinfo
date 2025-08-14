@@ -30,7 +30,6 @@ export class AuthGuard implements CanActivate {
                 })
             );
         } else if (!token) {
-            this.snackBarService.show("ERROR.NOT_AUTHENTICATED");
             this.router.navigate(['/login']);
             return of(false);
         } else {

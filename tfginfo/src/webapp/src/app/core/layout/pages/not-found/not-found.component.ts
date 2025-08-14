@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardMdImage, MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
@@ -16,10 +16,18 @@ import { TranslateModule } from '@ngx-translate/core';
     templateUrl: './not-found.component.html',
     styleUrl: './not-found.component.scss'
 })
-export class NotFoundComponent {
+export class NotFoundComponent implements OnInit{
     constructor(
         private router: Router,
         private configurationService: ConfigurationService) { }
+
+    ngOnInit(): void 
+    {
+        if(this.configurationService.getRole()) {
+           this.goHome();
+        }
+    }
+
 
     goHome() {
         let role = this.configurationService.getRole();
