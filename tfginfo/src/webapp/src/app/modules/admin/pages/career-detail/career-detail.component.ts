@@ -56,7 +56,7 @@ export class CareerDetailComponent implements OnInit {
         this.careerForm = this.fb.group({
             id: [this.creation ? null : this.id],
             name: ['', Validators.required],
-            universityId: ['', Validators.required],
+            universityId: [null, Validators.required],
             checkboxDoubleCareer: [false],
             primaryCareer: [null],
             secondaryCareer: [null],

@@ -192,7 +192,7 @@ namespace TFGinfo.Api
                 var university = 0;
                 if (!string.IsNullOrWhiteSpace(fields[1]))
                 {
-                    university = context.university.Where(u => u.name.ToLower() == fields[1].Trim().ToLower()).Select(u => u.id).FirstOrDefault();
+                    university = context.university.Where(u => u.name.ToLower() == fields[1].Trim().ToLower() || (u.acronym != null && u.acronym.ToLower() == fields[1].Trim().ToLower())).Select(u => u.id).FirstOrDefault();
                     if (university == 0)
                     {
                         output.errorItems.Add($"Line {i + 1}: University '{fields[1].Trim()}' does not exist.");
@@ -213,6 +213,11 @@ namespace TFGinfo.Api
                     }
                     doubleCareer = 1;
                     doubleCareers = context.career.Where(c => careerNames.Contains(c.name.Trim())).Select(c => c.id).ToList();
+                    if (doubleCareers.Count != 2)
+                    {
+                        output.errorItems.Add($"Line {i + 1}: One or both careers '{string.Join(", ", careerNames)}' do not exist.");
+                        continue;
+                    }
                 }
 
 

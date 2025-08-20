@@ -1,0 +1,18 @@
+# Imagen base con SDK para desarrollo
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS dev
+
+WORKDIR /app
+
+# Copiamos solo el archivo de proyecto para restaurar dependencias
+COPY *.csproj ./
+RUN dotnet restore
+
+# Copiamos el resto del código
+COPY . .
+
+# Exponer el puerto de la API (ejemplo 5089)
+EXPOSE 5089
+
+# Arrancamos en modo watch para desarrollo (hot reload)
+CMD ["dotnet", "watch", "run", "--project", "webapi.csproj", "--urls", "http://0.0.0.0:5089"]
+

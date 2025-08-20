@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  frontend:
+    build:
+      context: ./webapp
+      dockerfile: dockerfile   # tu Dockerfile de Angular en desarrollo
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./webapp:/app
+      - /app/node_modules
+    command: npm run start -- --host 0.0.0.0
+
+  backend:
+    build:
+      context: ./webapi
+      dockerfile: dockerfile   # tu Dockerfile de .NET en desarrollo
+    ports:
+      - "5089:5089"
+    volumes:
+      - ./webapi:/app
+      - /app/bin
+      - /app/obj
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      DOTNET_RUNNING_IN_CONTAINER: "true"
+      DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER: "true"
+      ConnectionStrings__DefaultConnection: "Server=mysql;Database=tfginfo;User=root;Password=root;"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.1
+    container_name: mysql-db
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      LOWER_CASE_TABLE_NAMES: 1
+    volumes:
+      - ./database/database:/docker-entrypoint-initdb.d

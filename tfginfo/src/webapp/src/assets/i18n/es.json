@@ -160,7 +160,7 @@
     },
     "UNIVERSITY": {
         "CREATE": "Crear centro",
-        "CSV_FORMAT": "Formato CSV: \n Nombre*; Dirección*",
+        "CSV_FORMAT": "Formato CSV: \n Nombre*; Acrónimo; Dirección*",
         "CHANGE": "Cambiar centro",
         "EDIT": "Editar centro",
         "DELETE": "Eliminar centro",

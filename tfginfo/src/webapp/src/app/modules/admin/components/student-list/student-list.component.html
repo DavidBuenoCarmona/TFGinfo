@@ -17,8 +17,8 @@
                                 <div>{{ student.name }} {{ student.surname }}</div>
                                 <div class="responsive-email">{{ student.email }}</div>
                                 <div *ngIf="!groupId" class="responsive-extra-info">{{ student.career.name }} ({{student.career.university ?
-                            student.career.university.name : student.career.doubleCareers[0].university.name + ", " +
-                            student.career.doubleCareers[1].university.name}})</div>
+                            (student.career.university.acronym != "" ? student.career.university.acronym : student.career.university.name) : (student.career.doubleCareers[0].university.acronym != "" ? student.career.doubleCareers[0].university.acronym : student.career.doubleCareers[0].university.name) + ", " +
+                            (student.career.doubleCareers[1].university.acronym != "" ? student.career.doubleCareers[1].university.acronym : student.career.doubleCareers[1].university.name)}})</div>
                             </div>
                         </td>
                     </ng-container>
@@ -45,8 +45,8 @@
                     <ng-container matColumnDef="career">
                         <th mat-header-cell *matHeaderCellDef>{{ 'CAREER.TITLE_1' | translate }}</th>
                         <td mat-cell *matCellDef="let student">{{ student.career.name }} ({{student.career.university ?
-                            student.career.university.name : student.career.doubleCareers[0].university.name + ", " +
-                            student.career.doubleCareers[1].university.name}})</td>
+                            (student.career.university.acronym != "" ? student.career.university.acronym : student.career.university.name) : (student.career.doubleCareers[0].university.acronym != "" ? student.career.doubleCareers[0].university.acronym : student.career.doubleCareers[0].university.name) + ", " +
+                            (student.career.doubleCareers[1].university.acronym != "" ? student.career.doubleCareers[1].university.acronym : student.career.doubleCareers[1].university.name)}})</td>
                     </ng-container>
 
                     <!-- Acciones Column -->

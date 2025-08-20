@@ -13,6 +13,13 @@
             </div>
             <div class="col-12 col-md-6 mb-2">
                 <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ 'GLOBAL.ACRONYM' | translate }}</mat-label>
+                    <input matInput formControlName="acronym" placeholder="{{ 'GLOBAL.ACRONYM' | translate }}" />
+                    <mat-error *ngIf="universityForm.get('acronym')?.invalid">{{ 'ERROR.ACRONYM_REQUIRED' | translate }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-6 mb-2">
+                <mat-form-field appearance="fill" class="w-100">
                     <mat-label>{{ 'GLOBAL.ADDRESS' | translate }}</mat-label>
                     <input matInput formControlName="address" placeholder="{{ 'GLOBAL.ADDRESS' | translate }}" />
                     <mat-error *ngIf="universityForm.get('address')?.invalid">{{ 'ERROR.LOCATION_REQUIRED' | translate }}</mat-error>

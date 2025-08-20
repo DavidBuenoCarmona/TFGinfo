@@ -20,7 +20,7 @@ namespace TFGinfo.Models
     {
         public void Configure(EntityTypeBuilder<DepartmentModel> builder)
         {
-            builder.ToTable("Department");
+            builder.ToTable("department");
 
             builder.HasKey(d => d.id);
 

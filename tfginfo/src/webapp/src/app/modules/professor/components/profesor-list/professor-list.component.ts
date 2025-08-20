@@ -35,7 +35,7 @@ export class ProfessorListComponent implements OnInit {
     @Input() groupId: number | undefined = undefined;
     public canEdit: boolean = false;
     public columnsInputCloned: string[] = [];
-    public universitySelected: number | undefined;
+     public universitiesSelected: number[] | undefined;
 
     constructor(
         private dialog: MatDialog,
@@ -48,7 +48,10 @@ export class ProfessorListComponent implements OnInit {
         this.columnsInputCloned = this.displayedColumns;
         let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin;
-        this.universitySelected = localStorage.getItem('selectedUniversity') ? parseInt(localStorage.getItem('selectedUniversity')!) : undefined;
+        this.universitiesSelected = this.configurationService.getSelectedUniversities();
+        if (!this.universitiesSelected || this.universitiesSelected.length === 0) {
+            this.universitiesSelected = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : undefined;
+        }
 
         this.setDisplayedColumns();
         window.addEventListener('resize', this.onResize);

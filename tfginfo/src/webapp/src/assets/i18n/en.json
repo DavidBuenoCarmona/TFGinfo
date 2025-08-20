@@ -161,7 +161,7 @@
     },
     "UNIVERSITY": {
         "CREATE": "Create center",
-        "CSV_FORMAT": "CSV format: \n Name*; Address*",
+        "CSV_FORMAT": "CSV format: \n Name*; Acronym; Address*",
         "CHANGE": "Change center",
         "EDIT": "Edit center",
         "DELETE": "Delete center",

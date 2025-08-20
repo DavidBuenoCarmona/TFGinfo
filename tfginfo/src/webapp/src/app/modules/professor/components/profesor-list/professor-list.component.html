@@ -60,8 +60,8 @@
             </ng-container>
             <ng-template #noResults>
                 <div class="text-center py-4">
-                    {{ (!universitySelected ? 'GLOBAL.NO_UNIVERSITY_SELECTED' : 'GLOBAL.NO_RESULTS') | translate }}
-                    <a *ngIf="!universitySelected" class="cursor-pointer" (click)="changeUniversity()">
+                    {{ (!universitiesSelected  || universitiesSelected.length == 0 ? 'GLOBAL.NO_UNIVERSITY_SELECTED' : 'GLOBAL.NO_RESULTS') | translate }}
+                    <a *ngIf="!universitiesSelected  || universitiesSelected.length == 0" class="cursor-pointer" (click)="changeUniversity()">
                         {{ 'UNIVERSITY.CHANGE' | translate }}
                     </a>
                 </div>

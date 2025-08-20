@@ -29,7 +29,7 @@ import { UniversitySelectionService } from '../../../../core/services/localstora
 })
 export class UniversityListComponent {
     @Input() universities: UniversityBase[] = [];
-    @Input() displayedColumns: string[] = ['name', 'address', 'actions'];
+    @Input() displayedColumns: string[] = ['name', 'acronym', 'address', 'actions'];
     @Output() onDeleteUniversity = new EventEmitter<number>();
 
     public selectedUniversity: number | undefined;

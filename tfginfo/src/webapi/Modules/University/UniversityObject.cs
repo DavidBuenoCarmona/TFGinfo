@@ -5,6 +5,7 @@ namespace TFGinfo.Objects
     public class UniversityBase {
         public int? id { get; set; }
         public string name { get; set; }
+        public string? acronym { get; set; }
         public string address { get; set; }
 
         public UniversityBase () {}
@@ -13,6 +14,7 @@ namespace TFGinfo.Objects
             name = model.name;
             address = model.address;
             id = model.id;
+            acronym = model.acronym;
         }
     }
 }

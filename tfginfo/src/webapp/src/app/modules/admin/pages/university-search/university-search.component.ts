@@ -50,6 +50,7 @@ export class UniversitySearchComponent implements OnInit {
         this.filterForm = this.fb.group({
             generic: [''],
             name: [''],
+            acronym: [''],
             address: ['']
         });
 

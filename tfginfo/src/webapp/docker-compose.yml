@@ -1,0 +1,10 @@
+version: "3"
+services:
+  angular-dev:
+    build: .
+    ports:
+      - "4200:4200"
+    volumes:
+      - .:/app        # Monta tu código local dentro del contenedor
+      - /app/node_modules  # Evita conflictos de dependencias entre host y container
+    command: npm run start -- --host 0.0.0.0

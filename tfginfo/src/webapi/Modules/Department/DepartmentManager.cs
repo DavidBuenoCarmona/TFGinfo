@@ -184,10 +184,10 @@ namespace TFGinfo.Api
                     continue;
                 }
 
-                var acronym = string.IsNullOrWhiteSpace(fields[2]) ? "" : fields[2].Trim();
+                var acronym = string.IsNullOrWhiteSpace(fields[1]) ? "" : fields[1].Trim();
                 var universityNames = fields[2].Split(',').Select(u => u.Trim().ToLower()).ToList();
                 var universityIds = context.university
-                    .Where(u => universityNames.Contains(u.name.ToLower()))
+                    .Where(u => universityNames.Contains(u.name.ToLower() ) || (u.acronym != null && universityNames.Contains(u.acronym.ToLower())))
                     .Select(u => u.id)
                     .ToList();
                 if (universityIds.Count == 0)
@@ -198,7 +198,7 @@ namespace TFGinfo.Api
 
                 foreach (var universityName in universityNames)
                 {
-                    var university = context.university.FirstOrDefault(u => u.name.ToLower() == universityName);
+                    var university = context.university.FirstOrDefault(u => u.name.ToLower() == universityName || (u.acronym != null && u.acronym.ToLower() == universityName));
                     if (university == null)
                     {
                         output.errorItems.Add($"Line {i + 1}: University '{universityName}' does not exist. This relation will be ignored.");

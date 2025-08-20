@@ -67,11 +67,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         if (localStorage.getItem('selectedUniversity')) {
-            this.universityService.getUniversity(Number(localStorage.getItem('selectedUniversity'))).subscribe(u => this.selectedUniversityName = u.name);
+            this.universityService.getUniversity(Number(localStorage.getItem('selectedUniversity'))).subscribe(u => this.selectedUniversityName = u.acronym != "" ? u.acronym : u.name);
         }
         this.universitySelectionService.universityId$.subscribe(id => {
             if (id) {
-                this.universityService.getUniversity(id).subscribe(u => this.selectedUniversityName = u.name);
+                this.universityService.getUniversity(id).subscribe(u => this.selectedUniversityName = u.acronym != "" ? u.acronym : u.name);
             } else {
                 this.selectedUniversityName = '';
             }

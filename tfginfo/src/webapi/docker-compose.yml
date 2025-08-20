@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "5089:5089"
+    volumes:
+      - ./:/app                 # Monta todo el proyecto en /app dentro del contenedor
+      - /app/bin
+      - /app/obj
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - DOTNET_RUNNING_IN_CONTAINER=true
+      - DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER=true

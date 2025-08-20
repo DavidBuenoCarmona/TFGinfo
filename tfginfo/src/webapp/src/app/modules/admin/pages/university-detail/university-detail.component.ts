@@ -46,7 +46,8 @@ export class UniversityDetailComponent implements OnInit {
         this.universityForm = this.fb.group({
             id: [this.creation ? null : this.id],
             name: ['', Validators.required],
-            address: ['', Validators.required]
+            address: ['', Validators.required],
+            acronym: [''] // Added acronym field
         });
 
         if (!this.creation) {

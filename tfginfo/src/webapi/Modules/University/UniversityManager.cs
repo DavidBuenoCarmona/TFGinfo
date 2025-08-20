@@ -19,9 +19,11 @@ namespace TFGinfo.Api
         { 
             CheckNameIsNotRepeated(university);
 
-            UniversityModel model = new UniversityModel {
+            UniversityModel model = new UniversityModel
+            {
                 name = university.name,
-                address = university.address
+                address = university.address,
+                acronym = university.acronym ?? string.Empty,
             };
             context.university.Add(model);
             context.SaveChanges();
@@ -31,11 +33,21 @@ namespace TFGinfo.Api
 
         public void DeleteUniversity(int id)
         {
-            // TODO: Check if the university has any related data (Departments, Degrees, etc)
             UniversityModel? model = context.university.FirstOrDefault(university => university.id == id);
             if (model == null) {
                 throw new NotFoundException();
             }
+
+            // Check departments and careers
+            if (context.department.Any(department => department.Universities.Any(u => u.id == id)))
+            {
+                throw new UnprocessableException("Cannot delete university with existing departments.");
+            }
+            if (context.career.Any(career => career.university == id))
+            {
+                throw new UnprocessableException("Cannot delete university with existing careers.");
+            }
+
             context.university.Remove(model);
             context.SaveChanges();
         }
@@ -51,6 +63,8 @@ namespace TFGinfo.Api
 
             model.name = university.name;
             model.address = university.address;
+            model.acronym = university.acronym ?? string.Empty;
+            context.university.Update(model);
             context.SaveChanges();
 
             return new UniversityBase(model);
@@ -81,7 +95,11 @@ namespace TFGinfo.Api
                 else if (filter.key == "generic")
                 {
                     query = query.Where(u => u.name.ToLower().Contains(filter.value.ToLower()) || 
-                                             u.address.ToLower().Contains(filter.value.ToLower()));
+                                             u.address.ToLower().Contains(filter.value.ToLower()) ||
+                                             u.acronym.ToLower().Contains(filter.value.ToLower()));
+                } else if (filter.key == "acronym")
+                {
+                    query = query.Where(u => u.acronym.ToLower().Contains(filter.value.ToLower()));
                 }
             } 
             return query.ToList().ConvertAll(model => new UniversityBase(model)); 
@@ -117,7 +135,8 @@ namespace TFGinfo.Api
                     output.errorItems.Add($"Line {i + 1}: Name cannot be empty.");
                     continue;
                 }
-                string address = fields.Length > 1 ? fields[1].Trim() : "";
+                string acronym = fields[1].Trim();
+                string address = fields.Length > 2 ? fields[2].Trim() : "";
                 if (string.IsNullOrWhiteSpace(address))
                 {
                     output.errorItems.Add($"Line {i + 1}: Address cannot be empty.");
@@ -126,7 +145,8 @@ namespace TFGinfo.Api
                 var university = new UniversityBase
                 {
                     name = name,
-                    address = address
+                    address = address,
+                    acronym = acronym
                 };
 
                 try
@@ -150,6 +170,10 @@ namespace TFGinfo.Api
             if (context.university.Any(u => u.id != university.id && u.name.ToLower() == university.name.ToLower()))
             {
                 throw new UnprocessableException("University name already exists");
+            }
+            if (context.university.Any(u => u.id != university.id && u.acronym.ToLower() == university.acronym.ToLower()))
+            {
+                throw new UnprocessableException("University acronym already exists");
             }
         }
 

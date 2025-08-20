@@ -15,7 +15,7 @@
                     <!-- Universidad Column -->
                     <ng-container matColumnDef="university">
                         <th mat-header-cell *matHeaderCellDef>{{ 'UNIVERSITY.TITLE_1' | translate }}</th>
-                        <td  mat-cell *matCellDef="let career">{{ career.university ? career.university.name : career.doubleCareers[0].university.name + ", "+ career.doubleCareers[1].university.name}}</td>
+                        <td  mat-cell *matCellDef="let career">{{ career.university ? (career.university.acronym != "" ? career.university.acronym : career.university.name) : (career.doubleCareers[0].university.acronym != "" ? career.doubleCareers[0].university.acronym : career.doubleCareers[0].university.name) + ", " + (career.doubleCareers[1].university.acronym != "" ? career.doubleCareers[1].university.acronym : career.doubleCareers[1].university.name)}}</td>
                     </ng-container>
 
                     <!-- Acciones Column -->

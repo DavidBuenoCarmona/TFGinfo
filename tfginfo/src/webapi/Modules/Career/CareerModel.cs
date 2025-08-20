@@ -23,7 +23,7 @@ namespace TFGinfo.Models
         public void Configure(EntityTypeBuilder<CareerModel> builder)
         {
             builder.HasKey(c => c.id);
-            builder.Property(c => c.name).IsRequired().HasMaxLength(100);
+            builder.Property(c => c.name).IsRequired();
             builder.Property(c => c.university).IsRequired(false);
             builder.Property(c => c.double_career).IsRequired();
 
