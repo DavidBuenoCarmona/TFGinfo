@@ -55,12 +55,17 @@ namespace TFGinfo.Api
             bool studentsExist = context.student.Any(s => s.career == id);
             if (studentsExist)
             {
-                throw new UnprocessableException("Cannot delete career because there are students associated with it.");
+                throw new UnprocessableException("CANNOT_DELETE_CAREER_WITH_STUDENTS");
             }
             bool tfgExists = context.tfg_line_career.Any(t => t.career == id);
             if (tfgExists)
             {
-                throw new UnprocessableException("Cannot delete career because there are TFGs associated with it.");
+                throw new UnprocessableException("CANNOT_DELETE_CAREER_WITH_TFG");
+            }
+            bool hasDoubleCareerAssociated = context.double_career.Any(dc => dc.primary_career == id || dc.secondary_career == id);
+            if (hasDoubleCareerAssociated)
+            {
+                throw new UnprocessableException("CANNOT_DELETE_CAREER_ASSOCIATED_WITH_DOUBLE_TITULATION");
             }
             var doubleCareer = context.double_career.FirstOrDefault(dc => dc.career == id);
             if (doubleCareer != null)
@@ -246,9 +251,9 @@ namespace TFGinfo.Api
         #region Private Methods
         private void CheckNameIsNotRepeated(CareerFlatDTO career)
         {
-            if (context.career.Any(c => c.id != career.id && c.name.ToLower() == career.name.ToLower() && c.university == career.universityId))
+            if (context.career.Any(c => c.id != career.id && c.name.ToLower() == career.name.ToLower()))
             {
-                throw new UnprocessableException("Career name already exists in this university.");
+                throw new UnprocessableException("CAREER_NAME_ALREADY_EXISTS");
             }
         }
         #endregion

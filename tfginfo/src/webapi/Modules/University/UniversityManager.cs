@@ -39,13 +39,13 @@ namespace TFGinfo.Api
             }
 
             // Check departments and careers
-            if (context.department.Any(department => department.Universities.Any(u => u.id == id)))
+            if (context.department.Any(department => department.Universities.Any(u => u.university == id)))
             {
-                throw new UnprocessableException("Cannot delete university with existing departments.");
+                throw new UnprocessableException("CANNOT_DELETE_UNIVERSITY_WITH_DEPARTMENTS");
             }
             if (context.career.Any(career => career.university == id))
             {
-                throw new UnprocessableException("Cannot delete university with existing careers.");
+                throw new UnprocessableException("CANNOT_DELETE_UNIVERSITY_WITH_CAREERS");
             }
 
             context.university.Remove(model);
@@ -169,11 +169,11 @@ namespace TFGinfo.Api
         {
             if (context.university.Any(u => u.id != university.id && u.name.ToLower() == university.name.ToLower()))
             {
-                throw new UnprocessableException("University name already exists");
+                throw new UnprocessableException("UNIVERSITY_NAME_ALREADY_EXISTS");
             }
             if (context.university.Any(u => u.id != university.id && u.acronym.ToLower() == university.acronym.ToLower()))
             {
-                throw new UnprocessableException("University acronym already exists");
+                throw new UnprocessableException("UNIVERSITY_ACRONYM_ALREADY_EXISTS");
             }
         }
 

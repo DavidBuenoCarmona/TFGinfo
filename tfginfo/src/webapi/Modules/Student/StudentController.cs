@@ -206,7 +206,7 @@ public class StudentController : BaseController
 
             if (User.id != id && User.role.id != (int)RoleTypes.Admin)
             {
-                throw new UnauthorizedAccessException("You do not have permission to update this student's optional data.");
+                throw new UnauthorizedAccessException("CANNOT_EDIT_THAT_STUDENT_INFORMATION");
             }
             StudentManager manager = new StudentManager(context);
             return Ok(manager.UpdateOptionalData(id, optionalData));
@@ -242,7 +242,7 @@ public class StudentController : BaseController
 
             if (User.id != id && User.role.id != (int)RoleTypes.Admin)
             {
-                throw new UnauthorizedAccessException("You do not have permission to update this student's optional data.");
+                throw new UnauthorizedAccessException("CANNOT_EDIT_THAT_STUDENT_INFORMATION");
             }
             StudentManager manager = new StudentManager(context);
             return Ok(manager.GetById(id));

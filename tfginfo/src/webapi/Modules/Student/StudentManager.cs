@@ -122,13 +122,13 @@ namespace TFGinfo.Api
             bool tfgExists = context.tfg_student.Any(t => t.student == id);
             if (tfgExists)
             {
-                throw new UnprocessableException("Cannot delete student because there are TFGs associated with it.");
+                throw new UnprocessableException("CANNOT_DELETE_STUDENT_WITH_TFG");
             }
 
             bool groupExists = context.working_group_student.Any(g => g.student == id);
             if (groupExists)
             {
-                throw new UnprocessableException("Cannot delete student because there are groups associated with it.");
+                throw new UnprocessableException("CANNOT_DELETE_STUDENT_WITH_GROUPS");
             }
 
             context.student.Remove(model);
@@ -296,7 +296,7 @@ namespace TFGinfo.Api
         {
             if (context.student.Any(s => s.id != student.id && s.email.ToLower() == student.email.ToLower()))
             {
-                throw new UnprocessableException("Student email already exists");
+                throw new UnprocessableException("STUDENT_EMAIL_ALREADY_EXISTS");
             }
         }
 
@@ -304,7 +304,7 @@ namespace TFGinfo.Api
         {
             if (context.student.Any(s => s.id != student.id && s.dni.ToLower() == student.dni.ToLower()))
             {
-                throw new UnprocessableException("Student dni already exists");
+                throw new UnprocessableException("STUDENT_DNI_ALREADY_EXISTS");
             }
         }
         #endregion

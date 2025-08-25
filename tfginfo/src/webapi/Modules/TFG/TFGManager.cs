@@ -114,13 +114,13 @@ namespace TFGinfo.Api
             var tfg = context.tfg_line.FirstOrDefault(t => t.id == request.tfg.tfgLineId);
             if (tfg == null)
             {
-                throw new NotFoundException("TFG Line not found");
+                throw new NotFoundException("TFG_LINE_NOT_FOUND");
             }
             // Check if the professor exists
             var professor = context.professor.FirstOrDefault(p => p.id == request.professorId);
             if (professor == null)
             {
-                throw new NotFoundException("Professor not found");
+                throw new NotFoundException("PROFESSOR_NOT_FOUND");
             }
             // Check if the secondary professor exists
             if (request.secondaryProfessorId.HasValue)
@@ -128,14 +128,14 @@ namespace TFGinfo.Api
                 var secondaryProfessor = context.professor.FirstOrDefault(p => p.id == request.secondaryProfessorId.Value);
                 if (secondaryProfessor == null)
                 {
-                    throw new NotFoundException("Secondary professor not found");
+                    throw new NotFoundException("SECONDARY_PROFESSOR_NOT_FOUND");
                 }
             }
             // Check if the student exists
             int studentId = context.student.FirstOrDefault(s => s.email == request.studentEmail)?.id ?? 0;
             if (studentId == 0)
             {
-                throw new NotFoundException("Student not found");
+                throw new NotFoundException("STUDENT_NOT_FOUND");
             }
             // Check if the the student has already requested a TFG with the same line and professor
             bool existingTfg = context.tfg.Include(t => t.Students).Include(t => t.Professors).Any(t =>
@@ -145,7 +145,7 @@ namespace TFGinfo.Api
 
             if (existingTfg)
             {
-                throw new UnprocessableException("TFG already requested by this student for this line and professor");
+                throw new UnprocessableException("TFG_ALREADY_REQUESTED_FOR_THIS_PROFESSOR");
             }
 
 
@@ -172,11 +172,11 @@ namespace TFGinfo.Api
 
             if (emailService == null)
             {
-                throw new UnprocessableException("Email service not available");
+                throw new UnprocessableException("EMAIL_SERVICE_NOT_CONFIGURED");
             }
             if (configuration == null)
             {
-                throw new UnprocessableException("Configuration not available");
+                throw new UnprocessableException("CONFIGURATION_NOT_AVAILABLE");
             }
             // Send email to the professor
             var body = $"Has recibido una solicitud de TFG de {request.studentEmail} para la línea {tfg.name}.\n\n" +
@@ -217,7 +217,7 @@ namespace TFGinfo.Api
                 .FirstOrDefault();
             if (model == null)
             {
-                throw new NotFoundException("TFG not found");
+                throw new NotFoundException("TFG_NOT_FOUND");
             }
             model.status = 1;
             context.SaveChanges();
@@ -237,11 +237,11 @@ namespace TFGinfo.Api
 
             if (emailService == null)
             {
-                throw new UnprocessableException("Email service not available");
+                throw new UnprocessableException("EMAIL_SERVICE_NOT_CONFIGURED");
             }
             if (configuration == null)
             {
-                throw new UnprocessableException("Configuration not available");
+                throw new UnprocessableException("CONFIGURATION_NOT_AVAILABLE");
             }
             // Send email to the student
             var body = $"Tu solicitud de TFG ha sido aceptada por el profesor {model.Professors.FirstOrDefault()?.professorModel.name}.\n\n" +
@@ -258,7 +258,7 @@ namespace TFGinfo.Api
                 .Where(d => d.id == tfgId).FirstOrDefault();
             if (model == null)
             {
-                throw new NotFoundException("TFG not found");
+                throw new NotFoundException("TFG_NOT_FOUND");
             }
             var studentEmail = model.Students.FirstOrDefault()?.studentModel.email;
             context.tfg.Remove(model);
@@ -269,11 +269,11 @@ namespace TFGinfo.Api
 
             if (emailService == null)
             {
-                throw new UnprocessableException("Email service not available");
+                throw new UnprocessableException("EMAIL_SERVICE_NOT_CONFIGURED");
             }
             if (configuration == null)
             {
-                throw new UnprocessableException("Configuration not available");
+                throw new UnprocessableException("CONFIGURATION_NOT_AVAILABLE");
             }
             // Send email to the student
             var body = $"Tu solicitud de TFG ha sido rechazada por el profesor {model.Professors.FirstOrDefault()?.professorModel.name}.\n\n" +
@@ -292,22 +292,22 @@ namespace TFGinfo.Api
 
             if (model == null)
             {
-                throw new NotFoundException("TFG not found");
+                throw new NotFoundException("TFG_NOT_FOUND");
             }
             if (model.status == (int)TFGStatus.Pending || model.status == (int)TFGStatus.Finished)
             {
-                throw new UnprocessableException("TFG status can't be changed from this status");
+                throw new UnprocessableException("TFG_STATUS_CANT_BE_CHANGED");
             }
             model.status = model.status + 1; // Increment the status;
             context.SaveChanges();
 
             if (emailService == null)
             {
-                throw new UnprocessableException("Email service not available");
+                throw new UnprocessableException("EMAIL_SERVICE_NOT_CONFIGURED");
             }
             if (configuration == null)
             {
-                throw new UnprocessableException("Configuration not available");
+                throw new UnprocessableException("CONFIGURATION_NOT_AVAILABLE");
             }
             var body = string.Empty;
             var subject = string.Empty;
@@ -323,7 +323,7 @@ namespace TFGinfo.Api
                         $"Puedes ver la solicitud en el portal de gestión de TFGs: {configuration.GetSection("app:url").Value}.\n\n";
                     break;
                 default:
-                    throw new UnprocessableException("Invalid TFG status");
+                    throw new UnprocessableException("INVALID_TFG_STATUS");
             }
             // Send email to the student
             await emailService.SendEmailAsync(model.Students.FirstOrDefault()?.studentModel.email, subject, body);

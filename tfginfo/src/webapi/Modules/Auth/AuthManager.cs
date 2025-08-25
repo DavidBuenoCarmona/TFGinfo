@@ -29,7 +29,7 @@ namespace TFGinfo.Api
             UserModel? model = context.user.Include(r => r.roleModel).FirstOrDefault(user => user.username == credentials.Username);
             if (model == null)
             {
-                throw new UnprocessableException("Invalid username or password");
+                throw new UnprocessableException("INVALID_USERNAME_OR_PASSWORD");
             }
             if (model.password == null && model.auth_code == credentials.Password)
             {
@@ -37,7 +37,7 @@ namespace TFGinfo.Api
             }
             else if (model.password != HashPassword(credentials.Password))
             {
-                throw new UnprocessableException("Invalid username or password");
+                throw new UnprocessableException("INVALID_USERNAME_OR_PASSWORD");
             }
             newUser.user = new AppUserDTO(model);
             if (newUser.user.role.id == (int)UserRole.Student)
@@ -82,13 +82,13 @@ namespace TFGinfo.Api
             UserModel? model = context.user.FirstOrDefault(user => user.username == request.username);
             if (model == null)
             {
-                throw new UnprocessableException("Invalid username or password");
+                throw new UnprocessableException("INVALID_USERNAME_OR_PASSWORD");
             }
             if (model.password == null && model.auth_code != null)
             {
                 if (model.auth_code != request.OldPassword)
                 {
-                    throw new UnprocessableException("Invalid username or password");
+                    throw new UnprocessableException("INVALID_USERNAME_OR_PASSWORD");
                 }
                 model.password = HashPassword(request.NewPassword);
                 model.auth_code = null;
@@ -97,7 +97,7 @@ namespace TFGinfo.Api
             }
             else if (model.password != HashPassword(request.OldPassword))
             {
-                throw new UnprocessableException("Invalid username or password");
+                throw new UnprocessableException("INVALID_USERNAME_OR_PASSWORD");
             }
             model.password = HashPassword(request.NewPassword);
             context.SaveChanges();
@@ -108,7 +108,7 @@ namespace TFGinfo.Api
         {
             if (context.user.Any(u => u.username.ToLower() == credentials.Username.ToLower()))
             {
-                throw new UnprocessableException("User name already exists");
+                throw new UnprocessableException("USERNAME_ALREADY_EXISTS");
             }
 
             UserModel model = new UserModel
@@ -128,7 +128,7 @@ namespace TFGinfo.Api
 
             if (string.IsNullOrEmpty(decryptedJwt) || !IsTokenValid(decryptedJwt, _configuration))
             {
-                throw new UnprocessableException("Invalid or expired token");
+                throw new UnprocessableException("INVALID_OR_EXPIRED_TOKEN");
             }
 
             var handler = new JwtSecurityTokenHandler();
@@ -139,7 +139,7 @@ namespace TFGinfo.Api
 
             if (userIdClaim == null || roleClaim == null || usernameClaim == null)
             {
-                throw new UnprocessableException("Invalid token: user ID claim not found");
+                throw new UnprocessableException("INVALID_OR_EXPIRED_TOKEN");
             }
 
             int userId = int.Parse(userIdClaim.Value);
@@ -149,11 +149,11 @@ namespace TFGinfo.Api
 
             if (model == null)
             {
-                throw new UnprocessableException("User not found");
+                throw new UnprocessableException("USER_NOT_FOUND");
             }
 
             AppUserDTO userDto = new AppUserDTO(model);
-            userDto.role = context.role.FirstOrDefault(r => r.id == roleId) ?? throw new UnprocessableException("Role not found");
+            userDto.role = context.role.FirstOrDefault(r => r.id == roleId) ?? throw new UnprocessableException("ROLE_NOT_FOUND");
             if (userDto.role.id == (int)UserRole.Student)
             {
                 var student = context.student.Include(s => s.careerModel).FirstOrDefault(s => s.user == userDto.id);
@@ -187,16 +187,16 @@ namespace TFGinfo.Api
             }
             catch (Exception)
             {
-                throw new UnauthorizedAccessException("Invalid token");
+                throw new UnauthorizedAccessException("INVALID_OR_EXPIRED_TOKEN");
             }
 
             if (user == null)
             {
-                throw new UnauthorizedAccessException("Invalid token");
+                throw new UnauthorizedAccessException("INVALID_OR_EXPIRED_TOKEN");
             }
             if (roles.Any() && !roles.Contains(user.role.id))
             {
-                throw new UnauthorizedAccessException("User does not have the required role to access this resource.");
+                throw new UnauthorizedAccessException("USER_ROLE_NOT_FOUND");
             }
             return user;
         }
@@ -208,13 +208,13 @@ namespace TFGinfo.Api
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.username),
-                new Claim("userId", user.id.ToString() ?? throw new InvalidOperationException("User ID cannot be null")),
-                new Claim("role", user.role.id.ToString() ?? throw new InvalidOperationException("Role ID cannot be null")),
+                new Claim("userId", user.id.ToString() ?? throw new InvalidOperationException("USER_NOT_FOUND")),
+                new Claim("role", user.role.id.ToString() ?? throw new InvalidOperationException("ROLE_NOT_FOUND")),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var jwtEncryptKey = _configuration["Jwt:EncryptKey"] ?? throw new InvalidOperationException("JWT Encrypt Key is not configured.");
-            var jwtKey = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured.");
+            var jwtEncryptKey = _configuration["Jwt:EncryptKey"] ?? throw new InvalidOperationException("JWT_KEY_NOT_CONFIGURED");
+            var jwtKey = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT_KEY_NOT_CONFIGURED");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -236,9 +236,9 @@ namespace TFGinfo.Api
 
         public static bool IsTokenValid(string token, IConfiguration configuration)
         {
-            var jwtKey = configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured.");
-            var jwtIssuer = configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT Issuer is not configured.");
-            var jwtAudience = configuration["Jwt:Audience"] ?? throw new InvalidOperationException("JWT Audience is not configured.");
+            var jwtKey = configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT_KEY_NOT_CONFIGURED");
+            var jwtIssuer = configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT_KEY_NOT_CONFIGURED");
+            var jwtAudience = configuration["Jwt:Audience"] ?? throw new InvalidOperationException("JWT_KEY_NOT_CONFIGURED");
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var tokenHandler = new JwtSecurityTokenHandler();

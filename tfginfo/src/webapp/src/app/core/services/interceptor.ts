@@ -30,7 +30,7 @@ export class AuthInterceptor implements HttpInterceptor {
         return next.handle(authReq).pipe(
             catchError((error: HttpErrorResponse) => {
                 let message = error.error?.message || error.statusText || 'ERROR.GENERIC';
-                this.snackBarService.error(message);
+                this.snackBarService.error("NET_ERROR." + message);
                 if (error.status === 401) {
                     // Manejo específico para errores 401 (no autorizado)
                     this.router.navigate(['/login']);

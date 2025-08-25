@@ -101,17 +101,17 @@ namespace TFGinfo.Api
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
             if (model == null)
             {
-                throw new NotFoundException("Working group not found");
+                throw new NotFoundException("WORKING_GROUP_NOT_FOUND");
             }
             StudentModel? student = context.student.FirstOrDefault(Student => Student.email == email);
             if (student == null)
             {
-                throw new NotFoundException("Student not found");
+                throw new NotFoundException("STUDENT_NOT_FOUND");
             }
             WorkingGroupStudentModel? existingWorkingGroupStudent = context.working_group_student.FirstOrDefault(WorkingGroup => WorkingGroup.working_group == model.id && WorkingGroup.student == student.id);
             if (existingWorkingGroupStudent != null)
             {
-                throw new UnprocessableException("Student already in working group");
+                throw new UnprocessableException("STUDENT_ALREADY_IN_WORKING_GROUP");
             }
             WorkingGroupStudentModel workingGroupStudent = new WorkingGroupStudentModel
             {
@@ -144,12 +144,12 @@ namespace TFGinfo.Api
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
             if (model == null)
             {
-                throw new NotFoundException("Working group not found");
+                throw new NotFoundException("WORKING_GROUP_NOT_FOUND");
             }
             ProfessorModel? professor = context.professor.FirstOrDefault(Professor => Professor.id == professorId);
             if (professor == null)
             {
-                throw new NotFoundException("Professor not found");
+                throw new NotFoundException("PROFESSOR_NOT_FOUND");
             }
             WorkingGroupProfessorModel workingGroupProfessor = new WorkingGroupProfessorModel
             {
@@ -175,7 +175,7 @@ namespace TFGinfo.Api
             }
             if (professors.Count <= 1)
             {
-                throw new UnprocessableException("Cannot remove last professor from working group");
+                throw new UnprocessableException("CANNOT_REMOVE_LAST_PROFESSOR_FROM_WORKING_GROUP");
             }
             context.working_group_professor.Remove(workingGroupProfessor);
             context.SaveChanges();
@@ -267,16 +267,16 @@ namespace TFGinfo.Api
             WorkingGroupModel? model = context.working_group.FirstOrDefault(WorkingGroup => WorkingGroup.id == id);
             if (model == null)
             {
-                throw new NotFoundException("Working group not found");
+                throw new NotFoundException("WORKING_GROUP_NOT_FOUND");
             }
             ProfessorModel? professor = context.professor.FirstOrDefault(Professor => Professor.id == professorId);
             if (professor == null)
             {
-                throw new NotFoundException("Professor not found");
+                throw new NotFoundException("PROFESSOR_NOT_FOUND");
             }
             if (emailService == null)
             {
-                throw new NotFoundException("Email service not found");
+                throw new NotFoundException("EMAIL_SERVICE_NOT_CONFIGURED");
             }
             string subject = $"Notificación del grupo {model.name}";
             string body = $"El profesor {professor.name} {professor.surname} ({professor.email}) ha enviado el siguiente mensaje al grupo de trabajo {model.name}:\n\n{message}\n\n";

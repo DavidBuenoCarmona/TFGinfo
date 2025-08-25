@@ -38,7 +38,7 @@ namespace TFGinfo.Api
             }
             else
             {
-                throw new UnprocessableException("At least one university must be associated with the department.");
+                throw new UnprocessableException("AT_LEAST_ONE_UNIVERSITY_REQUIRED");
             }
 
 
@@ -56,6 +56,16 @@ namespace TFGinfo.Api
             if (model == null)
             {
                 throw new NotFoundException();
+            }
+            bool professorExists = context.professor.Any(professor => professor.department == id);
+            if (professorExists)
+            {
+                throw new UnprocessableException("CANNOT_DELETE_DEPARTMENT_WITH_PROFESSORS");
+            }
+            bool tfgLineExists = context.tfg_line.Any(tfgLine => tfgLine.department == id);
+            if (tfgLineExists)
+            {
+                throw new UnprocessableException("CANNOT_DELETE_DEPARTMENT_WITH_TFG");
             }
             context.university_department.RemoveRange(context.university_department.Where(ud => ud.department == id));
             context.department.Remove(model);
@@ -81,7 +91,7 @@ namespace TFGinfo.Api
             }
             else
             {
-                throw new UnprocessableException("At least one university must be associated with the department.");
+                throw new UnprocessableException("AT_LEAST_ONE_UNIVERSITY_REQUIRED");
             }
 
 
@@ -232,7 +242,7 @@ namespace TFGinfo.Api
         {
             if (context.department.Any(d => d.name.ToLower() == department.name.ToLower() && d.id != department.id))
             {
-                throw new UnprocessableException("Department name already exists");
+                throw new UnprocessableException("DEPARTMENT_NAME_ALREADY_EXISTS");
             }
         }
         #endregion

@@ -68,7 +68,19 @@ namespace TFGinfo.Api
             bool groupsExist = context.working_group_professor.Any(g => g.professor == id);
             if (groupsExist)
             {
-                throw new UnprocessableException("Cannot delete professor because there are groups associated with it.");
+                throw new UnprocessableException("CANNOT_DELETE_PROFESSOR_WITH_GROUPS");
+            }
+
+            bool tfgsExist = context.tfg_professor.Any(t => t.professor == id);
+            if (tfgsExist)
+            {
+                throw new UnprocessableException("CANNOT_DELETE_PROFESSOR_WITH_TFG");
+            }
+
+            bool tfgLinesExist = context.tfg_line_professor.Any(t => t.professor == id);
+            if (tfgLinesExist)
+            {
+                throw new UnprocessableException("CANNOT_DELETE_PROFESSOR_WITH_TFG_LINES");
             }
 
             context.professor.Remove(model);
@@ -238,7 +250,7 @@ namespace TFGinfo.Api
         {
             if (context.professor.Any(p => p.id != professor.id && p.email.ToLower() == professor.email.ToLower()))
             {
-                throw new UnprocessableException("Professor email already exists");
+                throw new UnprocessableException("PROFESSOR_EMAIL_ALREADY_EXISTS");
             }
         }
         #endregion

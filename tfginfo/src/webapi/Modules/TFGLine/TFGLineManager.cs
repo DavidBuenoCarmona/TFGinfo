@@ -50,7 +50,7 @@ namespace TFGinfo.Api
             bool tfgExists = context.tfg.Any(t => t.tfg_line == id);
             if (tfgExists)
             {
-                throw new UnprocessableException("Cannot delete TFGLine because there are TFGs associated with it.");
+                throw new UnprocessableException("CANNOT_DELETE_TFG_LINE_WITH_TFG");
             }
             List<TFGLineCareerModel>? tfgLineCareers = context.tfg_line_career.Where(t => t.tfg_line == id).ToList(); ;
             if (tfgLineCareers != null)
@@ -324,7 +324,7 @@ namespace TFGinfo.Api
         {
             if (context.tfg_line.Any(t => t.id != TFGLine.id && t.name.ToLower() == TFGLine.name.ToLower()))
             {
-                throw new UnprocessableException("TFGLine name already exists");
+                throw new UnprocessableException("TFG_LINE_ALREADY_EXISTS");
             }
         }
         #endregion

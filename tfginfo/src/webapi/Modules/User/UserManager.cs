@@ -46,7 +46,7 @@ namespace TFGinfo.Api
             }
             if (context.user.Any(u => u.id != id && u.username.ToLower() == newEmail.ToLower()))
             {
-                throw new UnprocessableException("User name already exists");
+                throw new UnprocessableException("USERNAME_ALREADY_EXISTS");
             }
             model.username = newEmail;
             context.SaveChanges();
@@ -77,7 +77,7 @@ namespace TFGinfo.Api
         private void CheckNameIsNotRepeated(UserFlatDTO user)
         {
             if (context.user.Any(u => u.id != user.id && u.username.ToLower() == user.username.ToLower())) {
-                throw new UnprocessableException("User name already exists");
+                throw new UnprocessableException("USERNAME_ALREADY_EXISTS");
             }
         }
 
