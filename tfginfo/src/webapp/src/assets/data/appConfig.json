@@ -1,0 +1,12 @@
+{
+    "api": {
+        "url": "http://localhost:5089"
+    },
+    "app": {
+        "logo": {
+            "auth-width": 200,
+            "header-width": 50,
+            "src": "/assets/imgs/logo.png"
+        }
+    }
+}
