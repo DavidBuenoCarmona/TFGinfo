@@ -106,8 +106,8 @@ export class TfgSearchComponent implements OnInit {
     }
 
     onClearFilters(): void {
-        this.filterForm.reset(); // Reiniciar el formulario
-        this.filteredTfgs = [...this.tfgs]; // Restaurar la lista completa
+        this.filterForm.reset(); 
+        this.filteredTfgs = [...this.tfgs]; 
 
         const formValues = this.filterForm.value;
         Object.keys(formValues).forEach(key => {
@@ -151,7 +151,7 @@ export class TfgSearchComponent implements OnInit {
             if (result) {
                 const reader = new FileReader();
                 reader.onload = () => {
-                    const base64 = (reader.result as string).split(',')[1]; // Solo la parte base64
+                    const base64 = (reader.result as string).split(',')[1];
                     this.tfgService.importFromCSV(base64).subscribe({
                         next: (res) => {
                             if (res.errorItems.length > 0) {

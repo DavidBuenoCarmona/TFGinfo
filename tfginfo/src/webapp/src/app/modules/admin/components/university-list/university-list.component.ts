@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,10 +27,11 @@ import { UniversitySelectionService } from '../../../../core/services/localstora
     templateUrl: './university-list.component.html',
     styleUrls: ['./university-list.component.scss']
 })
-export class UniversityListComponent {
+export class UniversityListComponent implements OnInit{
     @Input() universities: UniversityBase[] = [];
     @Input() displayedColumns: string[] = ['name', 'acronym', 'address', 'actions'];
     @Output() onDeleteUniversity = new EventEmitter<number>();
+    public columnsInputCloned: string[] = [];
 
     public selectedUniversity: number | undefined;
 
@@ -45,6 +46,27 @@ export class UniversityListComponent {
             this.selectedUniversity = parseInt(localStorage.getItem('selectedUniversity')!);
         }
 
+    }
+    ngOnInit(): void {
+        this.columnsInputCloned = this.displayedColumns;
+        this.setDisplayedColumns();
+        window.addEventListener('resize', this.onResize);
+    }
+
+    ngOnDestroy(): void {
+        window.removeEventListener('resize', this.onResize);
+    }
+
+    onResize = () => {
+        this.setDisplayedColumns();
+    };
+
+    setDisplayedColumns() {
+        if (window.innerWidth < 600) {
+            this.displayedColumns = ['nameAcronym', 'actions'];
+        } else {
+            this.displayedColumns = this.columnsInputCloned;
+        }
     }
 
     onEdit(university: UniversityBase) {

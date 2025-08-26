@@ -190,11 +190,11 @@ body.dark-mode {
             color: var(--text-light);
 
             &:hover {
-                color: var(--color-light-blue);
+                color: var(--color-gray-light);
             }
 
             &.active {
-                color: var(--color-light-blue);
+                color: var(--color-gray-light);
             }
         }
     }
@@ -256,11 +256,27 @@ body.dark-mode {
             color: var(--color-gray-light) !important;
         }
     }
+    .change-university {
+        color: var(--color-blue-lighter);
+    }
+    .responsive-email {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: var(--color-gray-light);
+        font-size: small;
+    }
+
+    .responsive-extra-info {
+        color: var(--color-blue-lighter);
+        font-size: small;
+    }
 }
 
 .action-button {
     background-color: var(--color-light-blue) !important;
-    color: var(--color-gray-medium) !important;
+    color: var(--color-light) !important;
 
     &.disabled {
         background-color: var(--color-gray-medium) !important;
@@ -273,12 +289,12 @@ body.dark-mode {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--color-gray-light);
+    color: var(--color-gray-dark);
     font-size: small;
 }
 
 .responsive-extra-info {
-    color: var(--color-light-blue);
+    color: var(--color-blue-dark);
     font-size: small;
 }
 
@@ -293,6 +309,10 @@ body.dark-mode {
 
 .action-cell {
     width: 10%
+}
+
+.change-university {
+    color: var(--color-blue-dark);
 }
 
 /* Estilos globales para formularios de Angular Material */

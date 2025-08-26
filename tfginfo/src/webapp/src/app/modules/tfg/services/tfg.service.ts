@@ -7,7 +7,7 @@ import { TFGDTO, TFGLineDTO, TFGLineFlatDTO, TFGRequest, TFGRequestDTO } from ".
 import { Filter, ImportResponse } from "../../../core/core.model";
 
 @Injectable({
-    providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
+    providedIn: 'root'
 })
 export class TfgService extends BaseService {
   

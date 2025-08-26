@@ -7,7 +7,7 @@ import { DepartmentDTO, DepartmentFlatDTO } from "../models/department.model";
 import { Filter, ImportResponse } from "../../../core/core.model";
 
 @Injectable({
-    providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
+    providedIn: 'root' 
 })
 export class DepartmentService extends BaseService {
   

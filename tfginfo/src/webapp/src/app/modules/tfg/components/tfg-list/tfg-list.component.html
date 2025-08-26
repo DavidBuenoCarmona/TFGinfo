@@ -65,7 +65,7 @@
                 <div class="text-center py-4">
                     {{ (!universitiesSelected || universitiesSelected.length == 0 ? 'GLOBAL.NO_UNIVERSITY_SELECTED' :
                     'GLOBAL.NO_RESULTS') | translate }}
-                    <a *ngIf="!universitiesSelected  || universitiesSelected.length == 0" class="cursor-pointer"
+                    <a *ngIf="!universitiesSelected  || universitiesSelected.length == 0" class="cursor-pointer change-university"
                         (click)="changeUniversity()">
                         {{ 'UNIVERSITY.CHANGE' | translate }}
                     </a>

@@ -9,7 +9,7 @@ import { StudentDTO } from "../../admin/models/student.model";
 import { Filter } from "../../../core/core.model";
 
 @Injectable({
-    providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
+    providedIn: 'root' 
 })
 export class GroupService extends BaseService {
 

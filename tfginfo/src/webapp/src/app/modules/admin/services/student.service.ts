@@ -7,7 +7,7 @@ import { NewStudentDTO, StudentDTO, StudentFlatDTO, StudentOptionalData } from "
 import { Filter, ImportResponse } from "../../../core/core.model";
 
 @Injectable({
-    providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
+    providedIn: 'root' 
 })
 export class StudentService extends BaseService {
   

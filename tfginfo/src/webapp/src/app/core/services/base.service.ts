@@ -4,7 +4,7 @@ import { AppConfigService } from "./app-config.service";
 import { Injectable } from "@angular/core";
 
 @Injectable({
-    providedIn: 'root' // Esto hace que el servicio esté disponible en toda la aplicación
+    providedIn: 'root'
   })
 export class BaseService {
     protected url!: string;

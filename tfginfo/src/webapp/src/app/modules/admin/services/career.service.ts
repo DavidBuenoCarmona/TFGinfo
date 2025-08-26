@@ -7,7 +7,7 @@ import { CareerDTO, CareerFlatDTO } from "../models/career.model";
 import { Filter, ImportResponse } from "../../../core/core.model";
 
 @Injectable({
-    providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
+    providedIn: 'root' 
 })
 export class CareerService extends BaseService {
   

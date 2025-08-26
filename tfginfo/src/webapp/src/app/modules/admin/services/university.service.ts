@@ -7,7 +7,7 @@ import { UniversityBase } from "../models/university.model";
 import { Filter, ImportResponse } from "../../../core/core.model";
 
 @Injectable({
-    providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
+    providedIn: 'root' 
 })
 export class UniversityService extends BaseService {
   

@@ -6,7 +6,7 @@ import { Injectable } from "@angular/core";
 import { AppUserDTO, NewUserDTO, UserBase, UserChangePassword, UserCredentials, UserDTO } from "../../admin/models/user.model";
 
 @Injectable({
-    providedIn: 'root' // Esto permite que Angular maneje la inyección globalmente
+    providedIn: 'root' 
 })
 export class AuthService extends BaseService {
   

@@ -6,6 +6,15 @@
         <mat-card-content>
             <ng-container *ngIf="universities && universities.length > 0; else noResults">
                 <table mat-table [dataSource]="universities" class="mat-table">
+                    <!-- NameAcronym Column -->
+                    <ng-container matColumnDef="nameAcronym">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
+                        <td mat-cell *matCellDef="let university">
+                            <div class="d-flex flex-column">
+                                <span>{{ university.acronym != "" ? university.acronym : university.name }}</span>
+                            </div>
+                        </td>
+                    </ng-container>
                     <!-- Nombre Column -->
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>

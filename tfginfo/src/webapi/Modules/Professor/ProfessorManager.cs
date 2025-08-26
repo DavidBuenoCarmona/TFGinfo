@@ -193,7 +193,7 @@ namespace TFGinfo.Api
             // Separa líneas y elimina vacías
             var lines = csvContent.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-            // Opcional: Si la primera línea es cabecera, sáltala
+            // Opcional: Si la primera línea es cabecera
             // var startIndex = lines[0].StartsWith("Nombre") ? 1 : 0;
 
             for (int i = 0; i < lines.Length; i++)
