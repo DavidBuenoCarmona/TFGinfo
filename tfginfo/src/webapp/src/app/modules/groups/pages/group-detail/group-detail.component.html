@@ -1,6 +1,6 @@
 <div class="basic-page">
-    <h2 *ngIf="!creation" class="mb-3">{{ group?.name }}</h2>
-    <h2 *ngIf="creation" class="mb-3">{{ 'WORKING_GROUP.NEW' | translate }}</h2>
+    <h1 *ngIf="!creation" class="mb-3">{{ group?.name }}</h1>
+    <h1 *ngIf="creation" class="mb-3">{{ 'WORKING_GROUP.NEW' | translate }}</h1>
 
     <form class="group-form" [formGroup]="groupForm">
         <!-- Nombre y descripción -->

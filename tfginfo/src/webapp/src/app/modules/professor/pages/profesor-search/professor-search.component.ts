@@ -3,7 +3,7 @@ import { ProfessorService } from '../../services/professor.service';
 import { ProfessorDTO } from '../../models/professor.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +16,7 @@ import { ConfigurationService } from '../../../../core/services/configuration.se
 import { MatDialog } from '@angular/material/dialog';
 import { ImportDialogComponent } from '../../../../core/layout/components/import-dialog/import-dialog.component';
 import { ImportSummaryComponent } from '../../../../core/layout/components/import-summary/import-summary.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-professor-search',
@@ -24,6 +25,7 @@ import { ImportSummaryComponent } from '../../../../core/layout/components/impor
         MatInputModule,
         TranslateModule,
         ReactiveFormsModule,
+        MatTooltipModule,
         MatButtonModule,
         MatIconModule,
         CommonModule],
@@ -45,7 +47,8 @@ export class ProfessorSearchComponent implements OnInit {
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private configurationService: ConfigurationService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        public translateService: TranslateService
     ) { }
 
     ngOnInit(): void {

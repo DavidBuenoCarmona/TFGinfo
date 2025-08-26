@@ -1,6 +1,6 @@
 <div class="basic-page">
-    <h2 *ngIf="!creation" class="mb-3">{{ tfg?.name }}</h2>
-    <h2 *ngIf="creation" class="mb-3">{{ 'TFG.NEW' | translate }}</h2>
+    <h1 *ngIf="!creation" class="mb-3">{{ tfg?.name }}</h1>
+    <h1 *ngIf="creation" class="mb-3">{{ 'TFG.NEW' | translate }}</h1>
 
     <form class="tfg-form" [formGroup]="tfgForm" (ngSubmit)="onSubmit()">
         <!-- Primera fila: Nombre, Departamento, Plazas -->

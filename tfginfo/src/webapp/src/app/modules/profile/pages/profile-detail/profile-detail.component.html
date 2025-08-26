@@ -1,6 +1,6 @@
 <div class="basic-page">
-    <h2 *ngIf="!creation" class="mb-3">{{ profile?.name }} {{ profile?.surname }}</h2>
-    <h2 *ngIf="creation" class="mb-3">{{ 'PROFILE.NEW' | translate }}</h2>
+    <h1 *ngIf="!creation" class="mb-3">{{ profile?.name }} {{ profile?.surname }}</h1>
+    <h1 *ngIf="creation" class="mb-3">{{ 'PROFILE.NEW' | translate }}</h1>
 
     <form class="profile-form" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
         <div class="row">

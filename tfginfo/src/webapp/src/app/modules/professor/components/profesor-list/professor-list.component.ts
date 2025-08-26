@@ -45,14 +45,13 @@ export class ProfessorListComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.columnsInputCloned = this.displayedColumns;
         let role = this.configurationService.getRole();
         this.canEdit = role === RoleId.Admin;
         this.universitiesSelected = this.configurationService.getSelectedUniversities();
         if (!this.universitiesSelected || this.universitiesSelected.length === 0) {
             this.universitiesSelected = localStorage.getItem('selectedUniversity') ? [parseInt(localStorage.getItem('selectedUniversity')!)] : undefined;
         }
-
+        this.columnsInputCloned = this.displayedColumns;
         this.setDisplayedColumns();
         window.addEventListener('resize', this.onResize);
     }

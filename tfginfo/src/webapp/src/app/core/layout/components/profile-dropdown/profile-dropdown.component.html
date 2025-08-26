@@ -1,21 +1,21 @@
-<i class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown"
+<i class="nav-link dropdown-toggle" aria-label="profile-icon" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown"
     aria-expanded="false">
     <span class="fa-solid fa-user"></span>
 </i>
 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
     <li *ngIf="!isAdmin">
-        <a class="dropdown-item" [routerLink]="profileRoute" routerLinkActive="active">
+        <a class="dropdown-item" aria-label="profile" [routerLink]="profileRoute" routerLinkActive="active">
             {{ 'PROFILE.TITLE_1' | translate }}
         </a>
     </li>
     <li *ngIf="isAdmin">
-        <a class="dropdown-item" (click)="changeUniversity()">
+        <span class="dropdown-item" (click)="changeUniversity()">
             {{ 'UNIVERSITY.CHANGE' | translate }}
-        </a>
+        </span>
     </li>
     <li>
-        <a class="dropdown-item" (click)="logout()">
+        <span class="dropdown-item" (click)="logout()">
             {{ 'GLOBAL.LOGOUT' | translate }}
-        </a>
+        </span>
     </li>
 </ul>

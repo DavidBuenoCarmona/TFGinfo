@@ -44,10 +44,10 @@
                     <ng-container matColumnDef="actions">
                         <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.ACTIONS' | translate }}</th>
                         <td mat-cell *matCellDef="let professor">
-                            <button mat-icon-button color="primary" *ngIf="!groupId" (click)="onEdit(professor)">
+                            <button mat-icon-button aria-label="edit" color="primary" *ngIf="!groupId" (click)="onEdit(professor)">
                                 <mat-icon>{{ canEdit ? 'edit' : 'remove_red_eye'}}</mat-icon>
                             </button>
-                            <button *ngIf="canEdit" mat-icon-button color="warn" (click)="onDelete(professor)">
+                            <button *ngIf="canEdit" mat-icon-button aria-label="delete" color="warn" (click)="onDelete(professor)">
                                 <mat-icon>{{ !groupId ? 'delete' : 'clear' }}</mat-icon>
                             </button>
                         </td>

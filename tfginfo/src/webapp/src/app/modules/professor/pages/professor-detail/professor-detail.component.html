@@ -1,6 +1,6 @@
 <div class="basic-page">
-    <h2 *ngIf="!creation" class="mb-3">{{ professor?.name }} {{ professor?.surname }}</h2>
-    <h2 *ngIf="creation" class="mb-3">{{ 'PROFESSOR.NEW' | translate }}</h2>
+    <h1 *ngIf="!creation" class="mb-3">{{ professor?.name }} {{ professor?.surname }}</h1>
+    <h1 *ngIf="creation" class="mb-3">{{ 'PROFESSOR.NEW' | translate }}</h1>
 
     <form class="professor-form" [formGroup]="professorForm" (ngSubmit)="onSubmit()">
         <!-- Primera fila: Nombre, Apellido, Email -->

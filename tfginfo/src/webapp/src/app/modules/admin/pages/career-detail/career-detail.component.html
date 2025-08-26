@@ -1,6 +1,6 @@
 <div class="basic-page">
-    <h2 *ngIf="!creation" class="mb-3">{{ career?.name }}</h2>
-    <h2 *ngIf="creation" class="mb-3">{{ 'CAREER.NEW' | translate }}</h2>
+    <h1 *ngIf="!creation" class="mb-3">{{ career?.name }}</h1>
+    <h1 *ngIf="creation" class="mb-3">{{ 'CAREER.NEW' | translate }}</h1>
 
     <form class="career-form" [formGroup]="careerForm" (ngSubmit)="onSubmit()">
         <div class="row align-items-center">

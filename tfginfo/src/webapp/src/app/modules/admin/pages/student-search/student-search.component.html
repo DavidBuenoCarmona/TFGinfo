@@ -1,5 +1,5 @@
 <div class="basic-page">
-    <h2 class="mb-4">{{ 'STUDENT.TITLE_N' | translate }}</h2>
+    <h1 class="mb-4">{{ 'STUDENT.TITLE_N' | translate }}</h1>
     <div class="container-fluid">
         <form [formGroup]="filterForm" (ngSubmit)="onSearch()">
             <div class="row">
@@ -49,7 +49,7 @@
                     <button mat-raised-button class="action-button ms-2" type="button" (click)="onClearFilters()">
                         {{ 'GLOBAL.CLEAR_FILTERS' | translate }}
                     </button>
-                    <button mat-icon-button [matTooltip]="translateService.instant('GLOBAL.ADVANCED_FILTERS')"
+                    <button mat-icon-button aria-label="filter" [matTooltip]="translateService.instant('GLOBAL.ADVANCED_FILTERS')"
                         (click)="onShowExtraFilters()">
                         <mat-icon>filter_list</mat-icon>
                     </button>

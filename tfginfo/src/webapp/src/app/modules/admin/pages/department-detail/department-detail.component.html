@@ -1,6 +1,6 @@
 <div class="basic-page">
-    <h2 *ngIf="!creation" class="mb-3">{{ department?.name }}</h2>
-    <h2 *ngIf="creation" class="mb-3">{{ 'DEPARTMENT.NEW' | translate }}</h2>
+    <h1 *ngIf="!creation" class="mb-3">{{ department?.name }}</h1>
+    <h1 *ngIf="creation" class="mb-3">{{ 'DEPARTMENT.NEW' | translate }}</h1>
 
     <form class="department-form" [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
         <div class="row">
