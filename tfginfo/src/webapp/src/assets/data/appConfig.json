@@ -6,7 +6,7 @@
         "logo": {
             "auth-width": 200,
             "header-width": 50,
-            "src": "/assets/imgs/logo.png"
+            "src": "/assets/imgs/logo.webp"
         }
     }
 }
