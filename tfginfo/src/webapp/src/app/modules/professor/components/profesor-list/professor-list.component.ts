@@ -77,7 +77,7 @@ export class ProfessorListComponent implements OnInit {
     }
 
     onEdit(professor: ProfessorDTO) {
-        this.router.navigate([professor.id], { relativeTo: this.route });
+        this.router.navigate(["/professor", professor.id]);
     }
 
     onDelete(professor: ProfessorDTO) {

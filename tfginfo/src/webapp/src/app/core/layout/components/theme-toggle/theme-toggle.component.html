@@ -1,3 +1,4 @@
 <span class="nav-link d-flex align-items-center theme-toggle" (click)="toggleTheme()">
-    <i class="fa-solid" [ngClass]="isDarkMode ? 'fa-moon' : 'fa-sun'"></i> 
+    <i *ngIf="isDarkMode" class="fa-solid fa-moon"></i>
+    <mat-icon *ngIf="!isDarkMode">wb_sunny</mat-icon>
 </span>

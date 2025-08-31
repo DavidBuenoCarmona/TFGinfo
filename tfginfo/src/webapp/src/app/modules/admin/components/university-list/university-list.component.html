@@ -18,7 +18,7 @@
                     <!-- Nombre Column -->
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
-                        <td mat-cell *matCellDef="let university">{{ university.name }}</td>
+                        <td mat-cell *matCellDef="let university" class="cursor-pointer" (click)="onEdit(university)">{{ university.name }}</td>
                     </ng-container>
 
                     <!-- Acronym Column -->

@@ -27,7 +27,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-icon-button type="button" (click)="removeSecondaryTutor()">
+      <button class="remove-button" *ngIf="tutorForm.get('secondaryTutor')?.value || showExternalTutorFields" mat-icon-button type="button" (click)="removeSecondaryTutor()">
           <mat-icon>close</mat-icon>
       </button>
     </div>

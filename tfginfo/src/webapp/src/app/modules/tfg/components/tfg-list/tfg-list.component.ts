@@ -34,6 +34,7 @@ export class TfgListComponent implements OnInit {
     @Output() onDeleteTfg = new EventEmitter<number>();
     public isAdmin: boolean = false;
     public universitiesSelected: number[] | undefined;
+    public clonedDisplayedColumns: string[] = [];
 
     constructor(
         private dialog: MatDialog,
@@ -44,6 +45,7 @@ export class TfgListComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.clonedDisplayedColumns = [...this.displayedColumns];
         let role = this.configurationService.getRole();
         this.isAdmin = role === RoleId.Admin;
         this.universitiesSelected = this.configurationService.getSelectedUniversities();
@@ -67,7 +69,7 @@ export class TfgListComponent implements OnInit {
         if (window.innerWidth < 600) {
             this.displayedColumns = ['nameDepartment', 'slots', 'actions'];
         } else {
-            this.displayedColumns = ['name', 'description', 'department', 'slots', 'actions'];
+            this.displayedColumns = this.clonedDisplayedColumns;
         }
     }
 

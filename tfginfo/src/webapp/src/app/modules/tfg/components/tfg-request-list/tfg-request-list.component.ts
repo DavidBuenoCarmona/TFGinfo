@@ -8,10 +8,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { TfgService } from '../../services/tfg.service';
 import { CommonModule } from '@angular/common';
 import { SnackBarService } from '../../../../core/services/snackbar.service';
+import { ConfirmDialogComponent } from '../../../../core/layout/components/confirm-dialog/confirm-dialog.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
     selector: 'tfg-request-list',
-    imports: [MatCardModule, TranslateModule, MatTableModule, MatIconModule, MatButtonModule, CommonModule],
+    imports: [MatCardModule, TranslateModule, MatTableModule, MatIconModule, MatButtonModule, CommonModule, MatDialogModule],
     templateUrl: './tfg-request-list.component.html',
     styleUrl: './tfg-request-list.component.scss'
 })
@@ -24,7 +26,8 @@ export class TfgRequestListComponent {
 
     constructor(
         private tfgService: TfgService,
-        private snackBarService: SnackBarService
+        private snackBarService: SnackBarService,
+        private dialog: MatDialog
     ) {
     }
 
@@ -35,9 +38,14 @@ export class TfgRequestListComponent {
                 this.requestAccepted.emit(request);
             });
         } else {
-            this.tfgService.changeTfgStatus(request.tfgId).subscribe(() => {
-                this.snackBarService.show("TFG.STATUS_UPDATED")
-                this.requestAccepted.emit(request);
+            const dialogRef = this.dialog.open(ConfirmDialogComponent);
+            dialogRef.afterClosed().subscribe((result) => {
+                if (result) {
+                    this.tfgService.changeTfgStatus(request.tfgId).subscribe(() => {
+                        this.snackBarService.show("TFG.STATUS_UPDATED")
+                        this.requestAccepted.emit(request);
+                    });
+                }
             });
         }
 

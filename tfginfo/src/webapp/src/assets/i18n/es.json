@@ -130,6 +130,7 @@
         "INVALID_TFG_STATUS": "Estado de TFG inválido",
         "INVALID_USERNAME_OR_PASSWORD": "Usuario o contraseña inválidos",
         "JWT_KEY_NOT_CONFIGURED": "La clave JWT no está configurada",
+        "NOT_FOUND": "Elemento no encontrado",
         "PROFESSOR_EMAIL_ALREADY_EXISTS": "El correo del profesor ya existe",
         "PROFESSOR_NOT_FOUND": "Profesor no encontrado",
         "ROLE_NOT_FOUND": "Rol no encontrado",
@@ -228,6 +229,7 @@
     },
     "WORKING_GROUP": {
         "ADD_STUDENT_EMAIL": "Añadir estudiante por correo electrónico",
+        "DESCRIPTION": "Los canales son utilizados por los profesores para comunicarse con sus estudiantes. Puedes unirte a canales públicos o recibir una invitación para unirte a canales privados.",
         "JOIN": "Unirse",
         "LEAVE": "Dejar",
         "IS_PRIVATE": "Privado",

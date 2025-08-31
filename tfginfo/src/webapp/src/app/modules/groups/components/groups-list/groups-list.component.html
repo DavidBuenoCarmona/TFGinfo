@@ -9,7 +9,7 @@
                     <!-- Nombre Column -->
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
-                        <td mat-cell *matCellDef="let group">{{ group.name }}</td>
+                        <td mat-cell *matCellDef="let group" class="cursor-pointer" (click)="onEdit(group)">{{ group.name }}</td>
                     </ng-container>
 
                     <!-- Descripción Column -->

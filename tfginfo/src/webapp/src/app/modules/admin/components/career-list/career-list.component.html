@@ -9,7 +9,7 @@
                     <!-- Nombre Column -->
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>{{ 'GLOBAL.NAME' | translate }}</th>
-                        <td mat-cell *matCellDef="let career">{{ career.name }}</td>
+                        <td mat-cell *matCellDef="let career" class="cursor-pointer" (click)="onEdit(career)">{{ career.name }}</td>
                     </ng-container>
 
                     <!-- Universidad Column -->

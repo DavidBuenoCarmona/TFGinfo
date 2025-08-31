@@ -5,7 +5,7 @@ namespace TFGinfo.Common
 
     public class NotFoundException : Exception
     {
-        public NotFoundException() : base("Not Found") { }
+        public NotFoundException() : base("NOT_FOUND") { }
 
         public NotFoundException(string message) : base(message) { }
 

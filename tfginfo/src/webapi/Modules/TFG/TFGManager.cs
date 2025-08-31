@@ -183,6 +183,20 @@ namespace TFGinfo.Api
                 $"Puedes ver la solicitud en el portal de gestión de TFGs: {configuration.GetSection("app:url").Value}.\n\n";
             await emailService.SendEmailAsync(professor.email, "Solicitud TFG", body);
 
+            if (request.secondaryProfessorId.HasValue)
+            {
+                var secondaryProfessorEmail = context.professor.FirstOrDefault(p => p.id == request.secondaryProfessorId.Value)?.email;
+                if (!string.IsNullOrEmpty(secondaryProfessorEmail))
+                {
+                    await emailService.SendEmailAsync(secondaryProfessorEmail, "Solicitud TFG", body);
+                }
+            }
+
+            // Send email to the student
+            var bodyStudent = $"Se ha creado una solicitud para la línea {tfg.name}.\n\n" +
+                $"Puedes ver la solicitud en el portal de gestión de TFGs: {configuration.GetSection("app:url").Value}.\n\n";
+            await emailService.SendEmailAsync(request.studentEmail, "Solicitud TFG", bodyStudent);
+
             context.tfg.Update(tfgModel);
             context.SaveChanges();
         }
@@ -321,6 +335,7 @@ namespace TFGinfo.Api
                 case (int)TFGStatus.Finished:
                     body = $"Tu TFG ha sido presentado ante tribunal y finalizado.\n\n" +
                         $"Puedes ver la solicitud en el portal de gestión de TFGs: {configuration.GetSection("app:url").Value}.\n\n";
+                    subject = "TFG finalizado";
                     break;
                 default:
                     throw new UnprocessableException("INVALID_TFG_STATUS");

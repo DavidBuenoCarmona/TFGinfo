@@ -66,7 +66,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (14,'Lenguages y ciencias de la computacion','LCC'),(19,'Robotica','ROB');
+INSERT INTO `department` VALUES (14,'Lenguajes y ciencias de la computación','LCC'),(19,'Robótica','ROB');
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 

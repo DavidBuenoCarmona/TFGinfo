@@ -102,10 +102,19 @@ body {
     }
 }
 
+.cursor-pointer {
+    color: var(--color-blue-dark);
+    cursor: pointer;
+}
+
 body.dark-mode {
     background-color: var(--color-gray-medium);
     color: var(--text-light);
 
+    .cursor-pointer {
+        color: var(--color-blue-lighter) !important;
+        cursor: pointer;
+    }
 
     .snackbar-error {
         .mat-mdc-snackbar-surface {
@@ -256,9 +265,11 @@ body.dark-mode {
             color: var(--color-gray-light) !important;
         }
     }
+
     .change-university {
         color: var(--color-blue-lighter);
     }
+
     .responsive-email {
         display: block;
         overflow: hidden;
