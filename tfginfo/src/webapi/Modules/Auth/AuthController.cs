@@ -6,12 +6,23 @@ using TFGinfo.Common;
 using TFGinfo.Data;
 using TFGinfo.Objects;
 
+/// <summary>
+/// Controlador para autenticación y gestión de usuarios.
+/// </summary>
 [Route("/auth")]
 [ApiController]
 public class AuthController : BaseController
 {
-    public AuthController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration){}
+    /// <summary>
+    /// Constructor del controlador de autenticación.
+    /// </summary>
+    public AuthController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
+    /// <summary>
+    /// Inicia sesión con credenciales de usuario.
+    /// </summary>
+    /// <param name="credentails">Credenciales de acceso (usuario y contraseña).</param>
+    /// <returns>Token JWT y datos del usuario si la autenticación es correcta.</returns>
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginCredentials credentails)
     {
@@ -26,6 +37,11 @@ public class AuthController : BaseController
         }
     }
 
+    /// <summary>
+    /// Cambia la contraseña de un usuario autenticado.
+    /// </summary>
+    /// <param name="request">Datos para el cambio de contraseña.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("change-password")]
     public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
     {
@@ -40,6 +56,12 @@ public class AuthController : BaseController
         }
     }
 
+    /// <summary>
+    /// Crea un usuario administrador.
+    /// Requiere credenciales válidas.
+    /// </summary>
+    /// <param name="credentials">Credenciales del nuevo administrador.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("create-admin")]
     public IActionResult CreateAdmin([FromBody] LoginCredentials credentials)
     {
@@ -55,6 +77,11 @@ public class AuthController : BaseController
         }
     }
 
+    /// <summary>
+    /// Verifica la validez de un token JWT.
+    /// </summary>
+    /// <param name="token">Objeto con el token a verificar.</param>
+    /// <returns>Resultado de la verificación (válido o no).</returns>
     [HttpPost("check-token")]
     public IActionResult CheckToken([FromBody] TokenObject token)
     {

@@ -13,6 +13,12 @@ public class DepartmentController : BaseController
     public DepartmentController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
 
+    /// <summary>
+    /// Crea un nuevo departamento.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="department">Datos del departamento a crear.</param>
+    /// <returns>Datos del nuevo departamento.</returns>
     [HttpPost]
     public IActionResult Save([FromBody] DepartmentFlatDTO department)
     {
@@ -40,6 +46,11 @@ public class DepartmentController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene todos los departamentos.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <returns>Lista de todos los departamentos.</returns>
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -67,6 +78,13 @@ public class DepartmentController : BaseController
         }
     }
 
+
+    /// <summary>
+    /// Elimina un departamento por su ID.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="id">ID del departamento a eliminar.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
@@ -99,6 +117,12 @@ public class DepartmentController : BaseController
         }
     }
 
+    /// <summary>
+    /// Actualiza un departamento existente.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="department">Datos del departamento a actualizar.</param>
+    /// <returns>Departamento actualizado.</returns>
     [HttpPut]
     public IActionResult Update([FromBody] DepartmentFlatDTO department)
     {
@@ -130,6 +154,12 @@ public class DepartmentController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene un departamento por su ID.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="id">ID del departamento.</param>
+    /// <returns>El departamento solicitado.</returns>
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
@@ -161,6 +191,12 @@ public class DepartmentController : BaseController
         }
     }
 
+    /// <summary>
+    /// Busca departamentos según filtros especificados.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="filters">Lista de filtros para la búsqueda.</param>
+    /// <returns>Lista de departamentos que coinciden con los filtros.</returns>
     [HttpPost("search")]
     public IActionResult Search([FromBody] List<Filter> filters)
     {
@@ -187,6 +223,12 @@ public class DepartmentController : BaseController
         }
     }
 
+    /// <summary>
+    ///     Importa departamentos desde un archivo CSV codificado en base64.
+    ///     Requiere rol de administrador.
+    /// </summary>
+    /// <param name="input">Contenido del archivo CSV en base64.</param>
+    /// <returns>Resultado de la importación con número de éxitos y errores.</returns>
     [HttpPost("import")]
     public IActionResult Import([FromBody] CSVImport input)
     {

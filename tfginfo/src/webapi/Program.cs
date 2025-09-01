@@ -42,11 +42,19 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 // Registrar EmailService
 builder.Services.AddSingleton<EmailService>();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "webapi.xml"));
+});
+
 var app = builder.Build();
 app.UseCors("AllowAngularApp");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI();
     app.MapOpenApi();
 }
 app.UseHttpsRedirection();

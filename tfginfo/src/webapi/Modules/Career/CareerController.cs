@@ -12,7 +12,12 @@ public class CareerController : BaseController
 {
     public CareerController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
-
+    /// <summary>
+    /// Crea una nueva titulación.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="career">Datos de la titulación a crear.</param>
+    /// <returns>Datos de la nueva titulación.</returns>
     [HttpPost]
     public IActionResult Save([FromBody] CareerFlatDTO career)
     {
@@ -40,6 +45,11 @@ public class CareerController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene todas las titulaciones.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <returns>Lista de todos las titulaciones.</returns>
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -68,6 +78,12 @@ public class CareerController : BaseController
 
     }
 
+    /// <summary>
+    /// Elimina una titulación por su ID.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="id">ID de la titulación a eliminar.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
@@ -100,6 +116,12 @@ public class CareerController : BaseController
         }
     }
 
+    /// <summary>
+    /// Actualiza una titulación existente.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="career">Datos de la titulación a actualizar.</param>
+    /// <returns>titulación actualizada.</returns>
     [HttpPut]
     public IActionResult Update([FromBody] CareerFlatDTO career)
     {
@@ -131,6 +153,12 @@ public class CareerController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene una titulación por su ID.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="id">ID de la titulación.</param>
+    /// <returns>La titulación solicitada.</returns>
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
@@ -162,6 +190,12 @@ public class CareerController : BaseController
 
     }
 
+    /// <summary>
+    /// Busca titulaciones según filtros especificados.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="filters">Lista de filtros para la búsqueda.</param>
+    /// <returns>Lista de titulaciones que coinciden con los filtros.</returns>
     [HttpPost("search")]
     public IActionResult Search([FromBody] List<Filter> filters)
     {
@@ -190,6 +224,12 @@ public class CareerController : BaseController
 
     }
     
+    /// <summary>
+    ///    Importa titulaciones desde un archivo CSV codificado en base64.
+    ///  Requiere rol de administrador.
+    /// </summary>
+    /// <param name="input">Contenido del archivo CSV en base64.</param>
+    /// <returns>Resultado de la importación con número de éxitos y errores.</returns>
     [HttpPost("import")]
     public IActionResult Import([FromBody] CSVImport input)
     {

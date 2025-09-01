@@ -13,7 +13,12 @@ public class TFGLineController : BaseController
 {
     public TFGLineController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
-
+    /// <summary>
+    /// Crea una nueva línea de TFG.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="TFGLine">Datos de la línea de TFG a crear.</param>
+    /// <returns>La línea de TFG creada.</returns>
     [HttpPost]
     public IActionResult Save([FromBody] TFGLineFlatDTO TFGLine)
     {
@@ -46,6 +51,10 @@ public class TFGLineController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene todas las líneas de TFG.
+    /// Requiere autenticación.
+    /// </summary>
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -78,6 +87,12 @@ public class TFGLineController : BaseController
         }
     }
 
+    /// <summary>
+    /// Elimina una línea de TFG por su ID.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="id">ID de la línea de TFG a eliminar.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
@@ -115,6 +130,12 @@ public class TFGLineController : BaseController
         }
     }
 
+    /// <summary>
+    /// Busca líneas de TFG según filtros proporcionados.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="filters">Lista de filtros para la búsqueda.</param>
+    /// <returns>Lista de líneas de TFG encontradas.</returns>
     [HttpPost("search")]
     public IActionResult Search([FromBody] List<Filter> filters)
     {
@@ -147,6 +168,12 @@ public class TFGLineController : BaseController
         }
     }
 
+    /// <summary>
+    /// Actualiza una línea de TFG existente.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="TFGLine">Datos de la línea de TFG a actualizar.</param>
+    /// <returns>TFGLine actualizado.</returns>
     [HttpPut]
     public IActionResult Update([FromBody] TFGLineFlatDTO TFGLine)
     {
@@ -183,6 +210,13 @@ public class TFGLineController : BaseController
         }
     }
 
+    /// <summary>
+    /// Añade carreras a una línea de TFG.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="id">ID de la línea de TFG a actualizar.</param>
+    /// <param name="careers">Lista de IDs de carreras a añadir.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("add-career/{id}")]
     public IActionResult AddCareer(int id, [FromBody] List<int> careers)
     {
@@ -220,6 +254,13 @@ public class TFGLineController : BaseController
         }
     }
 
+    /// <summary>
+    /// Añade profesores a una línea de TFG.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="id">ID de la línea de TFG a actualizar.</param>
+    /// <param name="professors">Lista de IDs de profesores a añadir.</param
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("add-professor/{id}")]
     public IActionResult AddProfessor(int id, [FromBody] List<int> professors)
     {
@@ -257,6 +298,12 @@ public class TFGLineController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene una línea de TFG por su ID.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="id">ID de la línea de TFG.</param>
+    /// <returns>La línea de TFG solicitada.</returns>
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
@@ -293,6 +340,12 @@ public class TFGLineController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene las líneas de TFG asociadas a un estudiante por su ID.
+    /// Requiere rol de estudiante o administrador.
+    /// </summary>
+    /// <param name="id">ID del estudiante.</param>
+    /// <returns>Lista de líneas de TFG asociadas al estudiante.</returns>
     [HttpGet("student/{id}")]
     public IActionResult GetByStudentId(int id)
     {
@@ -324,6 +377,12 @@ public class TFGLineController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene las líneas de TFG asociadas a un profesor por su ID.
+    /// Requiere rol de profesor o administrador.
+    /// </summary>
+    /// <param name="id">ID del profesor.</param>
+    /// <returns>Lista de líneas de TFG asociadas al profesor.</returns>
     [HttpGet("professor/{id}")]
     public IActionResult GetByProfessorId(int id)
     {
@@ -360,6 +419,13 @@ public class TFGLineController : BaseController
         }
     }
     
+    /// <summary>
+    /// Importa líneas de TFG desde un archivo CSV codificado en base64.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="input">Objeto que contiene el contenido del archivo CSV en base64
+    /// </param>
+    /// <returns>Resultado de la importación, incluyendo número de éxitos y errores.</returns>
     [HttpPost("import")]
     public IActionResult Import([FromBody] CSVImport input)
     {

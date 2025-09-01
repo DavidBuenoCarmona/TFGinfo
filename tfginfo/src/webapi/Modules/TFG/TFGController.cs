@@ -18,7 +18,12 @@ public class TFGController : BaseController
         this.emailService = emailService;
     }
 
-
+    /// <summary>
+    /// Crea un nuevo TFG.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="TFG">Datos del TFG a crear.</param>
+    /// <returns>TFG creado.</returns>
     [HttpPost]
     public IActionResult Save([FromBody] TFGFlatDTO TFG)
     {
@@ -46,6 +51,11 @@ public class TFGController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene todos los TFGs.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <returns>Lista de TFGs.</returns>
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -74,6 +84,12 @@ public class TFGController : BaseController
 
     }
 
+     /// <summary>
+    /// Busca TFGs según filtros.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="filters">Lista de filtros para la búsqueda.</param>
+    /// <returns>Lista de TFGs encontrados.</returns>
     [HttpPost("search")]
     public IActionResult Search([FromBody] List<Filter> filters)
     {
@@ -100,6 +116,12 @@ public class TFGController : BaseController
         }
     }
 
+    /// <summary>
+    /// Elimina un TFG por su ID.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="id">ID del TFG a eliminar.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
@@ -132,6 +154,12 @@ public class TFGController : BaseController
         }
     }
 
+    /// <summary>
+    /// Actualiza un TFG existente.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="TFG">Datos del TFG a actualizar.</param>
+    /// <returns>TFG actualizado.</returns>
     [HttpPut]
     public IActionResult Update([FromBody] TFGFlatDTO TFG)
     {
@@ -163,6 +191,12 @@ public class TFGController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene un TFG por su ID.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="id">ID del TFG a obtener.</param>
+    /// <returns>TFG encontrado.</returns>
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
@@ -193,7 +227,12 @@ public class TFGController : BaseController
             return Unauthorized(e.Message);
         }
     }
-
+    
+    /// <summary>
+    /// Permite a un estudiante solicitar un TFG.
+    /// </summary>
+    /// <param name="request">Datos de la solicitud de TFG.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("request")]
     public async Task<IActionResult> RequestTFG([FromBody] TFGRequest request)
     {
@@ -230,6 +269,12 @@ public class TFGController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene las solicitudes de TFG pendientes para un profesor.
+    /// Requiere rol de profesor o administrador.
+    /// </summary>
+    /// <param name="id">ID del profesor.</param>
+    /// <returns>Lista de solicitudes de TFG pendientes.</returns>
     [HttpGet("professor-pending/{id}")]
     public IActionResult GetTFGsByProfessor(int id)
     {
@@ -265,6 +310,12 @@ public class TFGController : BaseController
         }
     }
 
+    /// <summary>
+    /// Acepta una solicitud de TFG.
+    /// Requiere rol de profesor o administrador.
+    /// </summary>
+    /// <param name="id">ID del TFG a aceptar.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("accept/{id}")]
     public async Task<IActionResult> Accept(int id)
     {
@@ -297,6 +348,12 @@ public class TFGController : BaseController
         }
     }
 
+    /// <summary>
+    /// Rechaza una solicitud de TFG.
+    /// Requiere rol de profesor o administrador.
+    /// </summary>
+    /// <param name="id">ID del TFG a rechazar.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("reject/{id}")]
     public async Task<IActionResult> Reject(int id)
     {
@@ -323,8 +380,18 @@ public class TFGController : BaseController
         {
             return UnprocessableEntity(e.GetError());
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
+    /// <summary>
+    /// Cambia el estado de un TFG.
+    /// Requiere rol de profesor o administrador.
+    /// </summary>
+    /// <param name="id">ID del TFG a cambiar de estado.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("change-status/{id}")]
     public async Task<IActionResult> ChangeStatus(int id)
     {

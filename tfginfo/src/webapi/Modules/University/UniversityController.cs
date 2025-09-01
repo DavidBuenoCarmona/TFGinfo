@@ -13,6 +13,12 @@ public class UniversityController : BaseController
     public UniversityController(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
 
+    /// <summary>
+    /// Crea una nueva centro.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="university">Datos de la centro a crear.</param>
+    /// <returns>Datos de la nueva centro.</returns>
     [HttpPost]
     public IActionResult Save([FromBody] UniversityBase university)
     {
@@ -40,6 +46,11 @@ public class UniversityController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene todas las centros.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <returns>Lista de todas las centros.</returns>
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -67,6 +78,12 @@ public class UniversityController : BaseController
         }
     }
 
+    /// <summary>
+    /// Elimina una centro por su ID.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="id">ID de la centro a eliminar.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
@@ -99,6 +116,12 @@ public class UniversityController : BaseController
         }
     }
 
+    /// <summary>
+    /// Actualiza una centro existente.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="university">Datos de la centro a actualizar.</param>
+    /// <returns>centro actualizada.</returns>
     [HttpPut]
     public IActionResult Update([FromBody] UniversityBase university)
     {
@@ -130,6 +153,12 @@ public class UniversityController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene una centro por su ID.
+    /// Requiere autenticación.
+    /// </summary>
+    ///     <param name="id">ID de la centro.</param>
+    /// <returns>La centro solicitada.</returns>
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
@@ -161,6 +190,12 @@ public class UniversityController : BaseController
         }
     }
 
+    /// <summary>
+    /// Busca centros según filtros especificados.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="filters">Lista de filtros para la búsqueda.</param>
+    /// <returns>Lista de centros que coinciden con los filtros.</returns>
     [HttpPost("search")]
     public IActionResult Search([FromBody] List<Filter> filters)
     {
@@ -188,6 +223,12 @@ public class UniversityController : BaseController
         }
     }
 
+    /// <summary>
+    ///     Importa centros desde un archivo CSV codificado en base64.
+    ///   Requiere rol de administrador.
+    /// </summary>
+    /// <param name="input">Contenido del archivo CSV en base64.</param>
+    /// <returns>Resultado de la importación con número de éxitos y errores.</returns>
     [HttpPost("import")]
     public IActionResult Import([FromBody] CSVImport input)
     {

@@ -17,7 +17,12 @@ public class WorkingGroupController : BaseController
         this.emailService = emailService;
     }
 
-
+    /// <summary>
+    ///   Crea un nuevo canal.
+    /// Requiere rol de administrador o profesor.
+    /// </summary>
+    /// <param name="WorkingGroup">Datos del canal a crear.</param>
+    /// <returns>Datos del nuevo canal.</returns>
     [HttpPost]
     public IActionResult Save([FromBody] WorkingGroupProfessor WorkingGroup)
     {
@@ -45,6 +50,11 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    ///  Obtiene todos los canales.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <returns>Lista de todos los canales.</returns>
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -71,7 +81,12 @@ public class WorkingGroupController : BaseController
             return UnprocessableEntity(e.GetError());
         }
     }
-
+    /// <summary>
+    /// Elimina un canal por su ID.
+    /// Requiere rol de administrador o profesor.
+    /// </summary>
+    /// <param name="id">ID del canal a eliminar.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
@@ -104,6 +119,12 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    /// Actualiza un canal existente.
+    /// Requiere rol de administrador o profesor.
+    /// </summary>
+    /// <param name="WorkingGroup">Datos del canal a actualizar.</param>
+    /// <returns>canal actualizado.</returns>
     [HttpPut]
     public IActionResult Update([FromBody] WorkingGroupBase WorkingGroup)
     {
@@ -135,6 +156,12 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene un canal por su ID.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="id">ID del canal.</param>
+    /// <returns>El canal solicitado.</returns>
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
@@ -166,6 +193,12 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene todos los profesores de un canal.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="id">ID del canal.</param>
+    /// <returns>Lista de profesores del canal.</returns>
     [HttpGet("{id}/professor")]
     public IActionResult GetProfessorsByWorkingGroup(int id)
     {
@@ -197,6 +230,12 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene todos los estudiantes de un canal.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="id">ID del canal.</param>
+    /// <returns>Lista de estudiantes del canal.</returns>
     [HttpGet("{id}/student/")]
     public IActionResult GetStudentsByWorkingGroup(int id)
     {
@@ -228,6 +267,12 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene todos los TFGs de un canal.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="id">ID del canal.</param>
+    /// <returns>Lista de TFGs del canal.</returns>
     [HttpGet("{id}/tfg")]
     public IActionResult GetTFGsByWorkingGroup(int id)
     {
@@ -259,6 +304,12 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene todos los canales asociados a un profesor.
+    /// Requiere rol de administrador o profesor.
+    /// </summary>
+    /// <param name="id">ID del profesor.</param>
+    /// <returns>Lista de canales del profesor.</returns>
     [HttpGet("professor/{id}")]
     public IActionResult GetWorkingGroupByProfessor(int id)
     {
@@ -294,6 +345,13 @@ public class WorkingGroupController : BaseController
             return Unauthorized(e.Message);
         }
     }
+
+    /// <summary>
+    /// Obtiene todos los canales asociados a un estudiante.
+    /// Requiere rol de administrador o estudiante.
+    /// </summary>
+    /// <param name="id">ID del estudiante.</param>
+    /// <returns>Lista de canales del estudiante.</returns>
     [HttpGet("student/{id}")]
     public IActionResult GetWorkingGroupByStudent(int id)
     {
@@ -330,6 +388,12 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    /// Agrega un estudiante a un canal.
+    /// Requiere rol de administrador o estudiante.
+    /// </summary>
+    /// <param name="workingGroupStudent">Objeto que contiene el ID del canal y el ID del estudiante.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("add-student")]
     public IActionResult AddStudent([FromBody] WorkingGroupUser workingGroupStudent)
     {
@@ -364,7 +428,12 @@ public class WorkingGroupController : BaseController
             return Unauthorized(e.Message);
         }
     }
-
+    /// <summary>
+    /// Agrega un estudiante a un canal mediante su correo electrónico.
+    /// Requiere rol de administrador o profesor.
+    /// </summary>
+    /// <param name="id">ID del canal.</param>
+    /// <param name="email">Correo electrónico del estudiante a agregar.</param>
     [HttpPost("{id}/add-student/{email}")]
     public IActionResult AddStudentFromEmail(int id, string email)
     {
@@ -396,6 +465,12 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    /// Elimina un estudiante de un canal.
+    /// Requiere rol de administrador o estudiante.
+    /// </summary>
+    /// <param name="workingGroupStudent">Objeto que contiene el ID del canal y el ID del estudiante.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("remove-student")]
     public IActionResult RemoveStudent([FromBody] WorkingGroupUser workingGroupStudent)
     {
@@ -431,6 +506,13 @@ public class WorkingGroupController : BaseController
             return Unauthorized(e.Message);
         }
     }
+
+    /// <summary>
+    /// Agrega un profesor a un canal.
+    /// Requiere rol de administrador o profesor.
+    /// </summary>
+    /// <param name="workingGroupProfessor">Objeto que contiene el ID del canal y el ID del profesor.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("add-professor")]
     public IActionResult AddProfessor([FromBody] WorkingGroupUser workingGroupProfessor)
     {
@@ -467,6 +549,13 @@ public class WorkingGroupController : BaseController
             return Unauthorized(e.Message);
         }
     }
+
+    /// <summary>
+    /// Elimina un profesor de un canal.
+    /// Requiere rol de administrador o profesor.
+    /// </summary>
+    /// <param name="workingGroupProfessor">Objeto que contiene el ID del canal y el ID del profesor.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("remove-professor")]
     public IActionResult RemoveProfessor([FromBody] WorkingGroupUser workingGroupProfessor)
     {
@@ -499,6 +588,11 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    /// Envía un mensaje a todos los estudiantes de un canal.
+    /// </summary>
+    /// <param name="message">Objeto que contiene el ID del canal, el ID del profesor y el mensaje a enviar.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("send-message")]
     public async Task<IActionResult> SendMessage([FromBody] WorkingGroupMessage message)
     {
@@ -536,6 +630,11 @@ public class WorkingGroupController : BaseController
         }
     }
 
+    /// <summary>
+    /// Busca canales según filtros especificados.
+    /// </summary>
+    /// <param name="filters">Lista de filtros a aplicar en la búsqueda.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpPost("search")]
     public IActionResult Search([FromBody] List<Filter> filters)
     {

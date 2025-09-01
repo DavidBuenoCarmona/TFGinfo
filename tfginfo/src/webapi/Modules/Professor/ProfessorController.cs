@@ -17,6 +17,12 @@ public class ProfessorController : BaseController
     }
 
 
+    /// <summary>
+    /// Crea un nuevo profesor.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="Professor">Datos del profesor a crear.</param>
+    /// <returns>Datos del nuevo profesor y código de autenticación.</returns>
     [HttpPost]
     public async Task<IActionResult> Save([FromBody] ProfessorFlatDTO Professor)
     {
@@ -45,6 +51,11 @@ public class ProfessorController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene todos los profesores.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <returns>Lista de profesores.</returns>
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -71,6 +82,12 @@ public class ProfessorController : BaseController
         }
     }
 
+    /// <summary>
+    /// Elimina un profesor por su ID.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="id">ID del profesor a eliminar.</param>
+    /// <returns>Resultado de la operación.</returns>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
@@ -103,6 +120,12 @@ public class ProfessorController : BaseController
         }
     }
 
+    /// <summary>
+    /// Actualiza un profesor existente.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="Professor">Datos del profesor a actualizar.</param>
+    /// <returns>Profesor actualizado.</returns>
     [HttpPut]
     public IActionResult Update([FromBody] ProfessorFlatDTO Professor)
     {
@@ -134,6 +157,12 @@ public class ProfessorController : BaseController
         }
     }
 
+    /// <summary>
+    /// Obtiene un profesor por su ID.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="id">ID del profesor.</param>
+    /// <returns>El profesor solicitado.</returns>
     [HttpGet("{id}")]
     public IActionResult GetProfessorById(int id)
     {
@@ -165,6 +194,12 @@ public class ProfessorController : BaseController
         }
     }
 
+    /// <summary>
+    /// Busca profesores según filtros especificados.
+    /// Requiere autenticación.
+    /// </summary>
+    /// <param name="filters">Lista de filtros para la búsqueda.</param>
+    /// <returns>Lista de profesores que coinciden con los filtros.</returns>
     [HttpPost("search")]
     public IActionResult Search([FromBody] List<Filter> filters)
     {
@@ -192,6 +227,13 @@ public class ProfessorController : BaseController
         }
     }
 
+    /// <summary>
+    /// Importa profesores desde un archivo CSV codificado en base64.
+    /// Requiere rol de administrador.
+    /// </summary>
+    /// <param name="input">Objeto que contiene el contenido del archivo CSV en base64
+    /// </param>
+    /// <returns>Resultado de la importación, incluyendo número de éxitos y errores.</returns>
     [HttpPost("import")]
     public async Task<IActionResult> Import([FromBody] CSVImport input)
     {
